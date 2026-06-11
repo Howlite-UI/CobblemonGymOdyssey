@@ -1,0 +1,13 @@
+{
+  "name": "cobblemongymodyssey:brock",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:standard",
+      "model": "cobblemon:alex.geo",
+      "texture": "cobblemongymodyssey:textures/npc/brock.png",
+      "layers": []
+    }
+  ]
+}

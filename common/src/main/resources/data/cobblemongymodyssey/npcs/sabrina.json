@@ -3,10 +3,7 @@
   "names": [
     "Sabrina"
   ],
-  "appearance": {
-    "type": "resource_location",
-    "texture": "cobblemongymodyssey:textures/npc/sabrina.png"
-  },
+  "resourceIdentifier": "cobblemongymodyssey:sabrina",
   "interaction": {
     "type": "dialogue",
     "dialogue": "cobblemongymodyssey:sabrina_dialogue"

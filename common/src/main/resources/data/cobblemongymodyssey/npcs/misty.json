@@ -3,10 +3,7 @@
   "names": [
     "Misty"
   ],
-  "appearance": {
-    "type": "resource_location",
-    "texture": "cobblemongymodyssey:textures/npc/misty.png"
-  },
+  "resourceIdentifier": "cobblemongymodyssey:misty",
   "interaction": {
     "type": "dialogue",
     "dialogue": "cobblemongymodyssey:misty_dialogue"

@@ -3,10 +3,7 @@
   "names": [
     "Blaine"
   ],
-  "appearance": {
-    "type": "resource_location",
-    "texture": "cobblemongymodyssey:textures/npc/blaine.png"
-  },
+  "resourceIdentifier": "cobblemongymodyssey:blaine",
   "interaction": {
     "type": "dialogue",
     "dialogue": "cobblemongymodyssey:blaine_dialogue"

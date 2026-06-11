@@ -3,10 +3,7 @@
   "names": [
     "Koga"
   ],
-  "appearance": {
-    "type": "resource_location",
-    "texture": "cobblemongymodyssey:textures/npc/koga.png"
-  },
+  "resourceIdentifier": "cobblemongymodyssey:koga",
   "interaction": {
     "type": "dialogue",
     "dialogue": "cobblemongymodyssey:koga_dialogue"

@@ -1,0 +1,13 @@
+{
+  "name": "cobblemongymodyssey:erika",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:standard",
+      "model": "cobblemon:steve.geo",
+      "texture": "cobblemongymodyssey:textures/npc/erika.png",
+      "layers": []
+    }
+  ]
+}

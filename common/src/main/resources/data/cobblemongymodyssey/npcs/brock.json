@@ -3,10 +3,7 @@
   "names": [
     "Brock"
   ],
-  "appearance": {
-    "type": "resource_location",
-    "texture": "cobblemongymodyssey:textures/npc/brock.png"
-  },
+  "resourceIdentifier": "cobblemongymodyssey:brock",
   "interaction": {
     "type": "dialogue",
     "dialogue": "cobblemongymodyssey:brock_dialogue"

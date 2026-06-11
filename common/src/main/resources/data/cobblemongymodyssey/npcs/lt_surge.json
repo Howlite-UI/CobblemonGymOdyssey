@@ -3,10 +3,7 @@
   "names": [
     "Lt. Surge"
   ],
-  "appearance": {
-    "type": "resource_location",
-    "texture": "cobblemongymodyssey:textures/npc/lt_surge.png"
-  },
+  "resourceIdentifier": "cobblemongymodyssey:lt_surge",
   "interaction": {
     "type": "dialogue",
     "dialogue": "cobblemongymodyssey:lt_surge_dialogue"

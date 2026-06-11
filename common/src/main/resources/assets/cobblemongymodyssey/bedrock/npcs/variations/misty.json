@@ -1,0 +1,13 @@
+{
+  "name": "cobblemongymodyssey:misty",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:standard",
+      "model": "cobblemon:steve.geo",
+      "texture": "cobblemongymodyssey:textures/npc/misty.png",
+      "layers": []
+    }
+  ]
+}

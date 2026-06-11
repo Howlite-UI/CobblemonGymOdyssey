@@ -3,10 +3,7 @@
   "names": [
     "Giovanni"
   ],
-  "appearance": {
-    "type": "resource_location",
-    "texture": "cobblemongymodyssey:textures/npc/giovanni.png"
-  },
+  "resourceIdentifier": "cobblemongymodyssey:giovanni",
   "interaction": {
     "type": "dialogue",
     "dialogue": "cobblemongymodyssey:giovanni_dialogue"
