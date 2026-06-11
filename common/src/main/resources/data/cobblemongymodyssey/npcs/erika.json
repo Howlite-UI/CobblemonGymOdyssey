@@ -1,0 +1,27 @@
+{
+  "hitbox": "player",
+  "names": [
+    "Erika"
+  ],
+  "appearance": {
+    "type": "resource_location",
+    "texture": "cobblemongymodyssey:textures/npc/erika.png"
+  },
+  "interaction": {
+    "type": "dialogue",
+    "dialogue": "cobblemongymodyssey:erika_dialogue"
+  },
+  "battleConfiguration": {
+    "canChallenge": true
+  },
+  "autoHealParty": true,
+  "skill": 5,
+  "party": {
+    "type": "simple",
+    "pokemon": [
+      "victreebel level=46 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "tangela level=48 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "vileplume level=50 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+    ]
+  }
+}

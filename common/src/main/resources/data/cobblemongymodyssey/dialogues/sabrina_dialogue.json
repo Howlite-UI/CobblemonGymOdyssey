@@ -1,0 +1,51 @@
+{
+  "initializationAction": "(q.npc.is_in_battle_with(q.player) || !q.npc.is_doing_activity('minecraft:idle', 'cobblemon:battling')) ? q.dialogue.close()",
+  "speakers": {
+    "npc": {
+      "name": {
+        "type": "expression",
+        "expression": "q.npc.name"
+      },
+      "face": "q.npc.face(false);"
+    },
+    "player": {
+      "face": "q.player.face();",
+      "name": {
+        "type": "expression",
+        "expression": "q.player.username"
+      }
+    }
+  },
+  "pages": [
+    {
+      "id": "npc-chat",
+      "speaker": "npc",
+      "lines": [
+        "I have used my power to hone my skills in Pokémon battles.",
+        "Face my Psychic Pokémon if you dare claim the Marsh Badge."
+      ],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "Battle!",
+            "value": "battle",
+            "action": [
+              "q.dialogue.close();",
+              "q.npc.start_battle(q.player);"
+            ],
+            "isSelectable": "c.npc.can_battle;"
+          },
+          {
+            "text": "Not yet",
+            "value": "cancel",
+            "action": [
+              "q.dialogue.close()"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

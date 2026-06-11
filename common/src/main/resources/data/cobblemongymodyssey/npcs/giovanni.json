@@ -1,0 +1,29 @@
+{
+  "hitbox": "player",
+  "names": [
+    "Giovanni"
+  ],
+  "appearance": {
+    "type": "resource_location",
+    "texture": "cobblemongymodyssey:textures/npc/giovanni.png"
+  },
+  "interaction": {
+    "type": "dialogue",
+    "dialogue": "cobblemongymodyssey:giovanni_dialogue"
+  },
+  "battleConfiguration": {
+    "canChallenge": true
+  },
+  "autoHealParty": true,
+  "skill": 5,
+  "party": {
+    "type": "simple",
+    "pokemon": [
+      "rhyhorn level=90 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "dugtrio level=91 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "nidoqueen level=93 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "nidoking level=95 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "rhyhorn level=97 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+    ]
+  }
+}

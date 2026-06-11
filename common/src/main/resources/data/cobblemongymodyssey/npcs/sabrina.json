@@ -1,0 +1,28 @@
+{
+  "hitbox": "player",
+  "names": [
+    "Sabrina"
+  ],
+  "appearance": {
+    "type": "resource_location",
+    "texture": "cobblemongymodyssey:textures/npc/sabrina.png"
+  },
+  "interaction": {
+    "type": "dialogue",
+    "dialogue": "cobblemongymodyssey:sabrina_dialogue"
+  },
+  "battleConfiguration": {
+    "canChallenge": true
+  },
+  "autoHealParty": true,
+  "skill": 5,
+  "party": {
+    "type": "simple",
+    "pokemon": [
+      "kadabra level=64 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "mr-mime level=66 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "venomoth level=66 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "alakazam level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+    ]
+  }
+}

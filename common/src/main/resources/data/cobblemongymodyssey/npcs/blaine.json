@@ -1,0 +1,28 @@
+{
+  "hitbox": "player",
+  "names": [
+    "Blaine"
+  ],
+  "appearance": {
+    "type": "resource_location",
+    "texture": "cobblemongymodyssey:textures/npc/blaine.png"
+  },
+  "interaction": {
+    "type": "dialogue",
+    "dialogue": "cobblemongymodyssey:blaine_dialogue"
+  },
+  "battleConfiguration": {
+    "canChallenge": true
+  },
+  "autoHealParty": true,
+  "skill": 5,
+  "party": {
+    "type": "simple",
+    "pokemon": [
+      "growlithe level=73 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "ponyta level=74 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "rapidash level=76 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+      "arcanine level=80 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+    ]
+  }
+}

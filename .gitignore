@@ -1,0 +1,29 @@
+# Gradle files
+.gradle/
+build/
+**/build/
+**/bin/
+**/.gradle/
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.kotlin/
+
+# Minecraft/Modding run directories
+**/run/
+run/
+
+# Log files and crash reports
+logs/
+**/logs/
+crash-reports/
+**/crash-reports/
+*.log
+
+# Operating System files
+.DS_Store
+Thumbs.db

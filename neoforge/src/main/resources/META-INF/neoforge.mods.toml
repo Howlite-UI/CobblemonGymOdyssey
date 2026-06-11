@@ -1,0 +1,52 @@
+modLoader = "kotlinforforge"
+loaderVersion = "[5,)"
+#issueTrackerURL = ""
+license = "Insert License Here"
+
+[[mods]]
+modId = "cobblemongymodyssey"
+version = "${version}"
+displayName = "Cobblemon Gym Odyssey"
+authors = "Me!"
+description = '''
+This is an example description! Tell everyone what your mod is about!
+'''
+#logoFile = ""
+
+[[dependencies.cobblemongymodyssey]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.8,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "kotlinforforge"
+type = "required"
+versionRange = "[5.9.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "cobblemon"
+type = "required"
+versionRange = "[1.5.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "cobblemongymodyssey.mixins.json"
