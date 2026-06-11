@@ -1,13 +1,12 @@
 package com.howlite.items
 
 import com.howlite.CobblemonGymOdyssey
+import com.howlite.data.GymBadge
 import dev.architectury.registry.CreativeTabRegistry
 import dev.architectury.registry.registries.DeferredRegister
-import dev.architectury.registry.registries.DeferredSupplier
 import dev.architectury.registry.registries.RegistrySupplier
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -16,17 +15,15 @@ import net.minecraft.world.item.ItemStack
  * Enregistrement cross-platform des 8 Items Badge via Architectury.
  *
  * - Les items sont enregistrés via [DeferredRegister] (Fabric + NeoForge).
- * - L'onglet créatif est créé via [CreativeTabRegistry.create] — l'API
- *   Architectury dédiée aux creative tabs, qui évite les problèmes de
- *   compatibilité SAM Kotlin/Java avec MC 1.21.1.
- *
- * ## Commandes utiles en jeu
- * `/give @p cobblemongymodyssey:boulder_badge`
+ * - L'onglet créatif est créé via [DeferredRegister] pour les onglets créatifs.
  */
 object GymBadgeItems {
 
     private val ITEMS: DeferredRegister<Item> =
         DeferredRegister.create(CobblemonGymOdyssey.MOD_ID, Registries.ITEM)
+
+    private val TABS: DeferredRegister<CreativeModeTab> =
+        DeferredRegister.create(CobblemonGymOdyssey.MOD_ID, Registries.CREATIVE_MODE_TAB)
 
     // -------------------------------------------------------------------------
     // Items Badge
@@ -58,15 +55,30 @@ object GymBadgeItems {
     }
 
     // -------------------------------------------------------------------------
-    // Onglet créatif "Gym Badges" — créé via CreativeTabRegistry Architectury
+    // Onglet créatif "Gym Badges"
     // -------------------------------------------------------------------------
 
+    val GYM_BADGES_TAB: RegistrySupplier<CreativeModeTab> = TABS.register("gym_badges") {
+        CreativeTabRegistry.create(
+            Component.translatable("itemGroup.cobblemongymodyssey.gym_badges")
+        ) { ItemStack(BOULDER_BADGE.get()) }
+    }
+
     /**
-     * Référence lazy à l'onglet créatif (DeferredSupplier).
-     * Initialisée dans [register].
+     * Retourne l'Item correspondant à un badge donné.
      */
-    lateinit var GYM_BADGES_TAB: DeferredSupplier<CreativeModeTab>
-        private set
+    fun getItemForBadge(badge: GymBadge): Item {
+        return when (badge) {
+            GymBadge.BOULDER_BADGE -> BOULDER_BADGE.get()
+            GymBadge.CASCADE_BADGE -> CASCADE_BADGE.get()
+            GymBadge.THUNDER_BADGE -> THUNDER_BADGE.get()
+            GymBadge.RAINBOW_BADGE -> RAINBOW_BADGE.get()
+            GymBadge.SOUL_BADGE -> SOUL_BADGE.get()
+            GymBadge.MARSH_BADGE -> MARSH_BADGE.get()
+            GymBadge.VOLCANO_BADGE -> VOLCANO_BADGE.get()
+            GymBadge.EARTH_BADGE -> EARTH_BADGE.get()
+        }
+    }
 
     // -------------------------------------------------------------------------
     // Point d'entrée appelé depuis CobblemonGymOdyssey.init()
@@ -74,18 +86,7 @@ object GymBadgeItems {
 
     fun register() {
         ITEMS.register()
-
-        // Référence différée sur l'onglet (par ResourceLocation)
-        GYM_BADGES_TAB = CreativeTabRegistry.defer(
-            ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "gym_badges")
-        )
-
-        // Créer l'onglet créatif via l'API Architectury (cross-platform)
-        CreativeTabRegistry.create { builder: CreativeModeTab.Builder ->
-            builder
-                .title(Component.translatable("itemGroup.cobblemongymodyssey.gym_badges"))
-                .icon { ItemStack(BOULDER_BADGE.get()) }
-        }
+        TABS.register()
 
         // Ajouter les 8 badges à l'onglet
         CreativeTabRegistry.append(

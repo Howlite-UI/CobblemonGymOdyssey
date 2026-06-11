@@ -5,8 +5,10 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.howlite.api.PlayerProgressApi
 import com.howlite.config.GymConfig
+import com.howlite.items.GymBadgeItems
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.ItemStack
 
 /**
  * Détecte les victoires en combat contre un Maître d'Arène et accorde
@@ -62,6 +64,13 @@ object GymBattleEventHandler {
             if (!data.hasBadge(badge)) {
                 data.earnBadge(badge)
                 PlayerProgressApi.markDirty(player)
+
+                // Accorder l'item physique du badge
+                val item = GymBadgeItems.getItemForBadge(badge)
+                val itemStack = ItemStack(item)
+                if (!player.inventory.add(itemStack)) {
+                    player.drop(itemStack, false)
+                }
 
                 // Feedback visuel au joueur
                 player.sendSystemMessage(
