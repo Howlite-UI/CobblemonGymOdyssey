@@ -43,6 +43,15 @@ dependencies {
     // Cobblemon NeoForge
     modImplementation "com.cobblemon:neoforge:$rootProject.cobblemon_version"
 
+    // Chipped, CobbleFurnies and dependencies
+    modImplementation "maven.modrinth:cobblefurnies:${rootProject.cobblefurnies_neoforge_version}"
+    modImplementation "maven.modrinth:chipped:${rootProject.chipped_neoforge_version}"
+    modImplementation "maven.modrinth:athena-ctm:${rootProject.athena_neoforge_version}"
+    modImplementation "maven.modrinth:resourceful-lib:${rootProject.resourceful_lib_neoforge_version}"
+
+    // ByteCodecs – bibliothèque interne Team Resourceful (dépendance de Chipped, non distribuée sur Modrinth)
+    implementation "com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

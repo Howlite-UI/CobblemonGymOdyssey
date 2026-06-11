@@ -45,6 +45,16 @@ dependencies {
     include "org.ladysnake.cardinal-components-api:cardinal-components-base:$rootProject.cardinal_components_version"
     include "org.ladysnake.cardinal-components-api:cardinal-components-entity:$rootProject.cardinal_components_version"
 
+    // Chipped, CobbleFurnies and dependencies
+    modImplementation "maven.modrinth:cobblefurnies:${rootProject.cobblefurnies_fabric_version}"
+    modImplementation "maven.modrinth:chipped:${rootProject.chipped_fabric_version}"
+    modImplementation "maven.modrinth:athena-ctm:${rootProject.athena_fabric_version}"
+    modImplementation "maven.modrinth:resourceful-lib:${rootProject.resourceful_lib_fabric_version}"
+
+    // ByteCodecs – bibliothèque interne Team Resourceful (dépendance de Chipped, non distribuée sur Modrinth)
+    implementation "com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}"
+    include "com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }

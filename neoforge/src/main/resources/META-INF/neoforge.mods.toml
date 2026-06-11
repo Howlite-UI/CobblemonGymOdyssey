@@ -44,9 +44,39 @@ side = "BOTH"
 [[dependencies.cobblemongymodyssey]]
 modId = "cobblemon"
 type = "required"
-versionRange = "[1.5.0,)"
+versionRange = "[1.7.1,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "cobblefurnies"
+type = "required"
+versionRange = "[1.1,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "chipped"
+type = "required"
+versionRange = "[4.0.2,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "athena"
+type = "required"
+versionRange = "[4.0.6,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "resourcefullib"
+type = "required"
+versionRange = "[3.0.12,)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]
 config = "cobblemongymodyssey.mixins.json"
+
+

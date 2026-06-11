@@ -43,6 +43,17 @@ subprojects {
             name = 'Ladysnake Mods (Cardinal Components)'
             url = 'https://maven.ladysnake.org/releases'
         }
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
+            }
+        }
+        maven {
+            name = "Team Resourceful Maven"
+            url = "https://maven.teamresourceful.com/repository/maven-public/"
+        }
     }
 
     loom {

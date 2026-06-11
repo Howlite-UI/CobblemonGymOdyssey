@@ -35,9 +35,13 @@
     "architectury": ">=13.0.8",
     "fabric-api": "*",
     "fabric-language-kotlin": ">=1.12.0",
-    "cobblemon": ">=1.5.0",
+    "cobblemon": ">=1.7.1",
     "cardinal-components-base": "*",
-    "cardinal-components-entity": "*"
+    "cardinal-components-entity": "*",
+    "cobblefurnies": ">=1.1",
+    "chipped": ">=4.0.2",
+    "athena": ">=4.0.6",
+    "resourcefullib": ">=3.0.12"
   },
   "custom": {
     "cardinal-components": [
