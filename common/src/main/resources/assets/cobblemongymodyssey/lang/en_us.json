@@ -7,5 +7,7 @@
   "item.cobblemongymodyssey.marsh_badge": "Marsh Badge",
   "item.cobblemongymodyssey.volcano_badge": "Volcano Badge",
   "item.cobblemongymodyssey.earth_badge": "Earth Badge",
-  "itemGroup.cobblemongymodyssey.gym_badges": "Gym Badges"
+  "itemGroup.cobblemongymodyssey.gym_badges": "Gym Badges",
+
+  "cobblemongymodyssey.level_cap.battle_blocked": "⛔ Battle cancelled! %s (level %s) exceeds your Level Cap of %s. Defeat more Gym Leaders to raise it!"
 }

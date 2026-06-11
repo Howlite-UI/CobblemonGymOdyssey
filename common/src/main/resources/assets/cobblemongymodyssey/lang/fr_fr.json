@@ -1,0 +1,13 @@
+{
+  "item.cobblemongymodyssey.boulder_badge": "Médaille Roc",
+  "item.cobblemongymodyssey.cascade_badge": "Médaille Cascade",
+  "item.cobblemongymodyssey.thunder_badge": "Médaille Foudre",
+  "item.cobblemongymodyssey.rainbow_badge": "Médaille Arc-en-ciel",
+  "item.cobblemongymodyssey.soul_badge": "Médaille Âme",
+  "item.cobblemongymodyssey.marsh_badge": "Médaille Marais",
+  "item.cobblemongymodyssey.volcano_badge": "Médaille Volcan",
+  "item.cobblemongymodyssey.earth_badge": "Médaille Terre",
+  "itemGroup.cobblemongymodyssey.gym_badges": "Badges d'Arène",
+
+  "cobblemongymodyssey.level_cap.battle_blocked": "⛔ Combat annulé ! %s (niveau %s) dépasse votre Level Cap de %s. Battez d'autres Champions d'Arène pour le relever !"
+}
