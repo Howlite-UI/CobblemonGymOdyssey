@@ -60,6 +60,34 @@ object GymBadgeItems {
     }
 
     // -------------------------------------------------------------------------
+    // Tickets d'Arène spécifiques
+    // -------------------------------------------------------------------------
+    val BOULDER_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_boulder_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.BOULDER_BADGE)
+    }
+    val CASCADE_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_cascade_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.CASCADE_BADGE)
+    }
+    val THUNDER_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_thunder_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.THUNDER_BADGE)
+    }
+    val RAINBOW_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_rainbow_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.RAINBOW_BADGE)
+    }
+    val SOUL_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_soul_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.SOUL_BADGE)
+    }
+    val MARSH_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_marsh_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.MARSH_BADGE)
+    }
+    val VOLCANO_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_volcano_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.VOLCANO_BADGE)
+    }
+    val EARTH_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_earth_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.EARTH_BADGE)
+    }
+
+    // -------------------------------------------------------------------------
     // Onglet créatif "Gym Badges"
     // -------------------------------------------------------------------------
 
@@ -93,12 +121,14 @@ object GymBadgeItems {
         ITEMS.register()
         TABS.register()
 
-        // Ajouter les 8 badges + la Boîte à Badges à l'onglet
+        // Ajouter les badges, la boîte et les tickets à l'onglet
         CreativeTabRegistry.append(
             GYM_BADGES_TAB,
             BOULDER_BADGE, CASCADE_BADGE, THUNDER_BADGE, RAINBOW_BADGE,
             SOUL_BADGE, MARSH_BADGE, VOLCANO_BADGE, EARTH_BADGE,
-            BADGE_CASE
+            BADGE_CASE,
+            BOULDER_TICKET, CASCADE_TICKET, THUNDER_TICKET, RAINBOW_TICKET,
+            SOUL_TICKET, MARSH_TICKET, VOLCANO_TICKET, EARTH_TICKET
         )
     }
 }

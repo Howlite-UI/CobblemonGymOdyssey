@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
+import java.util.Optional
 
 /**
  * Données de progression d'un joueur : badges obtenus et Level Cap actuel.
@@ -28,6 +29,32 @@ class PlayerProgressData {
 
     private val _badgeTeams: MutableMap<String, List<PokemonSnapshot>> = mutableMapOf()
     val badgeTeams: Map<String, List<PokemonSnapshot>> get() = _badgeTeams
+
+    var arenaIndex: Int? = null
+    var returnDim: String? = null
+    var returnX: Double? = null
+    var returnY: Double? = null
+    var returnZ: Double? = null
+    var returnYaw: Float? = null
+    var returnPitch: Float? = null
+
+    fun saveReturnPosition(dim: String, x: Double, y: Double, z: Double, yaw: Float, pitch: Float) {
+        this.returnDim = dim
+        this.returnX = x
+        this.returnY = y
+        this.returnZ = z
+        this.returnYaw = yaw
+        this.returnPitch = pitch
+    }
+
+    fun clearReturnPosition() {
+        this.returnDim = null
+        this.returnX = null
+        this.returnY = null
+        this.returnZ = null
+        this.returnYaw = null
+        this.returnPitch = null
+    }
 
     fun recordTeam(badgeId: String, team: List<PokemonSnapshot>) {
         _badgeTeams[badgeId] = team
@@ -91,6 +118,14 @@ class PlayerProgressData {
             teamsTag.put(badgeId, teamList)
         }
         tag.put(KEY_BADGE_TEAMS, teamsTag)
+
+        arenaIndex?.let { tag.putInt("ArenaIndex", it) }
+        returnDim?.let { tag.putString("ReturnDim", it) }
+        returnX?.let { tag.putDouble("ReturnX", it) }
+        returnY?.let { tag.putDouble("ReturnY", it) }
+        returnZ?.let { tag.putDouble("ReturnZ", it) }
+        returnYaw?.let { tag.putFloat("ReturnYaw", it) }
+        returnPitch?.let { tag.putFloat("ReturnPitch", it) }
     }
 
     fun readFromNbt(tag: CompoundTag) {
@@ -112,6 +147,14 @@ class PlayerProgressData {
                 _badgeTeams[badgeId] = snapshots
             }
         }
+
+        arenaIndex = if (tag.contains("ArenaIndex")) tag.getInt("ArenaIndex") else null
+        returnDim = if (tag.contains("ReturnDim")) tag.getString("ReturnDim") else null
+        returnX = if (tag.contains("ReturnX")) tag.getDouble("ReturnX") else null
+        returnY = if (tag.contains("ReturnY")) tag.getDouble("ReturnY") else null
+        returnZ = if (tag.contains("ReturnZ")) tag.getDouble("ReturnZ") else null
+        returnYaw = if (tag.contains("ReturnYaw")) tag.getFloat("ReturnYaw") else null
+        returnPitch = if (tag.contains("ReturnPitch")) tag.getFloat("ReturnPitch") else null
     }
 
     companion object {
@@ -136,12 +179,26 @@ class PlayerProgressData {
                 Codec.unboundedMap(Codec.STRING, PokemonSnapshot.CODEC.listOf())
                     .fieldOf(KEY_BADGE_TEAMS)
                     .orElse(emptyMap())
-                    .forGetter { it._badgeTeams }
-            ).apply(instance) { cap, badgeIds, teams ->
+                    .forGetter { it._badgeTeams },
+                Codec.INT.optionalFieldOf("arena_index").forGetter { Optional.ofNullable(it.arenaIndex) },
+                Codec.STRING.optionalFieldOf("return_dim").forGetter { Optional.ofNullable(it.returnDim) },
+                Codec.DOUBLE.optionalFieldOf("return_x").forGetter { Optional.ofNullable(it.returnX) },
+                Codec.DOUBLE.optionalFieldOf("return_y").forGetter { Optional.ofNullable(it.returnY) },
+                Codec.DOUBLE.optionalFieldOf("return_z").forGetter { Optional.ofNullable(it.returnZ) },
+                Codec.FLOAT.optionalFieldOf("return_yaw").forGetter { Optional.ofNullable(it.returnYaw) },
+                Codec.FLOAT.optionalFieldOf("return_pitch").forGetter { Optional.ofNullable(it.returnPitch) }
+            ).apply(instance) { cap, badgeIds, teams, arenaIndexOpt, returnDimOpt, returnXOpt, returnYOpt, returnZOpt, returnYawOpt, returnPitchOpt ->
                 PlayerProgressData().also { d ->
                     d.levelCap = cap
                     badgeIds.mapNotNull { GymBadge.fromId(it) }.forEach { d._badges.add(it) }
                     d._badgeTeams.putAll(teams)
+                    d.arenaIndex = arenaIndexOpt.orElse(null)
+                    d.returnDim = returnDimOpt.orElse(null)
+                    d.returnX = returnXOpt.orElse(null)
+                    d.returnY = returnYOpt.orElse(null)
+                    d.returnZ = returnZOpt.orElse(null)
+                    d.returnYaw = returnYawOpt.orElse(null)
+                    d.returnPitch = returnPitchOpt.orElse(null)
                 }
             }
         }

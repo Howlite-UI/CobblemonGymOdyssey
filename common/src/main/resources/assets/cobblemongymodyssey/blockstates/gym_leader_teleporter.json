@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "portal_open=false": {
+      "model": "cobblemongymodyssey:block/gym_leader_teleporter"
+    },
+    "portal_open=true": {
+      "model": "cobblemongymodyssey:block/gym_leader_teleporter"
+    }
+  }
+}

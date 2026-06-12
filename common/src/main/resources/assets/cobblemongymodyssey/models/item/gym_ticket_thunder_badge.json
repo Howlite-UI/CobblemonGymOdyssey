@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cobblemongymodyssey:item/gym_ticket_thunder_badge"
+  }
+}

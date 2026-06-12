@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "cobblemongymodyssey:block/gym_leader_teleporter_bottom",
+    "top": "cobblemongymodyssey:block/gym_leader_teleporter_top_closed",
+    "side": "cobblemongymodyssey:block/gym_leader_teleporter_side"
+  }
+}
