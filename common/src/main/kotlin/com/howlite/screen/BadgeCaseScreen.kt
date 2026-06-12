@@ -231,6 +231,10 @@ class BadgeCaseScreen(
         updateScrollOffset()
     }
 
+    override fun renderLabels(graphics: GuiGraphics, mouseX: Int, mouseY: Int) {
+        // Do nothing to hide default screen labels
+    }
+
     private fun updateScrollOffset() {
         val idx = activeRegion.ordinal
         if (idx < scrollOffset) {
