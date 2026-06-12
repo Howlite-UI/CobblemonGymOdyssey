@@ -16,9 +16,19 @@
   "cobblemongymodyssey.badge_case.tab.kanto": "Kanto",
   "cobblemongymodyssey.badge_case.tab.johto": "Johto",
   "cobblemongymodyssey.badge_case.tab.hoenn": "Hoenn",
+  "cobblemongymodyssey.badge_case.tab.sinnoh": "Sinnoh",
+  "cobblemongymodyssey.badge_case.tab.unova": "Unys",
+  "cobblemongymodyssey.badge_case.tab.kalos": "Kalos",
+  "cobblemongymodyssey.badge_case.tab.alola": "Alola",
+  "cobblemongymodyssey.badge_case.tab.galar": "Galar",
+  "cobblemongymodyssey.badge_case.tab.paldea": "Paldea",
   "cobblemongymodyssey.badge_case.coming_soon": "Bientôt disponible...",
   "cobblemongymodyssey.badge_case.level_cap_tooltip": "Level Cap débloqué : %s",
   "cobblemongymodyssey.badge_case.locked_tooltip": "Pas encore obtenu",
-  "cobblemongymodyssey.badge_case.lcd.level_cap": "LIMITE NIVEAU: %s",
-  "cobblemongymodyssey.badge_case.lcd.badges": "BADGES: %s / %s"
+  "cobblemongymodyssey.badge_case.lcd.level_cap": "LIMITE LV: %s",
+  "cobblemongymodyssey.badge_case.lcd.badges": "BADGES: %s/%s",
+  "cobblemongymodyssey.badge_case.ribbon.completed_title": "Ruban de Champion de %s",
+  "cobblemongymodyssey.badge_case.ribbon.completed_desc": "Tous les badges ont été obtenus !",
+  "cobblemongymodyssey.badge_case.ribbon.incomplete_title": "Ruban de %s (Incomplet)",
+  "cobblemongymodyssey.badge_case.ribbon.incomplete_desc": "Battez tous les champions d'arène."
 }

@@ -6,25 +6,18 @@ import com.howlite.menu.BadgeCaseMenu
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Inventory
 
 /**
  * Interface graphique de la Boîte à Badges.
  *
- * Rendu entièrement programmatique (sans texture de fond statique) pour un rendu pixel-art 3D
- * net, rétro et premium, similaire à un appareil Pokématos/Pokédex portable.
- *
- * ## Rendu dynamique par région
- * L'appareil change de couleur de coque et de thème graphique en fonction de la région sélectionnée.
- *
- * ## Rendu des badges
- * - Badge obtenu -> Texture 1:1 en couleur avec effet de surbrillance au survol.
- * - Badge non obtenu -> Recess sombre affichant la silhouette noire/sombre du badge.
- *
- * ## Écran LCD rétro-éclairé
- * Affiche au bas de l'écran le Level Cap actuel du joueur et sa progression globale.
+ * Rework complet utilisant les assets fournis par l'utilisateur pour correspondre
+ * au layout pixel-art premium de l'image de référence.
+ * Enrichie avec du "juice" (particules GUI, animations sinusoïdales, typewriter LCD, bruitages interactifs).
  */
 class BadgeCaseScreen(
     menu: BadgeCaseMenu,
@@ -33,18 +26,31 @@ class BadgeCaseScreen(
 ) : AbstractContainerScreen<BadgeCaseMenu>(menu, inventory, title) {
 
     companion object {
-        const val GUI_WIDTH  = 176
-        const val GUI_HEIGHT = 200
+        const val GUI_WIDTH  = 184
+        const val GUI_HEIGHT = 145
 
-        const val TAB_WIDTH  = 38
-        const val TAB_HEIGHT = 16
+        val BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/badge_box_background.png"
+        )
+        val TOPBAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/badge_box_topbar.png"
+        )
+        val LEFT_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/left_button.png"
+        )
+        val REGIONS_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/regions_button.png"
+        )
+        val RIGHT_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/right_button.png"
+        )
     }
 
-    /**
-     * Enumération des Régions supportées.
-     * Chaque région possède sa propre couleur primaire, ses reflets 3D (highlight/shadow)
-     * et la couleur du texte de son titre d'écran.
-     */
     enum class Region(
         val labelKey: String,
         val badges: List<GymBadge>,
@@ -62,44 +68,180 @@ class BadgeCaseScreen(
                 GymBadge.VOLCANO_BADGE, GymBadge.EARTH_BADGE
             ),
             0xFF2ED573.toInt(), // Vert Émeraude
-            0xFF55EFC4.toInt(), // Émeraude clair (Reflet)
-            0xFF21A354.toInt(), // Émeraude sombre (Ombre)
+            0xFF55EFC4.toInt(),
+            0xFF21A354.toInt(),
             0xFF2ED573.toInt()
         ),
         JOHTO(
             "cobblemongymodyssey.badge_case.tab.johto",
             emptyList(),
             0xFF1E90FF.toInt(), // Bleu Cobalt
-            0xFF70A1FF.toInt(), // Bleu clair
-            0xFF0F6EBD.toInt(), // Bleu sombre
+            0xFF70A1FF.toInt(),
+            0xFF0F6EBD.toInt(),
             0xFF70A1FF.toInt()
         ),
         HOENN(
             "cobblemongymodyssey.badge_case.tab.hoenn",
             emptyList(),
             0xFFFF4757.toInt(), // Rouge Rubis
-            0xFFFF6B81.toInt(), // Rouge clair
-            0xFFC92836.toInt(), // Rouge sombre
+            0xFFFF6B81.toInt(),
+            0xFFC92836.toInt(),
             0xFFFF6B81.toInt()
         ),
         SINNOH(
             "cobblemongymodyssey.badge_case.tab.sinnoh",
             emptyList(),
             0xFFA29BFE.toInt(), // Violet Platine
-            0xFFD6A2E8.toInt(), // Violet clair
-            0xFF6D214F.toInt(), // Violet sombre
+            0xFFD6A2E8.toInt(),
+            0xFF6D214F.toInt(),
             0xFFD6A2E8.toInt()
+        ),
+        UNOVA(
+            "cobblemongymodyssey.badge_case.tab.unova",
+            emptyList(),
+            0xFF34495E.toInt(), // Gris foncé / Bleu nuit
+            0xFF7F8C8D.toInt(),
+            0xFF2C3E50.toInt(),
+            0xFF7F8C8D.toInt()
+        ),
+        KALOS(
+            "cobblemongymodyssey.badge_case.tab.kalos",
+            emptyList(),
+            0xFF3B3B98.toInt(), // Indigo
+            0xFFFEA47F.toInt(),
+            0xFF1B1464.toInt(),
+            0xFFFEA47F.toInt()
+        ),
+        ALOLA(
+            "cobblemongymodyssey.badge_case.tab.alola",
+            emptyList(),
+            0xFFFF9F43.toInt(), // Orange chaud
+            0xFFFFF200.toInt(),
+            0xFFEE5253.toInt(),
+            0xFFFFF200.toInt()
+        ),
+        GALAR(
+            "cobblemongymodyssey.badge_case.tab.galar",
+            emptyList(),
+            0xFFE056FD.toInt(), // Magenta
+            0xFFF8EFBA.toInt(),
+            0xFFBE2EDD.toInt(),
+            0xFFF8EFBA.toInt()
+        ),
+        PALDEA(
+            "cobblemongymodyssey.badge_case.tab.paldea",
+            emptyList(),
+            0xFF6F1E51.toInt(), // Violet/Bordeaux
+            0xFFED4C67.toInt(),
+            0xFF353B48.toInt(),
+            0xFFED4C67.toInt()
         );
+
+        val ribbonName: String
+            get() = when (this) {
+                KANTO, JOHTO -> "ribbon_champion"
+                HOENN -> "ribbon_champion_hoenn"
+                SINNOH -> "ribbon_champion_sinnoh"
+                UNOVA -> "ribbon_placeholder"
+                KALOS -> "ribbon_champion_kalos"
+                ALOLA -> "ribbon_champion_alola"
+                GALAR -> "ribbon_champion_galar"
+                PALDEA -> "ribbon_champion_paldea"
+            }
+    }
+
+    /** Classe de particule GUI personnalisée pour animer l'écran */
+    class GuiParticle(
+        var x: Float,
+        var y: Float,
+        var vx: Float,
+        var vy: Float,
+        val color: Int,
+        val maxAge: Int
+    ) {
+        var age = 0
+
+        fun tick() {
+            x += vx
+            y += vy
+            vy += 0.03f // Légère gravité
+            vx *= 0.98f // Résistance de l'air
+            age++
+        }
+
+        fun render(graphics: GuiGraphics) {
+            val alpha = ((1.0f - (age.toFloat() / maxAge.toFloat())) * 255).toInt().coerceIn(0, 255)
+            val finalColor = (alpha shl 24) or (color and 0x00FFFFFF)
+            val size = if (age > maxAge * 0.7) 1 else 2
+            graphics.fill(x.toInt(), y.toInt(), x.toInt() + size, y.toInt() + size, finalColor)
+        }
     }
 
     private var activeRegion: Region = Region.KANTO
+    private var scrollOffset: Int = 0
+
+    // Gestion des animations et particules
+    private val particles = mutableListOf<GuiParticle>()
+    private val random = java.util.Random()
+    private var clientTicks = 0
+    private var lcdTextProgress = 0f
+    private var lastActiveRegion: Region = Region.KANTO
 
     override fun init() {
         super.init()
         imageWidth  = GUI_WIDTH
         imageHeight = GUI_HEIGHT
-        titleLabelX = -9999 // Masquer le titre par défaut pour utiliser notre bannière LCD
-        inventoryLabelY = GUI_HEIGHT + 100 // Hors écran
+        titleLabelX = -9999
+        inventoryLabelY = GUI_HEIGHT + 100
+        updateScrollOffset()
+    }
+
+    private fun updateScrollOffset() {
+        val idx = activeRegion.ordinal
+        if (idx < scrollOffset) {
+            scrollOffset = idx
+        } else if (idx >= scrollOffset + 3) {
+            scrollOffset = idx - 2
+        }
+        scrollOffset = scrollOffset.coerceIn(0, Region.entries.size - 3)
+    }
+
+    override fun containerTick() {
+        super.containerTick()
+        clientTicks++
+
+        // Avancement de l'effet typewriter LCD
+        if (lcdTextProgress < 100f) {
+            lcdTextProgress += 1.2f
+        }
+
+        // Tick des particules
+        val iterator = particles.iterator()
+        while (iterator.hasNext()) {
+            val p = iterator.next()
+            p.tick()
+            if (p.age >= p.maxAge) {
+                iterator.remove()
+            }
+        }
+
+        // Faire scintiller de temps en temps les badges obtenus de la région active
+        val x = (width - imageWidth) / 2
+        val y = (height - imageHeight) / 2
+        val obtainedBadgeIndices = activeRegion.badges.indices.filter { activeRegion.badges[it] in menu.unlockedBadges }
+        if (obtainedBadgeIndices.isNotEmpty() && random.nextInt(25) == 0) {
+            val randomIdx = obtainedBadgeIndices[random.nextInt(obtainedBadgeIndices.size)]
+            val slotX = getSlotX(randomIdx)
+            val px = (x + slotX + 2 + random.nextInt(12)).toFloat()
+            val py = (y + 111 + 2 + random.nextInt(12)).toFloat()
+            particles.add(GuiParticle(
+                px, py,
+                (random.nextFloat() - 0.5f) * 0.4f,
+                -random.nextFloat() * 0.4f - 0.1f,
+                activeRegion.highlightColor,
+                10 + random.nextInt(8)
+            ))
+        }
     }
 
     override fun renderBg(graphics: GuiGraphics, partialTick: Float, mouseX: Int, mouseY: Int) {
@@ -107,271 +249,231 @@ class BadgeCaseScreen(
         val y = (height - imageHeight) / 2
         val region = activeRegion
 
-        // 1. Contour noir externe de l'appareil
-        drawBorder(graphics, x - 7, y - 7, x + imageWidth + 7, y + imageHeight + 7, 0xFF000000.toInt())
+        // 1. Dessiner le fond principal
+        graphics.blit(BACKGROUND_TEXTURE, x, y, 0f, 0f, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT)
 
-        // 2. Coque de couleur primaire de la région
-        graphics.fill(x - 6, y - 6, x + imageWidth + 6, y + imageHeight + 6, region.primaryColor)
+        // 2. Dessiner et teinter la barre supérieure
+        val color = region.primaryColor
+        val r = ((color shr 16) and 0xFF) / 255.0f
+        val g = ((color shr 8) and 0xFF) / 255.0f
+        val b = (color and 0xFF) / 255.0f
+        RenderSystem.setShaderColor(r, g, b, 1.0f)
+        graphics.blit(TOPBAR_TEXTURE, x + 6, y + 1, 0f, 0f, 172, 17, 172, 17)
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
 
-        // 3. Reliefs 3D de la coque
-        graphics.fill(x - 6, y - 6, x + imageWidth + 6, y - 5, region.highlightColor) // Haut
-        graphics.fill(x - 6, y - 6, x - 5, y + imageHeight + 6, region.highlightColor) // Gauche
-        graphics.fill(x - 6, y + imageHeight + 5, x + imageWidth + 6, y + imageHeight + 6, region.shadowColor) // Bas
-        graphics.fill(x + imageWidth + 5, y - 6, x + imageWidth + 6, y + imageHeight + 6, region.shadowColor) // Droite
-
-        // 4. Rendu des Onglets
-        renderTabs(graphics, x, y, mouseX, mouseY)
-
-        // 5. Fond et contours de l'écran interne
-        val scrX1 = x + 6
-        val scrY1 = y + 26
-        val scrX2 = x + imageWidth - 6
-        val scrY2 = y + imageHeight - 6
-
-        // Fond noir/marine sombre
-        graphics.fill(scrX1, scrY1, scrX2, scrY2, 0xFF10141D.toInt())
-
-        // Relief de renfoncement de l'écran
-        graphics.fill(scrX1, scrY1, scrX2, scrY1 + 1, 0xFF050609.toInt()) // Ombre haute
-        graphics.fill(scrX1, scrY1, scrX1 + 1, scrY2, 0xFF050609.toInt()) // Ombre gauche
-        graphics.fill(scrX2 - 1, scrY1 + 1, scrX2, scrY2, 0xFF252D3A.toInt()) // Reflet droit
-        graphics.fill(scrX1 + 1, scrY2 - 1, scrX2, scrY2, 0xFF252D3A.toInt()) // Reflet bas
-        
-        drawBorder(graphics, scrX1 - 1, scrY1 - 1, scrX2 + 1, scrY2 + 1, 0xFF000000.toInt()) // Bord noir de l'écran
-
-        // 6. Bannière d'en-tête de l'écran
-        val banY1 = scrY1 + 4
-        val banY2 = scrY1 + 18
-        val bannerBgColor = (region.primaryColor and 0x00FFFFFF) or 0x35000000 // Teinte translucide
-        graphics.fill(scrX1 + 4, banY1, scrX2 - 4, banY2, bannerBgColor)
-        graphics.fill(scrX1 + 4, banY2, scrX2 - 4, banY2 + 1, region.shadowColor) // Ligne de séparation
-
+        // 3. Dessiner le titre de la ligue dans la barre supérieure
         val bannerText = "— " + Component.translatable(region.labelKey).string.uppercase() + " LEAGUE —"
         val bannerW = font.width(bannerText)
-        graphics.drawString(font, bannerText, x + (imageWidth - bannerW) / 2, banY1 + 3, region.screenTitleColor, false)
+        graphics.drawString(font, bannerText, x + (GUI_WIDTH - bannerW) / 2, y + 6, 0xFFFFFF, true)
 
-        // 7. Grille des Badges
-        renderBadgeGrid(graphics, x, y, mouseX, mouseY)
+        // 4. Dessiner le ruban au centre du Pokéball (avec effet glow/flottement si ligue complétée)
+        val rx = x + 76
+        val isCompleted = region.badges.isNotEmpty() && region.badges.all { it in menu.unlockedBadges }
+        val time = clientTicks + partialTick
 
-        // 8. Écran LCD du bas (Level Cap)
+        if (isCompleted) {
+            // Halo lumineux pulsant circulaire derrière le ruban
+            val glowColor = (region.primaryColor and 0x00FFFFFF)
+            val baseAlpha = (24 + (kotlin.math.sin(time * 0.15) * 10)).toInt().coerceIn(0, 255)
+            val cx = rx + 16
+            val cy = y + 58 + 16
+
+            drawGlowCircle(graphics, cx, cy, 26, ((baseAlpha * 0.15f).toInt() shl 24) or glowColor)
+            drawGlowCircle(graphics, cx, cy, 18, ((baseAlpha * 0.35f).toInt() shl 24) or glowColor)
+            drawGlowCircle(graphics, cx, cy, 12, ((baseAlpha * 0.65f).toInt() shl 24) or glowColor)
+            drawGlowCircle(graphics, cx, cy, 6, (baseAlpha shl 24) or glowColor)
+        }
+
+        // Flottement sinusoïdal doux du ruban obtenu
+        val bobbingY = if (isCompleted) (kotlin.math.sin(time * 0.08) * 1.5).toFloat() else 0f
+        val ry = y + 58 + bobbingY.toInt()
+
+        val ribbonTexName = region.ribbonName
+        val ribbonTexPath = if (region == Region.UNOVA) {
+            "textures/gui/ribbon/ribbon_placeholder_hollow.png"
+        } else if (isCompleted) {
+            "textures/gui/ribbon/$ribbonTexName.png"
+        } else {
+            "textures/gui/ribbon/${ribbonTexName}_hollow.png"
+        }
+        val ribbonTexture = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, ribbonTexPath)
+        graphics.blit(ribbonTexture, rx, ry, 0f, 0f, 32, 32, 32, 32)
+
+        // 5. Dessiner la grille des badges
+        renderBadgeGrid(graphics, x, y, mouseX, mouseY, partialTick)
+
+        // 6. Dessiner les informations LCD (barre inférieure)
         renderLCDDisplay(graphics, x, y)
+
+        // 7. Dessiner la barre d'onglets et les flèches de navigation
+        renderTabsAndArrows(graphics, x, y, mouseX, mouseY)
     }
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         renderBackground(graphics, mouseX, mouseY, partialTick)
         super.render(graphics, mouseX, mouseY, partialTick)
+
+        // Dessiner les particules interactives par-dessus le fond
+        particles.forEach { it.render(graphics) }
+
         renderTooltip(graphics, mouseX, mouseY)
     }
 
-    private fun renderTabs(graphics: GuiGraphics, guiX: Int, guiY: Int, mouseX: Int, mouseY: Int) {
-        val tabCount = Region.entries.size
-        val spacing = 2
-        val startX = guiX + (GUI_WIDTH - (tabCount * TAB_WIDTH + (tabCount - 1) * spacing)) / 2
+    private fun getSlotX(index: Int): Int {
+        val slotXs = intArrayOf(10, 28, 46, 64, 104, 122, 140, 158)
+        return slotXs.getOrElse(index) { 0 }
+    }
 
-        Region.entries.forEachIndexed { i, region ->
-            val tabX = startX + i * (TAB_WIDTH + spacing)
-            val isActive = region == activeRegion
-            val hasContent = region.badges.isNotEmpty()
-            
-            val tabY = if (isActive) guiY - 14 else guiY - 10
-            val currentTabH = if (isActive) 15 else 11
+    private fun drawHoverBorder(graphics: GuiGraphics, sx: Int, sy: Int, color: Int) {
+        graphics.fill(sx - 1, sy - 1, sx + 17, sy, color) // Top
+        graphics.fill(sx - 1, sy + 16, sx + 17, sy + 17, color) // Bottom
+        graphics.fill(sx - 1, sy, sx, sy + 16, color) // Left
+        graphics.fill(sx + 16, sy, sx + 17, sy + 16, color) // Right
+    }
 
-            val baseColor = if (isActive) region.primaryColor else 0xFF2F3542.toInt()
-            val highlight = if (isActive) region.highlightColor else 0xFF57606F.toInt()
-            val shadow = if (isActive) region.shadowColor else 0xFF1E272E.toInt()
-
-            graphics.fill(tabX, tabY, tabX + TAB_WIDTH, tabY + currentTabH, baseColor)
-
-            // Reliefs
-            graphics.fill(tabX, tabY, tabX + TAB_WIDTH, tabY + 1, highlight)
-            graphics.fill(tabX, tabY, tabX + 1, tabY + currentTabH, highlight)
-            graphics.fill(tabX + TAB_WIDTH - 1, tabY + 1, tabX + TAB_WIDTH, tabY + currentTabH, shadow)
-
-            // Contours noirs
-            graphics.fill(tabX, tabY - 1, tabX + TAB_WIDTH, tabY, 0xFF000000.toInt())
-            graphics.fill(tabX - 1, tabY, tabX, tabY + currentTabH, 0xFF000000.toInt())
-            graphics.fill(tabX + TAB_WIDTH, tabY, tabX + TAB_WIDTH + 1, tabY + currentTabH, 0xFF000000.toInt())
-            if (!isActive) {
-                graphics.fill(tabX, guiY - 1, tabX + TAB_WIDTH, guiY, 0xFF000000.toInt())
+    private fun drawGlowCircle(graphics: GuiGraphics, cx: Int, cy: Int, r: Int, color: Int) {
+        for (dy in -r..r) {
+            val dx = kotlin.math.sqrt((r * r - dy * dy).toDouble()).toInt()
+            if (dx > 0) {
+                graphics.fill(cx - dx, cy + dy, cx + dx, cy + dy + 1, color)
             }
-
-            val label = font.split(Component.translatable(region.labelKey), TAB_WIDTH - 4).firstOrNull()
-                ?: return@forEachIndexed
-            val textColor = when {
-                isActive -> 0xFFFFFF
-                hasContent -> 0xCCCCCC
-                else -> 0x747D8C
-            }
-            
-            val textX = tabX + (TAB_WIDTH - font.width(label)) / 2
-            val textY = tabY + (currentTabH - 8) / 2
-            graphics.drawString(font, label, textX, textY, textColor, false)
         }
     }
 
-    private fun renderBadgeGrid(graphics: GuiGraphics, guiX: Int, guiY: Int, mouseX: Int, mouseY: Int) {
+    private fun renderBadgeGrid(graphics: GuiGraphics, guiX: Int, guiY: Int, mouseX: Int, mouseY: Int, partialTick: Float) {
         val badges = activeRegion.badges
         val unlockedBadges = menu.unlockedBadges
 
         if (badges.isEmpty()) {
             val msg = Component.translatable("cobblemongymodyssey.badge_case.coming_soon")
             val msgX = guiX + (GUI_WIDTH - font.width(msg)) / 2
-            val msgY = guiY + 26 + (GUI_HEIGHT - 26 - 36) / 2
+            val msgY = guiY + 68
             graphics.drawString(font, msg, msgX, msgY, 0x57606F, false)
             return
         }
 
-        // Ligne de séparation écran gauche/droite
-        graphics.fill(guiX + 52, guiY + 48, guiX + 53, guiY + 138, 0xFF252C38.toInt())
-
-        // Rendu du trophée en pixel-art
-        drawPixelArtTrophy(graphics, guiX + 10, guiY + 48)
-
         badges.forEachIndexed { i, badge ->
-            val (slotX, slotY) = slotPosition(guiX, guiY, i)
+            val slotX = getSlotX(i)
+            val slotY = 111
+            val sx = guiX + slotX
+            val sy = guiY + slotY
             val isUnlocked = badge in unlockedBadges
-
-            // Fond renfoncé du slot
-            graphics.fill(slotX, slotY, slotX + 20, slotY + 20, 0xFF0A0D14.toInt())
-            
-            // Bordures de relief internes
-            graphics.fill(slotX, slotY, slotX + 20, slotY + 1, 0xFF040507.toInt())
-            graphics.fill(slotX, slotY, slotX + 1, slotY + 20, 0xFF040507.toInt())
-            graphics.fill(slotX + 19, slotY + 1, slotX + 20, slotY + 20, 0xFF1D2433.toInt())
-            graphics.fill(slotX + 1, slotY + 19, slotX + 20, slotY + 20, 0xFF1D2433.toInt())
-
-            // Arrondir les angles avec la couleur de fond
-            val bg = 0xFF10141D.toInt()
-            graphics.fill(slotX, slotY, slotX + 1, slotY + 1, bg)
-            graphics.fill(slotX + 19, slotY, slotX + 20, slotY + 1, bg)
-            graphics.fill(slotX, slotY + 19, slotX + 1, slotY + 20, bg)
-            graphics.fill(slotX + 19, slotY + 19, slotX + 20, slotY + 20, bg)
-
-            // Surbrillance au survol de la souris
-            val isHovered = mouseX >= slotX && mouseX < slotX + 20 && mouseY >= slotY && mouseY < slotY + 20
-            if (isHovered) {
-                val hoverColor = activeRegion.highlightColor
-                graphics.fill(slotX, slotY, slotX + 20, slotY + 1, hoverColor)
-                graphics.fill(slotX, slotY + 19, slotX + 20, slotY + 20, hoverColor)
-                graphics.fill(slotX, slotY, slotX + 1, slotY + 20, hoverColor)
-                graphics.fill(slotX + 19, slotY, slotX + 20, slotY + 20, hoverColor)
-            }
+            val isHovered = mouseX >= sx && mouseX < sx + 16 && mouseY >= sy && mouseY < sy + 16
 
             val badgeTexture = ResourceLocation.fromNamespaceAndPath(
                 CobblemonGymOdyssey.MOD_ID,
                 "textures/item/${badge.id}.png"
             )
 
-            val iconX = slotX + 2
-            val iconY = slotY + 2
+            // Rebond/bobbing interactif au survol
+            val offset = if (isHovered) {
+                val time = clientTicks + partialTick
+                val bob = kotlin.math.sin(time * 0.2f) * 1.2f
+                -1f + bob
+            } else {
+                0f
+            }
+            val renderY = sy + offset.toInt()
 
             if (isUnlocked) {
-                graphics.blit(
-                    badgeTexture, iconX, iconY, 0f, 0f,
-                    16, 16, 16, 16
-                )
+                graphics.blit(badgeTexture, sx, renderY, 0f, 0f, 16, 16, 16, 16)
             } else {
-                // Rendu silhouette sombre pour les badges non débloqués
                 RenderSystem.setShaderColor(0.06f, 0.06f, 0.06f, 0.75f)
-                graphics.blit(
-                    badgeTexture, iconX, iconY, 0f, 0f,
-                    16, 16, 16, 16
-                )
+                graphics.blit(badgeTexture, sx, renderY, 0f, 0f, 16, 16, 16, 16)
                 RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+            }
+
+            // Rendu de la bordure pulsante au survol
+            if (isHovered) {
+                val pulse = (160 + (kotlin.math.sin((clientTicks + partialTick) * 0.3) * 95)).toInt().coerceIn(0, 255)
+                val hoverColor = (pulse shl 24) or (activeRegion.highlightColor and 0x00FFFFFF)
+                drawHoverBorder(graphics, sx, sy, hoverColor)
             }
         }
     }
 
     private fun renderLCDDisplay(graphics: GuiGraphics, guiX: Int, guiY: Int) {
-        val lcdX = guiX + 12
-        val lcdY = guiY + 148
-        val lcdW = 152
-        val lcdH = 36
+        val yPos = guiY + 134
 
-        // Fond LCD bleu-cyan sombre rétro-éclairé
-        graphics.fill(lcdX, lcdY, lcdX + lcdW, lcdY + lcdH, 0xFF082C3C.toInt())
+        // 1. Dessiner les scanlines LCD (fines lignes rétro horizontales)
+        for (sy in 131..143 step 2) {
+            graphics.fill(guiX + 2, guiY + sy, guiX + 182, guiY + sy + 1, 0x12000000)
+        }
 
-        // Reliefs internes
-        graphics.fill(lcdX, lcdY, lcdX + lcdW, lcdY + 1, 0xFF04161E.toInt())
-        graphics.fill(lcdX, lcdY, lcdX + 1, lcdY + lcdH, 0xFF04161E.toInt())
-        graphics.fill(lcdX + lcdW - 1, lcdY + 1, lcdX + lcdW, lcdY + lcdH, 0xFF104A64.toInt())
-        graphics.fill(lcdX + 1, lcdY + lcdH - 1, lcdX + lcdW, lcdY + lcdH, 0xFF104A64.toInt())
-
-        // Contour extérieur
-        drawBorder(graphics, lcdX - 1, lcdY - 1, lcdX + lcdW + 1, lcdY + lcdH + 1, 0xFF000000.toInt())
-
-        if (activeRegion.badges.isNotEmpty()) {
+        val rawText = if (activeRegion.badges.isNotEmpty()) {
             val capText = Component.translatable("cobblemongymodyssey.badge_case.lcd.level_cap", menu.levelCap).string
-            graphics.drawString(font, capText, lcdX + 8, lcdY + 8, 0xFF00FFCC.toInt(), false)
-
             val badgeCountText = Component.translatable(
                 "cobblemongymodyssey.badge_case.lcd.badges",
-                menu.unlockedBadges.size,
+                menu.unlockedBadges.count { it in activeRegion.badges },
                 activeRegion.badges.size
             ).string
-            graphics.drawString(font, badgeCountText, lcdX + 8, lcdY + 20, 0xFF00CC99.toInt(), false)
+            "$capText   •   $badgeCountText"
         } else {
-            val waitText = Component.translatable("cobblemongymodyssey.badge_case.coming_soon").string
-            graphics.drawString(font, waitText, lcdX + 8, lcdY + 14, 0xFF00CC99.toInt(), false)
+            Component.translatable("cobblemongymodyssey.badge_case.coming_soon").string
         }
+
+        // Effet d'écriture typewriter
+        if (activeRegion != lastActiveRegion) {
+            lcdTextProgress = 0f
+            lastActiveRegion = activeRegion
+        }
+
+        val charsToShow = lcdTextProgress.toInt().coerceIn(0, rawText.length)
+        val visibleText = rawText.substring(0, charsToShow)
+
+        val textW = font.width(rawText)
+        val startX = guiX + (GUI_WIDTH - textW) / 2
+        graphics.drawString(font, visibleText, startX, yPos, 0x00FFCC, true)
     }
 
-    private fun drawPixelArtTrophy(graphics: GuiGraphics, tx: Int, ty: Int) {
-        val cx = tx + 8
-        val cy = ty + 12
+    private fun renderTabsAndArrows(graphics: GuiGraphics, guiX: Int, guiY: Int, mouseX: Int, mouseY: Int) {
+        // 1. Bouton Gauche (Y = guiY + 147, H = 14)
+        val leftX = guiX - 6
+        val leftY = guiY + 147
+        val isLeftDisabled = activeRegion.ordinal == 0
+        val isLeftHovered = !isLeftDisabled && mouseX >= leftX && mouseX < leftX + 26 && mouseY >= leftY && mouseY < leftY + 14
+        
+        val leftTint = if (isLeftDisabled) 0.5f else 1.0f
+        val leftV = if (isLeftHovered) 14f else 0f
+        RenderSystem.setShaderColor(leftTint, leftTint, leftTint, 1.0f)
+        graphics.blit(LEFT_BUTTON_TEXTURE, leftX, leftY, 0f, leftV, 26, 14, 26, 28)
 
-        val gold = 0xFFF1C40F.toInt()
-        val darkGold = 0xFFD35400.toInt()
-        val lightGold = 0xFFFFEAA7.toInt()
-        val silver = 0xFFBDC3C7.toInt()
-        val darkSilver = 0xFF7F8C8D.toInt()
-        val black = 0xFF000000.toInt()
+        // 2. Boutons d'onglets (Y = guiY + 143, H = 14)
+        val tabY = guiY + 143
+        for (i in 0 until 3) {
+            val regIdx = scrollOffset + i
+            if (regIdx >= Region.entries.size) break
 
-        // 1. Socle
-        graphics.fill(cx + 1, cy + 22, cx + 13, cy + 24, black)
-        graphics.fill(cx + 2, cy + 21, cx + 12, cy + 23, darkSilver)
-        graphics.fill(cx + 3, cy + 20, cx + 11, cy + 21, silver)
+            val region = Region.entries[regIdx]
+            val tabX = guiX + 20 + i * 48
+            val isActive = region == activeRegion
+            val isHovered = !isActive && mouseX >= tabX && mouseX < tabX + 48 && mouseY >= tabY && mouseY < tabY + 14
 
-        // 2. Tige
-        graphics.fill(cx + 6, cy + 13, cx + 8, cy + 20, darkGold)
-        graphics.fill(cx + 7, cy + 13, cx + 9, cy + 20, gold)
+            val tabV = if (isActive) 14f else 0f
+            val tabTint = 1.0f
+            
+            RenderSystem.setShaderColor(tabTint, tabTint, tabTint, 1.0f)
+            graphics.blit(REGIONS_BUTTON_TEXTURE, tabX, tabY, 0f, tabV, 48, 14, 48, 28)
 
-        // 3. Corps de la coupe (contour + fond)
-        graphics.fill(cx + 2, cy + 1, cx + 12, cy + 13, black)
-        graphics.fill(cx + 3, cy + 2, cx + 11, cy + 12, darkGold)
-        graphics.fill(cx + 4, cy + 2, cx + 10, cy + 11, gold)
-        graphics.fill(cx + 4, cy + 3, cx + 6, cy + 8, lightGold) // Reflet gauche
+            val label = Component.translatable(region.labelKey).string
+            val textX = tabX + (48 - font.width(label)) / 2
+            val textY = tabY + 3
+            val textColor = if (isActive) 0xFFFFFF else 0x8E8E93
+            graphics.drawString(font, label, textX, textY, textColor, false)
+        }
 
-        // 4. Anses
-        // Anse gauche
-        graphics.fill(cx + 0, cy + 3, cx + 2, cy + 9, black)
-        graphics.fill(cx + 1, cy + 4, cx + 3, cy + 8, gold)
-        graphics.fill(cx + 1, cy + 3, cx + 3, cy + 4, gold)
-        // Anse droite
-        graphics.fill(cx + 12, cy + 3, cx + 14, cy + 9, black)
-        graphics.fill(cx + 11, cy + 4, cx + 13, cy + 8, darkGold)
-        graphics.fill(cx + 11, cy + 3, cx + 13, cy + 4, darkGold)
+        // 3. Bouton Droit (Y = guiY + 147, H = 14)
+        val rightX = guiX + 164
+        val rightY = guiY + 147
+        val isRightDisabled = activeRegion.ordinal == Region.entries.size - 1
+        val isRightHovered = !isRightDisabled && mouseX >= rightX && mouseX < rightX + 26 && mouseY >= rightY && mouseY < rightY + 14
 
-        // 5. Gemme centrale rouge
-        graphics.fill(cx + 6, cy + 6, cx + 8, cy + 8, 0xFFE74C3C.toInt())
-    }
+        val rightTint = if (isRightDisabled) 0.5f else 1.0f
+        val rightV = if (isRightHovered) 14f else 0f
+        RenderSystem.setShaderColor(rightTint, rightTint, rightTint, 1.0f)
+        graphics.blit(RIGHT_BUTTON_TEXTURE, rightX, rightY, 0f, rightV, 26, 14, 26, 28)
 
-    private fun slotPosition(guiX: Int, guiY: Int, index: Int): Pair<Int, Int> {
-        val col = index % 4
-        val row = index / 4
-        val gx = guiX + 60
-        val gy = guiY + 52
-        return Pair(
-            gx + col * 27, // 20px de taille + 7px d'espacement
-            gy + row * 34  // 20px de taille + 14px d'espacement
-        )
-    }
-
-    private fun drawBorder(graphics: GuiGraphics, x1: Int, y1: Int, x2: Int, y2: Int, color: Int) {
-        graphics.fill(x1, y1, x2, y1 + 1, color)
-        graphics.fill(x1, y2 - 1, x2, y2, color)
-        graphics.fill(x1, y1, x1 + 1, y2, color)
-        graphics.fill(x2 - 1, y1, x2, y2, color)
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
     }
 
     override fun renderTooltip(graphics: GuiGraphics, mouseX: Int, mouseY: Int) {
@@ -381,8 +483,11 @@ class BadgeCaseScreen(
         val unlockedBadges = menu.unlockedBadges
 
         badges.forEachIndexed { i, badge ->
-            val (slotX, slotY) = slotPosition(x, y, i)
-            if (mouseX >= slotX && mouseX < slotX + 20 && mouseY >= slotY && mouseY < slotY + 20) {
+            val slotX = getSlotX(i)
+            val slotY = 111
+            val sx = x + slotX
+            val sy = y + slotY
+            if (mouseX >= sx && mouseX < sx + 16 && mouseY >= sy && mouseY < sy + 16) {
                 val lines = mutableListOf<Component>()
                 lines += Component.translatable("item.cobblemongymodyssey.${badge.id}")
                 if (badge in unlockedBadges) {
@@ -394,7 +499,27 @@ class BadgeCaseScreen(
                     lines += Component.translatable("cobblemongymodyssey.badge_case.locked_tooltip")
                 }
                 graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
+                return
             }
+        }
+
+        val rx = x + 76
+        val isCompleted = activeRegion.badges.isNotEmpty() && activeRegion.badges.all { it in unlockedBadges }
+        val bobbingY = if (isCompleted) (kotlin.math.sin((clientTicks) * 0.08) * 1.5).toInt() else 0
+        val ry = y + 58 + bobbingY
+
+        if (mouseX >= rx && mouseX < rx + 32 && mouseY >= ry && mouseY < ry + 32) {
+            val lines = mutableListOf<Component>()
+            val regionName = Component.translatable(activeRegion.labelKey).string
+            
+            if (isCompleted) {
+                lines += Component.translatable("cobblemongymodyssey.badge_case.ribbon.completed_title", regionName)
+                lines += Component.translatable("cobblemongymodyssey.badge_case.ribbon.completed_desc")
+            } else {
+                lines += Component.translatable("cobblemongymodyssey.badge_case.ribbon.incomplete_title", regionName)
+                lines += Component.translatable("cobblemongymodyssey.badge_case.ribbon.incomplete_desc")
+            }
+            graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
         }
     }
 
@@ -402,19 +527,112 @@ class BadgeCaseScreen(
         val x = (width  - imageWidth)  / 2
         val y = (height - imageHeight) / 2
 
-        val tabCount = Region.entries.size
-        val spacing = 2
-        val startX = x + (GUI_WIDTH - (tabCount * TAB_WIDTH + (tabCount - 1) * spacing)) / 2
-
-        Region.entries.forEachIndexed { i, region ->
-            val tabX = startX + i * (TAB_WIDTH + spacing)
-            val tabY = y - 14
-            if (mouseX >= tabX && mouseX <= tabX + TAB_WIDTH &&
-                mouseY >= tabY && mouseY <= tabY + TAB_HEIGHT) {
-                activeRegion = region
+        // Bouton Gauche (Y = y + 147, H = 14)
+        val leftX = x - 6
+        val leftY = y + 147
+        if (mouseX >= leftX && mouseX < leftX + 26 && mouseY >= leftY && mouseY < leftY + 14) {
+            if (activeRegion.ordinal > 0) {
+                activeRegion = Region.entries[activeRegion.ordinal - 1]
+                updateScrollOffset()
+                minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
                 return true
             }
         }
+
+        // Bouton Droit (Y = y + 147, H = 14)
+        val rightX = x + 164
+        val rightY = y + 147
+        if (mouseX >= rightX && mouseX < rightX + 26 && mouseY >= rightY && mouseY < rightY + 14) {
+            if (activeRegion.ordinal < Region.entries.size - 1) {
+                activeRegion = Region.entries[activeRegion.ordinal + 1]
+                updateScrollOffset()
+                minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
+                return true
+            }
+        }
+
+        // Onglets (Y = y + 143, H = 14)
+        val tabY = y + 143
+        for (i in 0 until 3) {
+            val regIdx = scrollOffset + i
+            if (regIdx >= Region.entries.size) break
+
+            val tabX = x + 20 + i * 48
+            if (mouseX >= tabX && mouseX < tabX + 48 && mouseY >= tabY && mouseY < tabY + 14) {
+                val region = Region.entries[regIdx]
+                if (region != activeRegion) {
+                    activeRegion = region
+                    updateScrollOffset()
+                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
+                    return true
+                }
+            }
+        }
+
+        // Interaction avec les badges (Jaillissement de particules et son interactif)
+        val badges = activeRegion.badges
+        val unlockedBadges = menu.unlockedBadges
+        badges.forEachIndexed { i, badge ->
+            val slotX = getSlotX(i)
+            val slotY = 111
+            val sx = x + slotX
+            val sy = y + slotY
+            if (mouseX >= sx && mouseX < sx + 16 && mouseY >= sy && mouseY < sy + 16) {
+                val isUnlocked = badge in unlockedBadges
+                if (isUnlocked) {
+                    // Éclatement d'étoiles dorées/colorées
+                    for (k in 0 until 12) {
+                        val vx = (random.nextFloat() - 0.5f) * 1.8f
+                        val vy = -random.nextFloat() * 1.5f - 0.5f
+                        particles.add(GuiParticle(
+                            (sx + 8).toFloat(), (sy + 8).toFloat(),
+                            vx, vy,
+                            activeRegion.highlightColor,
+                            15 + random.nextInt(10)
+                        ))
+                    }
+                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.2f))
+                } else {
+                    // Particules de fumée gris sombre
+                    for (k in 0 until 6) {
+                        val vx = (random.nextFloat() - 0.5f) * 0.8f
+                        val vy = -random.nextFloat() * 0.8f - 0.2f
+                        particles.add(GuiParticle(
+                            (sx + 8).toFloat(), (sy + 8).toFloat(),
+                            vx, vy,
+                            0xFF555555.toInt(),
+                            10 + random.nextInt(5)
+                        ))
+                    }
+                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
+                }
+                return true
+            }
+        }
+
+        // Interaction avec le ruban central (Feu d'artifice de particules et chime d'améthyste)
+        val rx = x + 76
+        val isCompleted = activeRegion.badges.isNotEmpty() && activeRegion.badges.all { it in unlockedBadges }
+        val bobbingY = if (isCompleted) (kotlin.math.sin((clientTicks) * 0.08) * 1.5).toInt() else 0
+        val ry = y + 58 + bobbingY
+
+        if (mouseX >= rx && mouseX < rx + 32 && mouseY >= ry && mouseY < ry + 32) {
+            if (isCompleted) {
+                for (k in 0 until 24) {
+                    val vx = (random.nextFloat() - 0.5f) * 3.0f
+                    val vy = (random.nextFloat() - 0.5f) * 3.0f - 1.0f
+                    particles.add(GuiParticle(
+                        (rx + 16).toFloat(), (ry + 16).toFloat(),
+                        vx, vy,
+                        activeRegion.highlightColor,
+                        20 + random.nextInt(15)
+                    ))
+                }
+                minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.AMETHYST_BLOCK_CHIME, 1.0f))
+                return true
+            }
+        }
+
         return super.mouseClicked(mouseX, mouseY, button)
     }
 }
