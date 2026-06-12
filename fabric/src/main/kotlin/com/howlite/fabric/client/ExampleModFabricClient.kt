@@ -14,6 +14,8 @@ import net.fabricmc.api.ClientModInitializer
  */
 class ExampleModFabricClient : ClientModInitializer {
     override fun onInitializeClient() {
+        com.howlite.client.GymClientInit.init()
+
         // Associe le MenuType à l'écran côté client
         MenuRegistry.registerScreenFactory(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get()) { menu, inv, title ->
             BadgeCaseScreen(menu, inv, title)

@@ -28,4 +28,9 @@ object NeoForgeClientSetup {
             BadgeCaseScreen(menu, inv, title)
         }
     }
+
+    @SubscribeEvent
+    fun onClientSetup(event: net.neoforged.fml.event.lifecycle.FMLClientSetupEvent) {
+        com.howlite.client.GymClientInit.init()
+    }
 }

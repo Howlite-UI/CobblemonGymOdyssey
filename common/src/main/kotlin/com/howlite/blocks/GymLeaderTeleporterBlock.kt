@@ -25,6 +25,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.block.state.properties.DirectionProperty
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.item.context.BlockPlaceContext
+import net.minecraft.core.Direction
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -35,17 +39,26 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
         simpleCodec(::GymLeaderTeleporterBlock)
 
     private val SHAPE: VoxelShape = Block.box(0.0, 0.0, 0.0, 16.0, 3.0, 16.0)
+    private val COLLISION_SHAPE_OPEN: VoxelShape = Block.box(0.0, 0.0, 0.0, 16.0, 2.5, 16.0)
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         return SHAPE
     }
 
+    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+        return if (state.getValue(PORTAL_OPEN)) COLLISION_SHAPE_OPEN else SHAPE
+    }
+
     init {
-        registerDefaultState(stateDefinition.any().setValue(PORTAL_OPEN, false))
+        registerDefaultState(stateDefinition.any().setValue(PORTAL_OPEN, false).setValue(FACING, Direction.NORTH))
+    }
+
+    override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
+        return defaultBlockState().setValue(FACING, context.horizontalDirection.opposite)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(PORTAL_OPEN)
+        builder.add(PORTAL_OPEN, FACING)
     }
 
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
@@ -80,7 +93,7 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
                         blockEntity.returnZ = player.z
                         blockEntity.returnYaw = player.yRot
                         blockEntity.returnPitch = player.xRot
-                        blockEntity.portalTicks = 200 // 10 secondes (20 ticks/sec)
+                        blockEntity.portalTicks = 600 // 30 secondes (20 ticks/sec)
                         blockEntity.activatedByPlayer = player.uuid
                         blockEntity.targetBadgeId = item.targetBadge.id
                         blockEntity.setChanged()
@@ -99,18 +112,10 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
                             PlayerProgressApi.markDirty(player)
                         }
 
-                        // Activer le portail dans le blockstate
-                        level.setBlock(pos, state.setValue(PORTAL_OPEN, true), 3)
-
-                        // Jouer des sons
-                        level.playSound(
-                            null,
-                            pos,
-                            SoundEvents.END_PORTAL_SPAWN,
-                            SoundSource.BLOCKS,
-                            1.0f,
-                            1.0f
-                        )
+                        // Activer le portail dans le blockstate et forcer la synchro client
+                        val newState = state.setValue(PORTAL_OPEN, true)
+                        level.setBlock(pos, newState, 3)
+                        level.sendBlockUpdated(pos, state, newState, 3)
                     }
                 }
                 return ItemInteractionResult.sidedSuccess(level.isClientSide)
@@ -119,7 +124,7 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
     }
 
-    override fun stepOn(level: Level, pos: BlockPos, state: BlockState, entity: Entity) {
+    override fun entityInside(state: BlockState, level: Level, pos: BlockPos, entity: Entity) {
         if (!level.isClientSide && state.getValue(PORTAL_OPEN) && entity is ServerPlayer) {
             val blockEntity = level.getBlockEntity(pos) as? GymLeaderTeleporterBlockEntity
             // Téléporte si c'est le joueur qui a activé le portail
@@ -127,13 +132,15 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
                 // Lancer la téléportation
                 GymArenaGenerator.teleportAndGenerate(entity, blockEntity.targetBadgeId)
                 
-                // Fermer immédiatement le portail
-                level.setBlock(pos, state.setValue(PORTAL_OPEN, false), 3)
+                // Fermer immédiatement le portail et forcer la synchro client
+                val newState = state.setValue(PORTAL_OPEN, false)
+                level.setBlock(pos, newState, 3)
                 blockEntity.portalTicks = 0
                 blockEntity.setChanged()
+                level.sendBlockUpdated(pos, state, newState, 3)
             }
         }
-        super.stepOn(level, pos, state, entity)
+        super.entityInside(state, level, pos, entity)
     }
 
     override fun <T : BlockEntity> getTicker(
@@ -150,5 +157,6 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
 
     companion object {
         val PORTAL_OPEN: BooleanProperty = BooleanProperty.create("portal_open")
+        val FACING: DirectionProperty = BlockStateProperties.HORIZONTAL_FACING
     }
 }

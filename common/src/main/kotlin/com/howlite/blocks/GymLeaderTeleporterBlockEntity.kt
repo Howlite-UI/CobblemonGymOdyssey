@@ -20,6 +20,7 @@ class GymLeaderTeleporterBlockEntity(pos: BlockPos, state: BlockState) :
     var portalTicks: Int = 0
     var activatedByPlayer: UUID? = null
     var targetBadgeId: String = ""
+    var clientTicks: Int = 0
 
     override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(tag, registries)
@@ -49,6 +50,14 @@ class GymLeaderTeleporterBlockEntity(pos: BlockPos, state: BlockState) :
         activatedByPlayer?.let { tag.putUUID("ActivatedByPlayer", it) }
     }
 
+    override fun getUpdatePacket(): net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener>? {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this)
+    }
+
+    override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag {
+        return saveWithoutMetadata(registries)
+    }
+
     companion object {
         fun serverTick(level: Level, pos: BlockPos, state: BlockState, blockEntity: GymLeaderTeleporterBlockEntity) {
             if (blockEntity.portalTicks > 0) {
@@ -58,24 +67,22 @@ class GymLeaderTeleporterBlockEntity(pos: BlockPos, state: BlockState) :
                 if (blockEntity.portalTicks == 0) {
                     val newState = state.setValue(GymLeaderTeleporterBlock.PORTAL_OPEN, false)
                     level.setBlock(pos, newState, 3)
+                    level.sendBlockUpdated(pos, state, newState, 3)
                 }
             }
         }
 
         fun clientTick(level: Level, pos: BlockPos, state: BlockState, blockEntity: GymLeaderTeleporterBlockEntity) {
             if (state.getValue(GymLeaderTeleporterBlock.PORTAL_OPEN)) {
-                val random = level.random
-                for (i in 0..2) {
-                    val px = pos.x + 0.5 + (random.nextDouble() - 0.5) * 0.8
-                    val py = pos.y + 1.0 + random.nextDouble() * 1.5
-                    val pz = pos.z + 0.5 + (random.nextDouble() - 0.5) * 0.8
-                    level.addParticle(
-                        net.minecraft.core.particles.ParticleTypes.PORTAL,
-                        px, py, pz,
-                        0.0, 0.1, 0.0
-                    )
+                blockEntity.clientTicks++
+                if (blockEntity.portalTicks > 0) {
+                    blockEntity.portalTicks--
                 }
+            } else {
+                blockEntity.clientTicks = 0
+                blockEntity.portalTicks = 0
             }
         }
     }
 }
+

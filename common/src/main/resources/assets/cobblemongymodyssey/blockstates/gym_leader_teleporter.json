@@ -1,10 +1,12 @@
 {
   "variants": {
-    "portal_open=false": {
-      "model": "cobblemongymodyssey:block/gym_leader_teleporter"
-    },
-    "portal_open=true": {
-      "model": "cobblemongymodyssey:block/gym_leader_teleporter"
-    }
+    "facing=north,portal_open=false": { "model": "cobblemongymodyssey:block/gym_leader_teleporter" },
+    "facing=north,portal_open=true": { "model": "cobblemongymodyssey:block/gym_leader_teleporter" },
+    "facing=south,portal_open=false": { "model": "cobblemongymodyssey:block/gym_leader_teleporter", "y": 180 },
+    "facing=south,portal_open=true": { "model": "cobblemongymodyssey:block/gym_leader_teleporter", "y": 180 },
+    "facing=east,portal_open=false": { "model": "cobblemongymodyssey:block/gym_leader_teleporter", "y": 90 },
+    "facing=east,portal_open=true": { "model": "cobblemongymodyssey:block/gym_leader_teleporter", "y": 90 },
+    "facing=west,portal_open=false": { "model": "cobblemongymodyssey:block/gym_leader_teleporter", "y": 270 },
+    "facing=west,portal_open=true": { "model": "cobblemongymodyssey:block/gym_leader_teleporter", "y": 270 }
   }
 }
