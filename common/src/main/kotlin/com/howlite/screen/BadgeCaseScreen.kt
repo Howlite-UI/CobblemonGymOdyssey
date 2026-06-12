@@ -301,7 +301,7 @@ class BadgeCaseScreen(
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
 
         // 3. Dessiner le titre de la ligue dans la barre supérieure
-        val bannerText = "— " + Component.translatable(region.labelKey).string.uppercase() + " LEAGUE —"
+        val bannerText = Component.translatable("cobblemongymodyssey.badge_case.league_format", Component.translatable(region.labelKey)).string.uppercase()
         val bannerW = font.width(bannerText)
         graphics.drawString(font, bannerText, x + (GUI_WIDTH - bannerW) / 2, y + 6, 0xFFFFFF, true)
 

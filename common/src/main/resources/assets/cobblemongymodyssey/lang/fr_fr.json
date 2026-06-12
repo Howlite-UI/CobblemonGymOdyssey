@@ -23,6 +23,7 @@
 
   "item.cobblemongymodyssey.badge_case": "Boîte à Badges",
   "cobblemongymodyssey.badge_case.title": "Boîte à Badges",
+  "cobblemongymodyssey.badge_case.league_format": "— LIGUE %s —",
   "cobblemongymodyssey.badge_case.tab.kanto": "Kanto",
   "cobblemongymodyssey.badge_case.tab.johto": "Johto",
   "cobblemongymodyssey.badge_case.tab.hoenn": "Hoenn",
@@ -45,5 +46,24 @@
   "cobblemongymodyssey.badge_case.back": "Retour",
   "cobblemongymodyssey.badge_case.lcd.back_hint": "APPUYER SUR RETOUR / ESC",
   "cobblemongymodyssey.badge_case.tooltip.species": "Espèce : %s",
-  "cobblemongymodyssey.badge_case.tooltip.level": "Niveau : %s"
+  "cobblemongymodyssey.badge_case.tooltip.level": "Niveau : %s",
+  "subtitles.cobblemongymodyssey.portal_open": "Le portail s'ouvre",
+  "cobblemongymodyssey.gym_battle.returned": "§aLe combat est terminé ! Vous avez été ramené à votre bloc de départ.",
+  "cobblemongymodyssey.gym_battle.obtained": "🏅 Félicitations ! Vous avez obtenu la %s ! Limite Level relevée à %s.",
+  "cobblemongymodyssey.gym_battle.already_owned": "Vous possédez déjà la %s.",
+  "cobblemongymodyssey.gym_generator.dimension_not_found": "§cErreur: Dimension d'arènes 'gym_dimension' introuvable !",
+  "cobblemongymodyssey.gym_generator.teleporting": "§aTéléportation vers l'Arène de %s...",
+  "cobblemongymodyssey.gym_generator.dev_warning": "§e[Dev Warning] Structure NBT 'gym_%s' non trouvée. Génération d'une arène de test.",
+  "commands.gymtp.success": "§a[Dev] Arène générée et joueur téléporté. Position de retour enregistrée !",
+  "commands.gymtp.no_return": "§cPas de position de retour enregistrée ! Utilisez d'abord /gymtp.",
+  "commands.gymtp.back_success": "§a[Dev] Téléporté de retour à la position d'origine.",
+  "commands.gymtest.status": "=== Progression de %s ===\nLimite Level : %s\nBadges : %s",
+  "commands.gymtest.status.none": "Aucun",
+  "commands.gymtest.badge_unknown": "Badge inconnu : %s",
+  "commands.gymtest.add.already_has": "%s possède déjà le badge %s",
+  "commands.gymtest.add.success": "Badge %s ajouté à %s. Limite Level : %s",
+  "commands.gymtest.remove.doesnt_have": "%s ne possède pas le badge %s",
+  "commands.gymtest.remove.success": "Badge %s retiré de %s. Limite Level : %s",
+  "commands.gymtest.reset.success": "Progression réinitialisée pour %s. Limite Level : %s",
+  "commands.gymtest.setlevelcap.success": "Limite Level de %s forcée à %s"
 }

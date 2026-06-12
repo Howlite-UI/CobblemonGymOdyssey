@@ -46,7 +46,7 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
     }
 
     override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
-        return if (state.getValue(PORTAL_OPEN)) COLLISION_SHAPE_OPEN else SHAPE
+        return if (state.getValue(PORTAL_OPEN)) net.minecraft.world.phys.shapes.Shapes.empty() else SHAPE
     }
 
     init {
@@ -116,6 +116,16 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
                         val newState = state.setValue(PORTAL_OPEN, true)
                         level.setBlock(pos, newState, 3)
                         level.sendBlockUpdated(pos, state, newState, 3)
+
+                        // Jouer le son d'ouverture personnalisé du portail
+                        level.playSound(
+                            null,
+                            pos,
+                            com.howlite.sounds.GymSounds.PORTAL_OPEN.get(),
+                            SoundSource.BLOCKS,
+                            1.0f,
+                            1.0f
+                        )
                     }
                 }
                 return ItemInteractionResult.sidedSuccess(level.isClientSide)
@@ -126,18 +136,66 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
 
     override fun entityInside(state: BlockState, level: Level, pos: BlockPos, entity: Entity) {
         if (!level.isClientSide && state.getValue(PORTAL_OPEN) && entity is ServerPlayer) {
-            val blockEntity = level.getBlockEntity(pos) as? GymLeaderTeleporterBlockEntity
-            // Téléporte si c'est le joueur qui a activé le portail
-            if (blockEntity != null && (blockEntity.activatedByPlayer == null || blockEntity.activatedByPlayer == entity.uuid)) {
-                // Lancer la téléportation
-                GymArenaGenerator.teleportAndGenerate(entity, blockEntity.targetBadgeId)
-                
-                // Fermer immédiatement le portail et forcer la synchro client
-                val newState = state.setValue(PORTAL_OPEN, false)
-                level.setBlock(pos, newState, 3)
-                blockEntity.portalTicks = 0
-                blockEntity.setChanged()
-                level.sendBlockUpdated(pos, state, newState, 3)
+            val gymLevelKey = net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.DIMENSION,
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "gym_dimension")
+            )
+            val server = entity.server ?: return
+
+            if (level.dimension() == gymLevelKey) {
+                // Dimension d'arènes : ramener le joueur
+                val progress = PlayerProgressApi.get(entity)
+                val returnDimStr = progress.returnDim
+                val returnX = progress.returnX
+                val returnY = progress.returnY
+                val returnZ = progress.returnZ
+                val returnYaw = progress.returnYaw ?: 0f
+                val returnPitch = progress.returnPitch ?: 0f
+
+                if (returnDimStr != null && returnX != null && returnY != null && returnZ != null) {
+                    // Fermer immédiatement le portail
+                    val newState = state.setValue(PORTAL_OPEN, false)
+                    level.setBlock(pos, newState, 3)
+                    val blockEntity = level.getBlockEntity(pos) as? GymLeaderTeleporterBlockEntity
+                    if (blockEntity != null) {
+                        blockEntity.portalTicks = 0
+                        blockEntity.setChanged()
+                    }
+                    level.sendBlockUpdated(pos, state, newState, 3)
+
+                    // Effacer la position de retour
+                    progress.clearReturnPosition()
+                    PlayerProgressApi.markDirty(entity)
+
+                    // Planifier la téléportation hors de la gestion des collisions courante
+                    server.execute {
+                        val returnLevelKey = net.minecraft.resources.ResourceKey.create(
+                            net.minecraft.core.registries.Registries.DIMENSION,
+                            net.minecraft.resources.ResourceLocation.parse(returnDimStr)
+                        )
+                        val targetWorld = server.getLevel(returnLevelKey) ?: server.overworld()
+                        entity.teleportTo(targetWorld, returnX, returnY, returnZ, returnYaw, returnPitch)
+                        entity.sendSystemMessage(
+                            net.minecraft.network.chat.Component.translatable("cobblemongymodyssey.gym_battle.returned")
+                        )
+                    }
+                }
+            } else {
+                // Monde normal : téléporter vers l'arène
+                val blockEntity = level.getBlockEntity(pos) as? GymLeaderTeleporterBlockEntity
+                if (blockEntity != null && (blockEntity.activatedByPlayer == null || blockEntity.activatedByPlayer == entity.uuid)) {
+                    // Fermer immédiatement le portail et forcer la synchro client
+                    val newState = state.setValue(PORTAL_OPEN, false)
+                    level.setBlock(pos, newState, 3)
+                    blockEntity.portalTicks = 0
+                    blockEntity.setChanged()
+                    level.sendBlockUpdated(pos, state, newState, 3)
+
+                    // Planifier la téléportation hors de la gestion des collisions courante
+                    server.execute {
+                        GymArenaGenerator.teleportAndGenerate(entity, blockEntity.targetBadgeId)
+                    }
+                }
             }
         }
         super.entityInside(state, level, pos, entity)

@@ -42,7 +42,7 @@ object GymArenaGenerator {
         )
         val gymWorld = server.getLevel(gymLevelKey)
         if (gymWorld == null) {
-            player.sendSystemMessage(Component.literal("§cErreur: Dimension d'arènes 'gym_dimension' introuvable !"))
+            player.sendSystemMessage(Component.translatable("cobblemongymodyssey.gym_generator.dimension_not_found"))
             return
         }
 
@@ -83,14 +83,32 @@ object GymArenaGenerator {
         }
 
         player.sendSystemMessage(
-            Component.literal("§aTéléportation vers l'Arène de ${formatName(leaderId)}...")
+            Component.translatable("cobblemongymodyssey.gym_generator.teleporting", formatName(leaderId))
         )
 
-        // 5. Générer l'arène et faire spawner le Champion
+        // 5. Générer d'abord l'arène (pose les blocs et fait spawner le Champion)
         generate(gymWorld, startX, startY, startZ, player, leaderId)
 
-        // 6. Téléporter le joueur en sécurité
-        player.teleportTo(gymWorld, startX + 0.5, startY.toDouble() + 1.0, startZ + 0.5, 0f, 0f)
+        // 6. Déterminer les coordonnées de spawn pour le joueur
+        val structureLoc = ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "gym_$leaderId")
+        val templateOpt = server.structureManager.get(structureLoc)
+
+        val spawnX: Double
+        val spawnY: Double
+        val spawnZ: Double
+        if (templateOpt.isPresent) {
+            spawnX = startX + 0.5
+            spawnY = startY.toDouble() + 1.0
+            spawnZ = startZ + 0.5
+        } else {
+            // Dans le cas de l'arène de test (fallback), on téléporte devant le portail de retour (Z = -1.0) face au NPC (Sud, yaw = 0f)
+            spawnX = startX + 0.5
+            spawnY = startY.toDouble() + 1.0
+            spawnZ = startZ - 1.0
+        }
+
+        // 7. Téléporter le joueur en toute sécurité sur le sol déjà généré
+        player.teleportTo(gymWorld, spawnX, spawnY, spawnZ, 0f, 0f)
     }
 
     /**
@@ -122,7 +140,10 @@ object GymArenaGenerator {
         }
 
         // 3. Générer un bloc de bedrock sous les pieds par sécurité
-        world.setBlock(BlockPos(startX, startY - 1, startZ), Blocks.BEDROCK.defaultBlockState(), 2)
+        world.setBlock(BlockPos(startX, startY, startZ), Blocks.BEDROCK.defaultBlockState(), 2)
+
+        var npcY = startY.toDouble() + 1.0
+        var npcZ = startZ.toDouble() + 2.5
 
         // 4. Placer la structure NBT
         if (templateOpt.isPresent) {
@@ -142,23 +163,47 @@ object GymArenaGenerator {
         } else {
             // Fallback si la structure NBT n'est pas présente
             player.sendSystemMessage(
-                Component.literal("§e[Dev Warning] Structure NBT 'gym_$leaderId' non trouvée. Génération d'une arène de test.")
+                Component.translatable("cobblemongymodyssey.gym_generator.dev_warning", leaderId)
             )
-            for (dx in -5..5) {
-                for (dz in -5..5) {
-                    world.setBlock(BlockPos(startX + dx, startY - 1, startZ + dz), Blocks.BEDROCK.defaultBlockState(), 2)
+            // Générer le sol en bedrock de 15x15 à la hauteur startY
+            for (dx in -7..7) {
+                for (dz in -7..7) {
+                    world.setBlock(BlockPos(startX + dx, startY, startZ + dz), Blocks.BEDROCK.defaultBlockState(), 2)
                 }
             }
-            // Bordure
-            for (dx in -5..5) {
-                world.setBlock(BlockPos(startX + dx, startY, startZ - 5), Blocks.GLASS.defaultBlockState(), 2)
-                world.setBlock(BlockPos(startX + dx, startY, startZ + 5), Blocks.GLASS.defaultBlockState(), 2)
+
+            // Murs en verre sur les 4 côtés (hauteur de 3 blocs, de Y = startY + 1 à Y = startY + 3)
+            for (dy in 1..3) {
+                for (dx in -7..7) {
+                    world.setBlock(BlockPos(startX + dx, startY + dy, startZ - 7), Blocks.GLASS.defaultBlockState(), 2)
+                    world.setBlock(BlockPos(startX + dx, startY + dy, startZ + 7), Blocks.GLASS.defaultBlockState(), 2)
+                }
+                for (dz in -6..6) {
+                    world.setBlock(BlockPos(startX - 7, startY + dy, startZ + dz), Blocks.GLASS.defaultBlockState(), 2)
+                    world.setBlock(BlockPos(startX + 7, startY + dy, startZ + dz), Blocks.GLASS.defaultBlockState(), 2)
+                }
             }
+
+            // Générer et activer le portail de retour à (startX, startY + 1, startZ - 4) faisant face au Sud
+            val portalPos = BlockPos(startX, startY + 1, startZ - 4)
+            val portalState = com.howlite.blocks.GymBlocks.GYM_LEADER_TELEPORTER.get().defaultBlockState()
+                .setValue(com.howlite.blocks.GymLeaderTeleporterBlock.PORTAL_OPEN, true)
+                .setValue(com.howlite.blocks.GymLeaderTeleporterBlock.FACING, net.minecraft.core.Direction.SOUTH)
+            world.setBlock(portalPos, portalState, 3)
+
+            val be = world.getBlockEntity(portalPos) as? com.howlite.blocks.GymLeaderTeleporterBlockEntity
+            if (be != null) {
+                be.portalTicks = 999999
+                be.setChanged()
+            }
+
+            // Placer le spawn du leader plus loin pour le fallback
+            npcZ = startZ.toDouble() + 4.5
         }
 
         // 5. Faire spawner le Gym Leader NPC à l'aide de la commande Cobblemon
         val commandSource = server.createCommandSourceStack()
-            .withPosition(Vec3(startX.toDouble() + 0.5, startY.toDouble(), startZ.toDouble() + 2.5))
+            .withPosition(Vec3(startX.toDouble() + 0.5, npcY, npcZ))
             .withPermission(4)
             .withSuppressedOutput()
 

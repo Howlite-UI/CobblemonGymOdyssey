@@ -1,0 +1,9 @@
+{
+  "portal_open": {
+    "category": "block",
+    "subtitle": "subtitles.cobblemongymodyssey.portal_open",
+    "sounds": [
+      "cobblemongymodyssey:portal_open"
+    ]
+  }
+}

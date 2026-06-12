@@ -63,6 +63,7 @@ object GymBattleEventHandler {
 
             // --- Accorder le badge si le joueur ne l'a pas encore ---
             val data = PlayerProgressApi.get(player)
+            val item = GymBadgeItems.getItemForBadge(badge)
             if (!data.hasBadge(badge)) {
                 // Capturer l'équipe du joueur
                 try {
@@ -84,7 +85,6 @@ object GymBattleEventHandler {
                 PlayerProgressApi.markDirty(player)
 
                 // Accorder l'item physique du badge
-                val item = GymBadgeItems.getItemForBadge(badge)
                 val itemStack = ItemStack(item)
                 if (!player.inventory.add(itemStack)) {
                     player.drop(itemStack, false)
@@ -92,14 +92,18 @@ object GymBattleEventHandler {
 
                 // Feedback visuel au joueur
                 player.sendSystemMessage(
-                    Component.literal(
-                        "🏅 Félicitations ! Vous avez obtenu le ${formatBadgeName(badge.name)} !" +
-                        " Level Cap relevé à ${badge.levelCap}."
+                    Component.translatable(
+                        "cobblemongymodyssey.gym_battle.obtained",
+                        Component.translatable(item.descriptionId),
+                        badge.levelCap
                     )
                 )
             } else {
                 player.sendSystemMessage(
-                    Component.literal("Vous possédez déjà le ${formatBadgeName(badge.name)}.")
+                    Component.translatable(
+                        "cobblemongymodyssey.gym_battle.already_owned",
+                        Component.translatable(item.descriptionId)
+                    )
                 )
             }
         }

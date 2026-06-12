@@ -9,12 +9,14 @@ import com.howlite.events.GymBattleReturnHandler
 import com.howlite.events.LevelCapEventHandler
 import com.howlite.items.GymBadgeItems
 import com.howlite.menu.BadgeCaseMenus
+import com.howlite.sounds.GymSounds
 
 object CobblemonGymOdyssey {
     const val MOD_ID = "cobblemongymodyssey"
 
     @JvmStatic
     fun init() {
+        GymSounds.register()
         GymBadgeItems.register()
         GymBlocks.register()
         BadgeCaseMenus.register()

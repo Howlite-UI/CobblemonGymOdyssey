@@ -52,7 +52,7 @@ object GymBattleReturnHandler {
                 // Téléporter le joueur de retour à son bloc de départ
                 player.teleportTo(targetWorld, returnX, returnY, returnZ, returnYaw, returnPitch)
                 player.sendSystemMessage(
-                    Component.literal("§aLe combat est terminé ! Vous avez été ramené à votre bloc de départ.")
+                    Component.translatable("cobblemongymodyssey.gym_battle.returned")
                 )
             }
         }

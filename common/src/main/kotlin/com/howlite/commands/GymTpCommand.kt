@@ -62,7 +62,7 @@ object GymTpCommand {
         GymArenaGenerator.teleportAndGenerate(player, targetBadgeId)
 
         context.source.sendSuccess(
-            { Component.literal("§a[Dev] Arène générée et joueur téléporté. Position de retour enregistrée !") },
+            { Component.translatable("commands.gymtp.success") },
             false
         )
         return 1
@@ -80,7 +80,7 @@ object GymTpCommand {
         val returnPitch = progress.returnPitch ?: 0f
 
         if (returnDimStr == null || returnX == null || returnY == null || returnZ == null) {
-            context.source.sendFailure(Component.literal("§cPas de position de retour enregistrée ! Utilisez d'abord /gymtp."))
+            context.source.sendFailure(Component.translatable("commands.gymtp.no_return"))
             return 0
         }
 
@@ -99,7 +99,7 @@ object GymTpCommand {
         player.teleportTo(targetWorld, returnX, returnY, returnZ, returnYaw, returnPitch)
 
         context.source.sendSuccess(
-            { Component.literal("§a[Dev] Téléporté de retour à la position d'origine.") },
+            { Component.translatable("commands.gymtp.back_success") },
             false
         )
         return 1

@@ -32,6 +32,22 @@ class GymLeaderTeleporterRenderer(val context: BlockEntityRendererProvider.Conte
         )
     }
 
+    data class PortalColor(val r: Int, val g: Int, val b: Int)
+
+    private fun getPortalColor(badgeId: String): PortalColor {
+        return when (badgeId) {
+            "boulder_badge" -> PortalColor(180, 160, 140)   // Rock Gray-Brown
+            "cascade_badge" -> PortalColor(50, 150, 255)    // Water Blue
+            "thunder_badge" -> PortalColor(255, 230, 0)     // Electric Yellow
+            "rainbow_badge" -> PortalColor(255, 80, 220)    // Rainbow Pink-Violet
+            "soul_badge"    -> PortalColor(160, 50, 230)    // Poison Purple
+            "marsh_badge"   -> PortalColor(255, 100, 180)   // Psychic Pink
+            "volcano_badge" -> PortalColor(255, 69, 0)      // Volcano Orange-Red
+            "earth_badge"   -> PortalColor(50, 200, 50)     // Earth Forest Green
+            else            -> PortalColor(255, 255, 255)   // Default white
+        }
+    }
+
     override fun render(
         blockEntity: GymLeaderTeleporterBlockEntity,
         partialTick: Float,
@@ -42,6 +58,9 @@ class GymLeaderTeleporterRenderer(val context: BlockEntityRendererProvider.Conte
     ) {
         val state = blockEntity.blockState
         if (!state.getValue(GymLeaderTeleporterBlock.PORTAL_OPEN)) return
+
+        // Récupérer la couleur correspondante au badge
+        val color = getPortalColor(blockEntity.targetBadgeId)
 
         // Calculer l'âge de l'animation en prenant en compte la fermeture
         val portalTicks = blockEntity.portalTicks
@@ -72,14 +91,14 @@ class GymLeaderTeleporterRenderer(val context: BlockEntityRendererProvider.Conte
             scaleX = 1.0f + (sin(animationAge * 0.2f) * 0.02f)
         }
 
-        // Rendu du Timer au-dessus du portail
+        // Rendu du Timer au-dessus du portail (avec la couleur du badge)
         if (portalTicks > 0) {
             val remainingSeconds = (portalTicks + 19) / 20
             val text = "$remainingSeconds s"
             
             poseStack.pushPose()
-            // Placé au-dessus du portail (élevé de 2.5m par rapport à la base)
-            poseStack.translate(0.5, 2.5, 0.5)
+            // Placé au-dessus du portail (élevé de 2.8m par rapport à la base)
+            poseStack.translate(0.5, 2.8, 0.5)
             
             // Face the camera (billboard)
             val camera = net.minecraft.client.Minecraft.getInstance().entityRenderDispatcher.camera
@@ -94,11 +113,13 @@ class GymLeaderTeleporterRenderer(val context: BlockEntityRendererProvider.Conte
             val matrix = poseStack.last().pose()
             val xOffset = -textWidth / 2f
             
+            val colorInt = 0xFF000000.toInt() or (color.r shl 16) or (color.g shl 8) or color.b
+
             font.drawInBatch(
                 text,
                 xOffset,
                 0f,
-                0xFFFFA800.toInt(), // Beautiful gold color matching the portal
+                colorInt,
                 true, // Draw with shadow
                 matrix,
                 bufferSource,
@@ -143,49 +164,79 @@ class GymLeaderTeleporterRenderer(val context: BlockEntityRendererProvider.Conte
         val minZ = -0.5f
         val maxZ = 0.5f
 
-        // 1. Récupérer le VertexConsumer principal et dessiner les faces avant/arrière
+        // 1. Récupérer le VertexConsumer principal et dessiner les faces avant/arrière (teintées)
         val consumerMain = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(PORTAL_TEXTURE))
 
         // Face avant (facing +Z)
-        vertex(consumerMain, pose, last, minX, minY, maxZ, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, light)
-        vertex(consumerMain, pose, last, maxX, minY, maxZ, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, light)
-        vertex(consumerMain, pose, last, maxX, maxY, maxZ, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, light)
-        vertex(consumerMain, pose, last, minX, maxY, maxZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, light)
+        vertex(consumerMain, pose, last, minX, minY, maxZ, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerMain, pose, last, maxX, minY, maxZ, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerMain, pose, last, maxX, maxY, maxZ, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerMain, pose, last, minX, maxY, maxZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, color.r, color.g, color.b, 255, light)
 
         // Face arrière (facing -Z)
-        vertex(consumerMain, pose, last, maxX, minY, minZ, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, light)
-        vertex(consumerMain, pose, last, minX, minY, minZ, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, light)
-        vertex(consumerMain, pose, last, minX, maxY, minZ, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, light)
-        vertex(consumerMain, pose, last, maxX, maxY, minZ, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, light)
+        vertex(consumerMain, pose, last, maxX, minY, minZ, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerMain, pose, last, minX, minY, minZ, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerMain, pose, last, minX, maxY, minZ, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerMain, pose, last, maxX, maxY, minZ, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, color.r, color.g, color.b, 255, light)
 
-        // 2. Récupérer le VertexConsumer secondaire pour les tranches et les dessiner
+        // 2. Récupérer le VertexConsumer secondaire pour les tranches et les dessiner (teintées)
         val consumerSide = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(PORTAL_SIDE_TEXTURE))
 
         // Face gauche (facing -X)
-        vertex(consumerSide, pose, last, minX, minY, minZ, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, minX, minY, maxZ, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, minX, maxY, maxZ, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, minX, maxY, minZ, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, light)
+        vertex(consumerSide, pose, last, minX, minY, minZ, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, minX, minY, maxZ, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, minX, maxY, maxZ, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, minX, maxY, minZ, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, color.r, color.g, color.b, 255, light)
 
         // Face droite (facing +X)
-        vertex(consumerSide, pose, last, maxX, minY, maxZ, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, maxX, minY, minZ, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, maxX, maxY, minZ, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, maxX, maxY, maxZ, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, light)
+        vertex(consumerSide, pose, last, maxX, minY, maxZ, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, maxX, minY, minZ, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, maxX, maxY, minZ, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, maxX, maxY, maxZ, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, color.r, color.g, color.b, 255, light)
 
         // Face supérieure (facing +Y)
-        vertex(consumerSide, pose, last, minX, maxY, maxZ, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, maxX, maxY, maxZ, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, maxX, maxY, minZ, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, minX, maxY, minZ, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, light)
+        vertex(consumerSide, pose, last, minX, maxY, maxZ, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, maxX, maxY, maxZ, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, maxX, maxY, minZ, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, minX, maxY, minZ, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, color.r, color.g, color.b, 255, light)
 
         // Face inférieure (facing -Y)
-        vertex(consumerSide, pose, last, minX, minY, minZ, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, maxX, minY, minZ, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, maxX, minY, maxZ, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, light)
-        vertex(consumerSide, pose, last, minX, minY, maxZ, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, light)
+        vertex(consumerSide, pose, last, minX, minY, minZ, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, maxX, minY, minZ, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, maxX, minY, maxZ, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, color.r, color.g, color.b, 255, light)
+        vertex(consumerSide, pose, last, minX, minY, maxZ, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, color.r, color.g, color.b, 255, light)
 
         poseStack.popPose()
+
+        // 3. Rendu de l'effet shockwave (onde de choc / flash de dopamine lors de l'expansion, teintée)
+        if (animationAge in 5f..15f) {
+            val t = (animationAge - 5f) / 10f
+            val shockwaveScale = t * 3.5f
+            val alpha = ((1f - t) * 255).toInt()
+            
+            poseStack.pushPose()
+            // Centrer l'onde de choc sur le portail (hauteur du centre du portail : translation Y de base 0.3125 + 1.0 = 1.3125)
+            poseStack.translate(0.5, 1.3125, 0.5)
+            
+            // Face the camera (billboard)
+            val camera = net.minecraft.client.Minecraft.getInstance().entityRenderDispatcher.camera
+            poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-camera.yRot))
+            poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(camera.xRot))
+            
+            poseStack.scale(shockwaveScale, shockwaveScale, 1f)
+            
+            val consumerShockwave = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(PORTAL_TEXTURE))
+            val lastShock = poseStack.last()
+            val poseShock = lastShock.pose()
+            
+            // Dessiner un quad circulaire/flash avec fondu alpha tinté
+            vertex(consumerShockwave, poseShock, lastShock, -0.5f, -0.5f, 0f, 0f, 1f, 0f, 0f, 1f, color.r, color.g, color.b, alpha, light)
+            vertex(consumerShockwave, poseShock, lastShock, 0.5f, -0.5f, 0f, 1f, 1f, 0f, 0f, 1f, color.r, color.g, color.b, alpha, light)
+            vertex(consumerShockwave, poseShock, lastShock, 0.5f, 0.5f, 0f, 1f, 0f, 0f, 0f, 1f, color.r, color.g, color.b, alpha, light)
+            vertex(consumerShockwave, poseShock, lastShock, -0.5f, 0.5f, 0f, 0f, 0f, 0f, 0f, 1f, color.r, color.g, color.b, alpha, light)
+            
+            poseStack.popPose()
+        }
     }
 
     private fun vertex(
@@ -195,10 +246,11 @@ class GymLeaderTeleporterRenderer(val context: BlockEntityRendererProvider.Conte
         x: Float, y: Float, z: Float,
         u: Float, v: Float,
         nx: Float, ny: Float, nz: Float,
+        r: Int, g: Int, b: Int, a: Int,
         light: Int
     ) {
         consumer.addVertex(pose, x, y, z)
-            .setColor(255, 255, 255, 255)
+            .setColor(r, g, b, a)
             .setUv(u, v)
             .setOverlay(OverlayTexture.NO_OVERLAY)
             .setLight(light)

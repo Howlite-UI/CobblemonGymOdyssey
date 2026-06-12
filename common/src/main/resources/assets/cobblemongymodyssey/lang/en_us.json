@@ -23,6 +23,7 @@
 
   "item.cobblemongymodyssey.badge_case": "Badge Case",
   "cobblemongymodyssey.badge_case.title": "Badge Case",
+  "cobblemongymodyssey.badge_case.league_format": "— %s LEAGUE —",
   "cobblemongymodyssey.badge_case.tab.kanto": "Kanto",
   "cobblemongymodyssey.badge_case.tab.johto": "Johto",
   "cobblemongymodyssey.badge_case.tab.hoenn": "Hoenn",
@@ -45,5 +46,24 @@
   "cobblemongymodyssey.badge_case.back": "Back",
   "cobblemongymodyssey.badge_case.lcd.back_hint": "PRESS BACK / ESC TO RETURN",
   "cobblemongymodyssey.badge_case.tooltip.species": "Species: %s",
-  "cobblemongymodyssey.badge_case.tooltip.level": "Level: %s"
+  "cobblemongymodyssey.badge_case.tooltip.level": "Level: %s",
+  "subtitles.cobblemongymodyssey.portal_open": "Portal opens",
+  "cobblemongymodyssey.gym_battle.returned": "§aThe battle is over! You have been returned to your start location.",
+  "cobblemongymodyssey.gym_battle.obtained": "🏅 Congratulations! You obtained the %s! Level Cap raised to %s.",
+  "cobblemongymodyssey.gym_battle.already_owned": "You already own the %s.",
+  "cobblemongymodyssey.gym_generator.dimension_not_found": "§cError: Gym dimension 'gym_dimension' not found!",
+  "cobblemongymodyssey.gym_generator.teleporting": "§aTeleporting to %s's Gym...",
+  "cobblemongymodyssey.gym_generator.dev_warning": "§e[Dev Warning] Structure NBT 'gym_%s' not found. Generating a test arena.",
+  "commands.gymtp.success": "§a[Dev] Arena generated and player teleported. Return position saved!",
+  "commands.gymtp.no_return": "§cNo return position saved! Use /gymtp first.",
+  "commands.gymtp.back_success": "§a[Dev] Teleported back to origin position.",
+  "commands.gymtest.status": "=== Progress of %s ===\nLevel Cap: %s\nBadges: %s",
+  "commands.gymtest.status.none": "None",
+  "commands.gymtest.badge_unknown": "Unknown badge: %s",
+  "commands.gymtest.add.already_has": "%s already has the badge %s",
+  "commands.gymtest.add.success": "Badge %s added to %s. New Level Cap: %s",
+  "commands.gymtest.remove.doesnt_have": "%s does not have the badge %s",
+  "commands.gymtest.remove.success": "Badge %s removed from %s. New Level Cap: %s",
+  "commands.gymtest.reset.success": "Progress reset for %s. Level Cap: %s",
+  "commands.gymtest.setlevelcap.success": "Level Cap of %s forced to %s"
 }

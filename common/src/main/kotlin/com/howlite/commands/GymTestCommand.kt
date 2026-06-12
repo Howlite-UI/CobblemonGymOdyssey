@@ -92,11 +92,10 @@ object GymTestCommand {
 
     private fun showStatus(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
         val data = PlayerProgressApi.get(player)
-        val badgesList = if (data.badges.isEmpty()) "Aucun" else data.badges.joinToString(", ") { it.id }
+        val noneText = Component.translatable("commands.gymtest.status.none").string
+        val badgesList = if (data.badges.isEmpty()) noneText else data.badges.joinToString(", ") { it.id }
         context.source.sendSuccess(
-            { Component.literal("=== Progression de ${player.scoreboardName} ===\n" +
-                               "Level Cap : ${data.levelCap}\n" +
-                               "Badges : $badgesList") },
+            { Component.translatable("commands.gymtest.status", player.scoreboardName, data.levelCap, badgesList) },
             false
         )
         return 1
@@ -105,12 +104,12 @@ object GymTestCommand {
     private fun addBadge(context: CommandContext<CommandSourceStack>, badgeId: String, player: ServerPlayer): Int {
         val badge = GymBadge.fromId(badgeId)
         if (badge == null) {
-            context.source.sendFailure(Component.literal("Badge inconnu : $badgeId"))
+            context.source.sendFailure(Component.translatable("commands.gymtest.badge_unknown", badgeId))
             return 0
         }
         val data = PlayerProgressApi.get(player)
         if (data.hasBadge(badge)) {
-            context.source.sendFailure(Component.literal("${player.scoreboardName} possède déjà le badge $badgeId"))
+            context.source.sendFailure(Component.translatable("commands.gymtest.add.already_has", player.scoreboardName, badgeId))
             return 0
         }
         
@@ -133,7 +132,7 @@ object GymTestCommand {
         data.earnBadge(badge)
         PlayerProgressApi.markDirty(player)
         context.source.sendSuccess(
-            { Component.literal("Badge $badgeId ajouté à ${player.scoreboardName}. Nouveau Level Cap : ${data.levelCap}") },
+            { Component.translatable("commands.gymtest.add.success", badgeId, player.scoreboardName, data.levelCap) },
             true
         )
         return 1
@@ -142,18 +141,18 @@ object GymTestCommand {
     private fun removeBadge(context: CommandContext<CommandSourceStack>, badgeId: String, player: ServerPlayer): Int {
         val badge = GymBadge.fromId(badgeId)
         if (badge == null) {
-            context.source.sendFailure(Component.literal("Badge inconnu : $badgeId"))
+            context.source.sendFailure(Component.translatable("commands.gymtest.badge_unknown", badgeId))
             return 0
         }
         val data = PlayerProgressApi.get(player)
         if (!data.hasBadge(badge)) {
-            context.source.sendFailure(Component.literal("${player.scoreboardName} ne possède pas le badge $badgeId"))
+            context.source.sendFailure(Component.translatable("commands.gymtest.remove.doesnt_have", player.scoreboardName, badgeId))
             return 0
         }
         data.removeBadge(badge)
         PlayerProgressApi.markDirty(player)
         context.source.sendSuccess(
-            { Component.literal("Badge $badgeId retiré de ${player.scoreboardName}. Nouveau Level Cap : ${data.levelCap}") },
+            { Component.translatable("commands.gymtest.remove.success", badgeId, player.scoreboardName, data.levelCap) },
             true
         )
         return 1
@@ -164,7 +163,7 @@ object GymTestCommand {
         data.reset()
         PlayerProgressApi.markDirty(player)
         context.source.sendSuccess(
-            { Component.literal("Progression réinitialisée pour ${player.scoreboardName}. Level Cap : ${data.levelCap}") },
+            { Component.translatable("commands.gymtest.reset.success", player.scoreboardName, data.levelCap) },
             true
         )
         return 1
@@ -175,7 +174,7 @@ object GymTestCommand {
         data.overrideLevelCap(level)
         PlayerProgressApi.markDirty(player)
         context.source.sendSuccess(
-            { Component.literal("Level Cap de ${player.scoreboardName} forcé à $level") },
+            { Component.translatable("commands.gymtest.setlevelcap.success", player.scoreboardName, level) },
             true
         )
         return 1
