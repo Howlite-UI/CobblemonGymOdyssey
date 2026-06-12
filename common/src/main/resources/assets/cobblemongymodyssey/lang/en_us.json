@@ -30,5 +30,10 @@
   "cobblemongymodyssey.badge_case.ribbon.completed_title": "%s Champion Ribbon",
   "cobblemongymodyssey.badge_case.ribbon.completed_desc": "All badges obtained!",
   "cobblemongymodyssey.badge_case.ribbon.incomplete_title": "%s Ribbon (Incomplete)",
-  "cobblemongymodyssey.badge_case.ribbon.incomplete_desc": "Defeat all gym leaders to unlock."
+  "cobblemongymodyssey.badge_case.ribbon.incomplete_desc": "Defeat all gym leaders to unlock.",
+  "cobblemongymodyssey.badge_case.winning_team": "%s - Winning Team",
+  "cobblemongymodyssey.badge_case.back": "Back",
+  "cobblemongymodyssey.badge_case.lcd.back_hint": "PRESS BACK / ESC TO RETURN",
+  "cobblemongymodyssey.badge_case.tooltip.species": "Species: %s",
+  "cobblemongymodyssey.badge_case.tooltip.level": "Level: %s"
 }

@@ -2,6 +2,7 @@ package com.howlite.items
 
 import com.howlite.api.PlayerProgressApi
 import com.howlite.menu.BadgeCaseMenu
+import com.howlite.data.PokemonSnapshot
 import dev.architectury.registry.menu.MenuRegistry
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.chat.Component
@@ -43,6 +44,7 @@ class BadgeCaseItem(properties: Properties) : Item(properties) {
             val progress = PlayerProgressApi.get(player)
             val badges = progress.badges
             val levelCap = progress.levelCap
+            val badgeTeams = progress.badgeTeams
 
             MenuRegistry.openExtendedMenu(
                 player,
@@ -51,11 +53,23 @@ class BadgeCaseItem(properties: Properties) : Item(properties) {
                         Component.translatable("cobblemongymodyssey.badge_case.title")
 
                     override fun createMenu(syncId: Int, inv: Inventory, p: Player): AbstractContainerMenu =
-                        BadgeCaseMenu(syncId, badges, levelCap)
+                        BadgeCaseMenu(syncId, badges, levelCap, badgeTeams)
                 }
             ) { buf: FriendlyByteBuf ->
                 buf.writeInt(levelCap)
                 buf.writeCollection(badges) { b, badge -> b.writeUtf(badge.id) }
+                
+                // Écrire les équipes gagnantes
+                buf.writeInt(badgeTeams.size)
+                badgeTeams.forEach { (badgeId, team) ->
+                    buf.writeUtf(badgeId)
+                    buf.writeCollection(team) { b, pokemon ->
+                        b.writeUtf(pokemon.species)
+                        b.writeInt(pokemon.level)
+                        b.writeBoolean(pokemon.isShiny)
+                        b.writeUtf(pokemon.displayName)
+                    }
+                }
             }
         }
 

@@ -26,6 +26,13 @@ class PlayerProgressData {
     var levelCap: Int = INITIAL_LEVEL_CAP
         private set
 
+    private val _badgeTeams: MutableMap<String, List<PokemonSnapshot>> = mutableMapOf()
+    val badgeTeams: Map<String, List<PokemonSnapshot>> get() = _badgeTeams
+
+    fun recordTeam(badgeId: String, team: List<PokemonSnapshot>) {
+        _badgeTeams[badgeId] = team
+    }
+
     /** Vérifie si le joueur possède déjà le badge donné. */
     fun hasBadge(badge: GymBadge): Boolean = badge in _badges
 
@@ -43,6 +50,7 @@ class PlayerProgressData {
      */
     fun removeBadge(badge: GymBadge) {
         _badges.remove(badge)
+        _badgeTeams.remove(badge.id)
         levelCap = if (_badges.isEmpty()) INITIAL_LEVEL_CAP else _badges.maxOf { it.levelCap }
     }
 
@@ -51,6 +59,7 @@ class PlayerProgressData {
      */
     fun reset() {
         _badges.clear()
+        _badgeTeams.clear()
         levelCap = INITIAL_LEVEL_CAP
     }
 
@@ -70,6 +79,18 @@ class PlayerProgressData {
         val badgeList = ListTag()
         _badges.forEach { badgeList.add(StringTag.valueOf(it.id)) }
         tag.put(KEY_BADGES, badgeList)
+
+        val teamsTag = CompoundTag()
+        _badgeTeams.forEach { (badgeId, team) ->
+            val teamList = ListTag()
+            team.forEach { snapshot ->
+                val pokemonTag = CompoundTag()
+                PokemonSnapshot.writeToNbt(snapshot, pokemonTag)
+                teamList.add(pokemonTag)
+            }
+            teamsTag.put(badgeId, teamList)
+        }
+        tag.put(KEY_BADGE_TEAMS, teamsTag)
     }
 
     fun readFromNbt(tag: CompoundTag) {
@@ -78,11 +99,25 @@ class PlayerProgressData {
         tag.getList(KEY_BADGES, Tag.TAG_STRING.toInt()).forEach { nbt ->
             GymBadge.fromId(nbt.asString)?.let { _badges.add(it) }
         }
+
+        _badgeTeams.clear()
+        if (tag.contains(KEY_BADGE_TEAMS)) {
+            val teamsTag = tag.getCompound(KEY_BADGE_TEAMS)
+            teamsTag.allKeys.forEach { badgeId ->
+                val teamList = teamsTag.getList(badgeId, Tag.TAG_COMPOUND.toInt())
+                val snapshots = mutableListOf<PokemonSnapshot>()
+                for (i in 0 until teamList.size) {
+                    snapshots.add(PokemonSnapshot.fromNbt(teamList.getCompound(i)))
+                }
+                _badgeTeams[badgeId] = snapshots
+            }
+        }
     }
 
     companion object {
         private const val KEY_LEVEL_CAP = "LevelCap"
         private const val KEY_BADGES = "Badges"
+        private const val KEY_BADGE_TEAMS = "BadgeTeams"
         const val INITIAL_LEVEL_CAP = 10
 
         // -------------------------------------------------------------------------
@@ -97,11 +132,16 @@ class PlayerProgressData {
                 Codec.STRING.listOf()
                     .fieldOf(KEY_BADGES)
                     .orElse(emptyList())
-                    .forGetter { data -> data._badges.map { it.id } }
-            ).apply(instance) { cap, badgeIds ->
+                    .forGetter { data -> data._badges.map { it.id } },
+                Codec.unboundedMap(Codec.STRING, PokemonSnapshot.CODEC.listOf())
+                    .fieldOf(KEY_BADGE_TEAMS)
+                    .orElse(emptyMap())
+                    .forGetter { it._badgeTeams }
+            ).apply(instance) { cap, badgeIds, teams ->
                 PlayerProgressData().also { d ->
                     d.levelCap = cap
                     badgeIds.mapNotNull { GymBadge.fromId(it) }.forEach { d._badges.add(it) }
+                    d._badgeTeams.putAll(teams)
                 }
             }
         }

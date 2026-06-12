@@ -6,6 +6,8 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.howlite.api.PlayerProgressApi
 import com.howlite.data.GymBadge
+import com.howlite.data.PokemonSnapshot
+import com.cobblemon.mod.common.Cobblemon
 import dev.architectury.event.events.common.CommandRegistrationEvent
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -111,6 +113,23 @@ object GymTestCommand {
             context.source.sendFailure(Component.literal("${player.scoreboardName} possède déjà le badge $badgeId"))
             return 0
         }
+        
+        // Capturer l'équipe du joueur
+        try {
+            val party = Cobblemon.storage.getParty(player)
+            val snapshots = party.filterNotNull().map { pokemon ->
+                PokemonSnapshot(
+                    species = pokemon.species.name,
+                    level = pokemon.level,
+                    isShiny = pokemon.shiny,
+                    displayName = pokemon.getDisplayName().string
+                )
+            }
+            data.recordTeam(badge.id, snapshots)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         data.earnBadge(badge)
         PlayerProgressApi.markDirty(player)
         context.source.sendSuccess(

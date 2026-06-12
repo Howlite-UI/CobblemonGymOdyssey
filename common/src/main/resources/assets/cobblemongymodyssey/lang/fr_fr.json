@@ -30,5 +30,10 @@
   "cobblemongymodyssey.badge_case.ribbon.completed_title": "Ruban de Champion de %s",
   "cobblemongymodyssey.badge_case.ribbon.completed_desc": "Tous les badges ont été obtenus !",
   "cobblemongymodyssey.badge_case.ribbon.incomplete_title": "Ruban de %s (Incomplet)",
-  "cobblemongymodyssey.badge_case.ribbon.incomplete_desc": "Battez tous les champions d'arène."
+  "cobblemongymodyssey.badge_case.ribbon.incomplete_desc": "Battez tous les champions d'arène.",
+  "cobblemongymodyssey.badge_case.winning_team": "Équipe victorieuse : %s",
+  "cobblemongymodyssey.badge_case.back": "Retour",
+  "cobblemongymodyssey.badge_case.lcd.back_hint": "APPUYER SUR RETOUR / ESC",
+  "cobblemongymodyssey.badge_case.tooltip.species": "Espèce : %s",
+  "cobblemongymodyssey.badge_case.tooltip.level": "Niveau : %s"
 }

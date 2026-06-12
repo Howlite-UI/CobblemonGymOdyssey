@@ -2,7 +2,15 @@ package com.howlite.screen
 
 import com.howlite.CobblemonGymOdyssey
 import com.howlite.data.GymBadge
+import com.howlite.data.PokemonSnapshot
 import com.howlite.menu.BadgeCaseMenu
+import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
+import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
+import org.joml.Quaternionf
+import org.joml.Vector3f
+import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -180,6 +188,33 @@ class BadgeCaseScreen(
     private var activeRegion: Region = Region.KANTO
     private var scrollOffset: Int = 0
 
+    private var viewedBadgeTeam: GymBadge? = null
+    private var lastViewedBadgeTeam: GymBadge? = null
+
+    private val clientPokemonCache: MutableMap<String, List<Pokemon>> = mutableMapOf()
+    private val slotStates = List(6) { FloatingState() }
+
+    private fun getClientPokemonList(badgeId: String): List<Pokemon> {
+        return clientPokemonCache.getOrPut(badgeId) {
+            val snapshots = menu.badgeTeams[badgeId] ?: return@getOrPut emptyList()
+            snapshots.map { snapshot ->
+                try {
+                    val properties = PokemonProperties.parse(
+                        "${snapshot.species} level=${snapshot.level} shiny=${if (snapshot.isShiny) "yes" else "no"}"
+                    )
+                    val pokemon = properties.create()
+                    if (snapshot.displayName.isNotEmpty()) {
+                        pokemon.nickname = Component.literal(snapshot.displayName)
+                    }
+                    pokemon
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Pokemon()
+                }
+            }
+        }
+    }
+
     // Gestion des animations et particules
     private val particles = mutableListOf<GuiParticle>()
     private val random = java.util.Random()
@@ -266,13 +301,33 @@ class BadgeCaseScreen(
         val bannerW = font.width(bannerText)
         graphics.drawString(font, bannerText, x + (GUI_WIDTH - bannerW) / 2, y + 6, 0xFFFFFF, true)
 
-        // 4. Dessiner le ruban au centre du Pokéball (avec effet glow/flottement si ligue complétée)
+        if (viewedBadgeTeam != null) {
+            renderWinningTeam(graphics, x, y, mouseX, mouseY, partialTick)
+        } else {
+            renderCenterPokeBallAndRibbon(graphics, x, y, partialTick)
+        }
+
+        // 5. Dessiner la grille des badges (TOUJOURS visible !)
+        renderBadgeGrid(graphics, x, y, mouseX, mouseY, partialTick)
+
+        // 6. Dessiner les informations LCD (barre inférieure)
+        renderLCDDisplay(graphics, x, y)
+
+        // 7. Dessiner la barre d'onglets OU le bouton Retour
+        if (viewedBadgeTeam != null) {
+            renderBackButton(graphics, x, y, mouseX, mouseY)
+        } else {
+            renderTabsAndArrows(graphics, x, y, mouseX, mouseY)
+        }
+    }
+
+    private fun renderCenterPokeBallAndRibbon(graphics: GuiGraphics, x: Int, y: Int, partialTick: Float) {
+        val region = activeRegion
         val rx = x + 76
         val isCompleted = region.badges.isNotEmpty() && region.badges.all { it in menu.unlockedBadges }
         val time = clientTicks + partialTick
 
         if (isCompleted) {
-            // Halo lumineux pulsant circulaire derrière le ruban
             val glowColor = (region.primaryColor and 0x00FFFFFF)
             val baseAlpha = (24 + (kotlin.math.sin(time * 0.15) * 10)).toInt().coerceIn(0, 255)
             val cx = rx + 16
@@ -284,7 +339,6 @@ class BadgeCaseScreen(
             drawGlowCircle(graphics, cx, cy, 6, (baseAlpha shl 24) or glowColor)
         }
 
-        // Flottement sinusoïdal doux du ruban obtenu
         val bobbingY = if (isCompleted) (kotlin.math.sin(time * 0.08) * 1.5).toFloat() else 0f
         val ry = y + 58 + bobbingY.toInt()
 
@@ -298,15 +352,72 @@ class BadgeCaseScreen(
         }
         val ribbonTexture = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, ribbonTexPath)
         graphics.blit(ribbonTexture, rx, ry, 0f, 0f, 32, 32, 32, 32)
+    }
 
-        // 5. Dessiner la grille des badges
-        renderBadgeGrid(graphics, x, y, mouseX, mouseY, partialTick)
+    private fun renderBackButton(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        val backX = x + 68
+        val backY = y + 143
+        val isBackHovered = mouseX >= backX && mouseX < backX + 48 && mouseY >= backY && mouseY < backY + 14
+        val backV = if (isBackHovered) 14f else 0f
 
-        // 6. Dessiner les informations LCD (barre inférieure)
-        renderLCDDisplay(graphics, x, y)
+        graphics.blit(REGIONS_BUTTON_TEXTURE, backX, backY, 0f, backV, 48, 14, 48, 28)
 
-        // 7. Dessiner la barre d'onglets et les flèches de navigation
-        renderTabsAndArrows(graphics, x, y, mouseX, mouseY)
+        val backText = Component.translatable("cobblemongymodyssey.badge_case.back").string
+        val backW = font.width(backText)
+        graphics.drawString(font, backText, backX + (48 - backW) / 2, backY + 3, if (isBackHovered) 0xFFFFA800.toInt() else 0xFFFFFF, false)
+    }
+
+    private fun renderWinningTeam(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, partialTick: Float) {
+        val badge = viewedBadgeTeam ?: return
+        val team = menu.badgeTeams[badge.id] ?: emptyList()
+
+        // Dessiner les 6 emplacements de Pokémon arrangés en 2 lignes de 3 colonnes
+        for (i in 0 until 6) {
+            val col = i % 3
+            val row = i / 3
+            val centerX = x + 47 + col * 45
+            val centerY = y + 32 + row * 28
+
+            if (i < team.size) {
+                // Rendu 3D du modèle de Pokémon
+                try {
+                    val pokemonList = getClientPokemonList(badge.id)
+                    if (i < pokemonList.size) {
+                        val pokemon = pokemonList[i]
+                        val poseStack = graphics.pose()
+                        poseStack.pushPose()
+                        poseStack.translate(centerX.toDouble(), (centerY - 15).toDouble(), 0.0)
+                        poseStack.scale(3.5F, 3.5F, 1F)
+                        drawProfilePokemon(
+                            renderablePokemon = pokemon.asRenderablePokemon(),
+                            matrixStack = poseStack,
+                            rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
+                            state = slotStates[i],
+                            partialTicks = partialTick,
+                            scale = 6.5F
+                        )
+                        poseStack.popPose()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                // Afficher une étoile dorée si le Pokémon est shiny
+                val snapshot = team[i]
+                if (snapshot.isShiny) {
+                    graphics.drawString(font, "★", centerX - 14, centerY - 29, 0xFFFFA800.toInt(), true)
+                }
+            } else {
+                // Emplacement vide subtil
+                graphics.drawString(font, "—", centerX - 3, centerY - 19, 0x44555555, true)
+            }
+        }
+
+        // 3. Dessiner le titre de l'équipe gagnante
+        val badgeName = Component.translatable("item.cobblemongymodyssey.${badge.id}").string
+        val titleText = Component.translatable("cobblemongymodyssey.badge_case.winning_team", badgeName).string
+        val titleW = font.width(titleText)
+        graphics.drawString(font, titleText, x + (GUI_WIDTH - titleW) / 2, y + 90, 0xFFFFFF, true)
     }
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -400,7 +511,9 @@ class BadgeCaseScreen(
             graphics.fill(guiX + 2, guiY + sy, guiX + 182, guiY + sy + 1, 0x12000000)
         }
 
-        val rawText = if (activeRegion.badges.isNotEmpty()) {
+        val rawText = if (viewedBadgeTeam != null) {
+            Component.translatable("cobblemongymodyssey.badge_case.lcd.back_hint").string
+        } else if (activeRegion.badges.isNotEmpty()) {
             val capText = Component.translatable("cobblemongymodyssey.badge_case.lcd.level_cap", menu.levelCap).string
             val badgeCountText = Component.translatable(
                 "cobblemongymodyssey.badge_case.lcd.badges",
@@ -413,9 +526,11 @@ class BadgeCaseScreen(
         }
 
         // Effet d'écriture typewriter
-        if (activeRegion != lastActiveRegion) {
+        val textStateChanged = (viewedBadgeTeam != lastViewedBadgeTeam) || (activeRegion != lastActiveRegion)
+        if (textStateChanged) {
             lcdTextProgress = 0f
             lastActiveRegion = activeRegion
+            lastViewedBadgeTeam = viewedBadgeTeam
         }
 
         val charsToShow = lcdTextProgress.toInt().coerceIn(0, rawText.length)
@@ -482,6 +597,37 @@ class BadgeCaseScreen(
         val badges = activeRegion.badges
         val unlockedBadges = menu.unlockedBadges
 
+        if (viewedBadgeTeam != null) {
+            val badge = viewedBadgeTeam!!
+            val team = menu.badgeTeams[badge.id] ?: emptyList()
+            for (i in 0 until 6) {
+                val col = i % 3
+                val row = i / 3
+                val minX = x + 20 + col * 48
+                val maxX = minX + 48
+                val minY = y + 18 + row * 36
+                val maxY = minY + 36
+                if (mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY) {
+                    if (i < team.size) {
+                        val pokemon = team[i]
+                        val tooltipLines = mutableListOf<Component>()
+                        var nameComp = Component.literal(pokemon.displayName)
+                        if (pokemon.isShiny) {
+                            nameComp = Component.literal("★ ").withStyle { it.withColor(0xFFFFA800.toInt()) }.append(nameComp)
+                        }
+                        tooltipLines += nameComp
+                        tooltipLines += Component.translatable("cobblemongymodyssey.badge_case.tooltip.species", pokemon.species.uppercase())
+                        tooltipLines += Component.translatable("cobblemongymodyssey.badge_case.tooltip.level", pokemon.level)
+                        graphics.renderComponentTooltip(font, tooltipLines, mouseX, mouseY)
+                    }
+                    return
+                }
+            }
+            if (mouseY < y + 111) {
+                return
+            }
+        }
+
         badges.forEachIndexed { i, badge ->
             val slotX = getSlotX(i)
             val slotY = 111
@@ -526,6 +672,37 @@ class BadgeCaseScreen(
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val x = (width  - imageWidth)  / 2
         val y = (height - imageHeight) / 2
+
+        if (viewedBadgeTeam != null) {
+            val backX = x + 68
+            val backY = y + 143
+            if (mouseX >= backX && mouseX < backX + 48 && mouseY >= backY && mouseY < backY + 14) {
+                viewedBadgeTeam = null
+                minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
+                return true
+            }
+
+            // Effet sonore interactif au clic sur les cartes Pokémon
+            val badge = viewedBadgeTeam!!
+            val team = menu.badgeTeams[badge.id] ?: emptyList()
+            for (i in 0 until 6) {
+                val col = i % 3
+                val row = i / 3
+                val minX = x + 20 + col * 48
+                val maxX = minX + 48
+                val minY = y + 18 + row * 36
+                val maxY = minY + 36
+                if (mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY) {
+                    if (i < team.size) {
+                        minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.2f))
+                    }
+                    return true
+                }
+            }
+            if (mouseY < y + 111 || mouseY >= y + 127) {
+                return true // Bloque les autres clics sauf sur la grille des badges
+            }
+        }
 
         // Bouton Gauche (Y = y + 147, H = 14)
         val leftX = x - 6
@@ -592,6 +769,7 @@ class BadgeCaseScreen(
                         ))
                     }
                     minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.2f))
+                    viewedBadgeTeam = badge
                 } else {
                     // Particules de fumée gris sombre
                     for (k in 0 until 6) {

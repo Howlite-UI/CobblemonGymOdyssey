@@ -3,6 +3,8 @@ package com.howlite.events
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
+import com.cobblemon.mod.common.Cobblemon
+import com.howlite.data.PokemonSnapshot
 import com.howlite.api.PlayerProgressApi
 import com.howlite.config.GymConfig
 import com.howlite.items.GymBadgeItems
@@ -44,7 +46,7 @@ object GymBattleEventHandler {
                 .firstOrNull() ?: return@subscribe
 
             // PlayerBattleActor.entity est une ServerPlayer?
-            val player = playerActor.entity as? ServerPlayer ?: return@subscribe
+            val player = playerActor.entity ?: return@subscribe
 
             // --- Trouver un NPC parmi les perdants ---
             // BattleVictoryEvent expose directement event.losers (confirmé sources)
@@ -62,6 +64,22 @@ object GymBattleEventHandler {
             // --- Accorder le badge si le joueur ne l'a pas encore ---
             val data = PlayerProgressApi.get(player)
             if (!data.hasBadge(badge)) {
+                // Capturer l'équipe du joueur
+                try {
+                    val party = Cobblemon.storage.getParty(player)
+                    val snapshots = party.filterNotNull().map { pokemon ->
+                        PokemonSnapshot(
+                            species = pokemon.species.name,
+                            level = pokemon.level,
+                            isShiny = pokemon.shiny,
+                            displayName = pokemon.getDisplayName().string
+                        )
+                    }
+                    data.recordTeam(badge.id, snapshots)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
                 data.earnBadge(badge)
                 PlayerProgressApi.markDirty(player)
 

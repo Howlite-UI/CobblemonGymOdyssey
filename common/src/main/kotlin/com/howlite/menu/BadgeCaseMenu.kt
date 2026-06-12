@@ -1,6 +1,7 @@
 package com.howlite.menu
 
 import com.howlite.data.GymBadge
+import com.howlite.data.PokemonSnapshot
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
@@ -28,17 +29,38 @@ import net.minecraft.world.item.ItemStack
 class BadgeCaseMenu(
     syncId: Int,
     val unlockedBadges: Set<GymBadge>,
-    val levelCap: Int = 10
+    val levelCap: Int = 10,
+    val badgeTeams: Map<String, List<PokemonSnapshot>> = emptyMap()
 ) : AbstractContainerMenu(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get(), syncId) {
 
     companion object {
-        private fun readData(buf: FriendlyByteBuf): Pair<Int, Set<GymBadge>> {
+        private fun readData(buf: FriendlyByteBuf): Triple<Int, Set<GymBadge>, Map<String, List<PokemonSnapshot>>> {
             val levelCap = buf.readInt()
             val badges = buf.readCollection(
                 { size -> HashSet(size) },
                 { b -> GymBadge.fromId(b.readUtf()) }
             ).filterNotNull().toSet()
-            return Pair(levelCap, badges)
+
+            val badgeTeams = mutableMapOf<String, List<PokemonSnapshot>>()
+            if (buf.readableBytes() > 0) {
+                val size = buf.readInt()
+                for (i in 0 until size) {
+                    val badgeId = buf.readUtf()
+                    val team = buf.readCollection(
+                        { s -> ArrayList<PokemonSnapshot>(s) },
+                        { b ->
+                            PokemonSnapshot(
+                                species = b.readUtf(),
+                                level = b.readInt(),
+                                isShiny = b.readBoolean(),
+                                displayName = b.readUtf()
+                            )
+                        }
+                    )
+                    badgeTeams[badgeId] = team
+                }
+            }
+            return Triple(levelCap, badges, badgeTeams)
         }
     }
 
@@ -51,10 +73,11 @@ class BadgeCaseMenu(
         readData(buf)
     )
 
-    private constructor(syncId: Int, data: Pair<Int, Set<GymBadge>>) : this(
+    private constructor(syncId: Int, data: Triple<Int, Set<GymBadge>, Map<String, List<PokemonSnapshot>>>) : this(
         syncId,
         unlockedBadges = data.second,
-        levelCap = data.first
+        levelCap = data.first,
+        badgeTeams = data.third
     )
 
     /** Pas de déplacement rapide d'items — menu en lecture seule. */
