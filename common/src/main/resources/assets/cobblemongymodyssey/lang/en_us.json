@@ -9,5 +9,16 @@
   "item.cobblemongymodyssey.earth_badge": "Earth Badge",
   "itemGroup.cobblemongymodyssey.gym_badges": "Gym Badges",
 
-  "cobblemongymodyssey.level_cap.battle_blocked": "⛔ Battle cancelled! %s (level %s) exceeds your Level Cap of %s. Defeat more Gym Leaders to raise it!"
+  "cobblemongymodyssey.level_cap.battle_blocked": "⛔ Battle cancelled! %s (level %s) exceeds your Level Cap of %s. Defeat more Gym Leaders to raise it!",
+
+  "item.cobblemongymodyssey.badge_case": "Badge Case",
+  "cobblemongymodyssey.badge_case.title": "Badge Case",
+  "cobblemongymodyssey.badge_case.tab.kanto": "Kanto",
+  "cobblemongymodyssey.badge_case.tab.johto": "Johto",
+  "cobblemongymodyssey.badge_case.tab.hoenn": "Hoenn",
+  "cobblemongymodyssey.badge_case.coming_soon": "Coming Soon...",
+  "cobblemongymodyssey.badge_case.level_cap_tooltip": "Level Cap unlocked: %s",
+  "cobblemongymodyssey.badge_case.locked_tooltip": "Not yet obtained",
+  "cobblemongymodyssey.badge_case.lcd.level_cap": "LEVEL CAP: %s",
+  "cobblemongymodyssey.badge_case.lcd.badges": "BADGES: %s / %s"
 }

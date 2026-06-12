@@ -1,0 +1,31 @@
+package com.howlite.neoforge.client
+
+import com.howlite.CobblemonGymOdyssey
+import com.howlite.menu.BadgeCaseMenus
+import com.howlite.screen.BadgeCaseScreen
+import net.neoforged.api.distmarker.Dist
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent
+
+/**
+ * Enregistrement côté client NeoForge de l'écran de la Boîte à Badges.
+ *
+ * Utilise [RegisterMenuScreensEvent] (bus MOD, dist CLIENT) plutôt que
+ * [dev.architectury.registry.menu.MenuRegistry] qui peut présenter des
+ * problèmes de timing sur NeoForge 1.21.x.
+ */
+@EventBusSubscriber(
+    modid = CobblemonGymOdyssey.MOD_ID,
+    bus   = EventBusSubscriber.Bus.MOD,
+    value = [Dist.CLIENT]
+)
+object NeoForgeClientSetup {
+
+    @SubscribeEvent
+    fun onRegisterScreens(event: RegisterMenuScreensEvent) {
+        event.register(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get()) { menu, inv, title ->
+            BadgeCaseScreen(menu, inv, title)
+        }
+    }
+}

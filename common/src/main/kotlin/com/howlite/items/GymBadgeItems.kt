@@ -54,6 +54,11 @@ object GymBadgeItems {
         BadgeItem(Item.Properties().stacksTo(1))
     }
 
+    /** La Boîte à Badges — s'ouvre en clic droit pour afficher les badges du joueur. */
+    val BADGE_CASE: RegistrySupplier<Item> = ITEMS.register("badge_case") {
+        BadgeCaseItem(Item.Properties().stacksTo(1))
+    }
+
     // -------------------------------------------------------------------------
     // Onglet créatif "Gym Badges"
     // -------------------------------------------------------------------------
@@ -88,11 +93,12 @@ object GymBadgeItems {
         ITEMS.register()
         TABS.register()
 
-        // Ajouter les 8 badges à l'onglet
+        // Ajouter les 8 badges + la Boîte à Badges à l'onglet
         CreativeTabRegistry.append(
             GYM_BADGES_TAB,
             BOULDER_BADGE, CASCADE_BADGE, THUNDER_BADGE, RAINBOW_BADGE,
-            SOUL_BADGE, MARSH_BADGE, VOLCANO_BADGE, EARTH_BADGE
+            SOUL_BADGE, MARSH_BADGE, VOLCANO_BADGE, EARTH_BADGE,
+            BADGE_CASE
         )
     }
 }

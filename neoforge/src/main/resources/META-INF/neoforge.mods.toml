@@ -79,4 +79,10 @@ side = "BOTH"
 [[mixins]]
 config = "cobblemongymodyssey.mixins.json"
 
-
+# Accessories (soft-dep) — slot équipable Boîte à Badges
+[[dependencies.cobblemongymodyssey]]
+modId = "accessories"
+type = "optional"
+versionRange = "[1.1.0,)"
+ordering = "NONE"
+side = "BOTH"

@@ -29,6 +29,10 @@ repositories {
         name = 'NeoForged'
         url = 'https://maven.neoforged.net/releases'
     }
+    maven {
+        name = 'WispForest (Accessories)'
+        url = 'https://maven.wispforest.io/releases'
+    }
 }
 
 dependencies {

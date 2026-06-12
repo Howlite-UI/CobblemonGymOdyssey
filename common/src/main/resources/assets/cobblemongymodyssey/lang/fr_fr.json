@@ -9,5 +9,16 @@
   "item.cobblemongymodyssey.earth_badge": "Médaille Terre",
   "itemGroup.cobblemongymodyssey.gym_badges": "Badges d'Arène",
 
-  "cobblemongymodyssey.level_cap.battle_blocked": "⛔ Combat annulé ! %s (niveau %s) dépasse votre Level Cap de %s. Battez d'autres Champions d'Arène pour le relever !"
+  "cobblemongymodyssey.level_cap.battle_blocked": "⛔ Combat annulé ! %s (niveau %s) dépasse votre Level Cap de %s. Battez d'autres Champions d'Arène pour le relever !",
+
+  "item.cobblemongymodyssey.badge_case": "Boîte à Badges",
+  "cobblemongymodyssey.badge_case.title": "Boîte à Badges",
+  "cobblemongymodyssey.badge_case.tab.kanto": "Kanto",
+  "cobblemongymodyssey.badge_case.tab.johto": "Johto",
+  "cobblemongymodyssey.badge_case.tab.hoenn": "Hoenn",
+  "cobblemongymodyssey.badge_case.coming_soon": "Bientôt disponible...",
+  "cobblemongymodyssey.badge_case.level_cap_tooltip": "Level Cap débloqué : %s",
+  "cobblemongymodyssey.badge_case.locked_tooltip": "Pas encore obtenu",
+  "cobblemongymodyssey.badge_case.lcd.level_cap": "LIMITE NIVEAU: %s",
+  "cobblemongymodyssey.badge_case.lcd.badges": "BADGES: %s / %s"
 }

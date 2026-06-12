@@ -43,6 +43,9 @@
     "athena": ">=4.0.6",
     "resourcefullib": ">=3.0.12"
   },
+  "suggests": {
+    "trinkets": ">=3.10.0"
+  },
   "custom": {
     "cardinal-components": [
       "cobblemongymodyssey:player_progress"
