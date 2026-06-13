@@ -30,6 +30,14 @@ object GymBlocks {
         BlockItem(GYM_LEADER_TELEPORTER.get(), Item.Properties())
     }
 
+    val SMALL_ROCK: RegistrySupplier<Block> = BLOCKS.register("small_rock") {
+        SmallRockBlock(BlockBehaviour.Properties.of().strength(1.5f).requiresCorrectToolForDrops().noOcclusion())
+    }
+
+    val SMALL_ROCK_ITEM: RegistrySupplier<Item> = ITEMS.register("small_rock") {
+        BlockItem(SMALL_ROCK.get(), Item.Properties())
+    }
+
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     val GYM_LEADER_TELEPORTER_ENTITY: RegistrySupplier<BlockEntityType<GymLeaderTeleporterBlockEntity>> =
         BLOCK_ENTITY_TYPES.register("gym_leader_teleporter") {
@@ -44,7 +52,8 @@ object GymBlocks {
         // Append item to the badges creative tab
         CreativeTabRegistry.append(
             GymBadgeItems.GYM_BADGES_TAB,
-            GYM_LEADER_TELEPORTER_ITEM
+            GYM_LEADER_TELEPORTER_ITEM,
+            SMALL_ROCK_ITEM
         )
     }
 }
