@@ -66,5 +66,19 @@
   "commands.gymtest.remove.doesnt_have": "%s does not have the badge %s",
   "commands.gymtest.remove.success": "Badge %s removed from %s. New Level Cap: %s",
   "commands.gymtest.reset.success": "Progress reset for %s. Level Cap: %s",
-  "commands.gymtest.setlevelcap.success": "Level Cap of %s forced to %s"
+  "commands.gymtest.setlevelcap.success": "Level Cap of %s forced to %s",
+
+  "item.cobblemongymodyssey.zephyr_badge": "Zephyr Badge",
+  "item.cobblemongymodyssey.hive_badge": "Hive Badge",
+  "item.cobblemongymodyssey.plain_badge": "Plain Badge",
+  "item.cobblemongymodyssey.fog_badge": "Fog Badge",
+  "item.cobblemongymodyssey.storm_badge": "Storm Badge",
+  "item.cobblemongymodyssey.mineral_badge": "Mineral Badge",
+  "item.cobblemongymodyssey.glacier_badge": "Glacier Badge",
+  "item.cobblemongymodyssey.rising_badge": "Rising Badge",
+
+  "cobblemongymodyssey.badge_case.shop_button": "Shop",
+  "cobblemongymodyssey.badge_case.shop.tooltip.open": "Click to open the Johto Shop",
+  "cobblemongymodyssey.badge_case.shop.tooltip.locked": "Defeat a Johto Gym Leader to unlock the Shop",
+  "cobblemongymodyssey.shop.johto.title": "Johto League Shop"
 }

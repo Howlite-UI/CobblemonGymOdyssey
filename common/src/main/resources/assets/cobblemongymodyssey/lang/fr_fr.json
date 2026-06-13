@@ -66,5 +66,19 @@
   "commands.gymtest.remove.doesnt_have": "%s ne possède pas le badge %s",
   "commands.gymtest.remove.success": "Badge %s retiré de %s. Limite Level : %s",
   "commands.gymtest.reset.success": "Progression réinitialisée pour %s. Limite Level : %s",
-  "commands.gymtest.setlevelcap.success": "Limite Level de %s forcée à %s"
+  "commands.gymtest.setlevelcap.success": "Limite Level de %s forcée à %s",
+
+  "item.cobblemongymodyssey.zephyr_badge": "Badge Zéphyr",
+  "item.cobblemongymodyssey.hive_badge": "Badge Essaim",
+  "item.cobblemongymodyssey.plain_badge": "Badge Plaine",
+  "item.cobblemongymodyssey.fog_badge": "Badge Brouillard",
+  "item.cobblemongymodyssey.storm_badge": "Badge Choc",
+  "item.cobblemongymodyssey.mineral_badge": "Badge Minéral",
+  "item.cobblemongymodyssey.glacier_badge": "Badge Glacier",
+  "item.cobblemongymodyssey.rising_badge": "Badge Lever",
+
+  "cobblemongymodyssey.badge_case.shop_button": "Boutique",
+  "cobblemongymodyssey.badge_case.shop.tooltip.open": "Cliquer pour ouvrir la boutique de Johto",
+  "cobblemongymodyssey.badge_case.shop.tooltip.locked": "Battez un champion de Johto pour déverrouiller la boutique",
+  "cobblemongymodyssey.shop.johto.title": "Boutique de la Ligue Johto"
 }

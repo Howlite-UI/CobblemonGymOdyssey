@@ -65,11 +65,11 @@ class PlayerProgressData {
 
     /**
      * Ajoute un badge à la collection du joueur et recalcule le [levelCap]
-     * au maximum de tous les badges détenus.
+     * au maximum de tous les badges Kanto détenus.
      */
     fun earnBadge(badge: GymBadge) {
         _badges.add(badge)
-        levelCap = _badges.maxOf { it.levelCap }
+        recalculateLevelCap()
     }
 
     /**
@@ -78,7 +78,12 @@ class PlayerProgressData {
     fun removeBadge(badge: GymBadge) {
         _badges.remove(badge)
         _badgeTeams.remove(badge.id)
-        levelCap = if (_badges.isEmpty()) INITIAL_LEVEL_CAP else _badges.maxOf { it.levelCap }
+        recalculateLevelCap()
+    }
+
+    private fun recalculateLevelCap() {
+        val kantoBadges = _badges.filter { it.region == GymRegion.KANTO }
+        levelCap = if (kantoBadges.isEmpty()) INITIAL_LEVEL_CAP else kantoBadges.maxOf { it.levelCap }
     }
 
     /**

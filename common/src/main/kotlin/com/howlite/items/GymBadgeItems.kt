@@ -54,6 +54,32 @@ object GymBadgeItems {
         BadgeItem(Item.Properties().stacksTo(1))
     }
 
+    // Johto Badges
+    val ZEPHYR_BADGE: RegistrySupplier<Item> = ITEMS.register("zephyr_badge") {
+        BadgeItem(Item.Properties().stacksTo(1))
+    }
+    val HIVE_BADGE: RegistrySupplier<Item> = ITEMS.register("hive_badge") {
+        BadgeItem(Item.Properties().stacksTo(1))
+    }
+    val PLAIN_BADGE: RegistrySupplier<Item> = ITEMS.register("plain_badge") {
+        BadgeItem(Item.Properties().stacksTo(1))
+    }
+    val FOG_BADGE: RegistrySupplier<Item> = ITEMS.register("fog_badge") {
+        BadgeItem(Item.Properties().stacksTo(1))
+    }
+    val STORM_BADGE: RegistrySupplier<Item> = ITEMS.register("storm_badge") {
+        BadgeItem(Item.Properties().stacksTo(1))
+    }
+    val MINERAL_BADGE: RegistrySupplier<Item> = ITEMS.register("mineral_badge") {
+        BadgeItem(Item.Properties().stacksTo(1))
+    }
+    val GLACIER_BADGE: RegistrySupplier<Item> = ITEMS.register("glacier_badge") {
+        BadgeItem(Item.Properties().stacksTo(1))
+    }
+    val RISING_BADGE: RegistrySupplier<Item> = ITEMS.register("rising_badge") {
+        BadgeItem(Item.Properties().stacksTo(1))
+    }
+
     /** La Boîte à Badges — s'ouvre en clic droit pour afficher les badges du joueur. */
     val BADGE_CASE: RegistrySupplier<Item> = ITEMS.register("badge_case") {
         BadgeCaseItem(Item.Properties().stacksTo(1))
@@ -110,6 +136,14 @@ object GymBadgeItems {
             GymBadge.MARSH_BADGE -> MARSH_BADGE.get()
             GymBadge.VOLCANO_BADGE -> VOLCANO_BADGE.get()
             GymBadge.EARTH_BADGE -> EARTH_BADGE.get()
+            GymBadge.ZEPHYR_BADGE -> ZEPHYR_BADGE.get()
+            GymBadge.HIVE_BADGE -> HIVE_BADGE.get()
+            GymBadge.PLAIN_BADGE -> PLAIN_BADGE.get()
+            GymBadge.FOG_BADGE -> FOG_BADGE.get()
+            GymBadge.STORM_BADGE -> STORM_BADGE.get()
+            GymBadge.MINERAL_BADGE -> MINERAL_BADGE.get()
+            GymBadge.GLACIER_BADGE -> GLACIER_BADGE.get()
+            GymBadge.RISING_BADGE -> RISING_BADGE.get()
         }
     }
 
@@ -126,6 +160,8 @@ object GymBadgeItems {
             GYM_BADGES_TAB,
             BOULDER_BADGE, CASCADE_BADGE, THUNDER_BADGE, RAINBOW_BADGE,
             SOUL_BADGE, MARSH_BADGE, VOLCANO_BADGE, EARTH_BADGE,
+            ZEPHYR_BADGE, HIVE_BADGE, PLAIN_BADGE, FOG_BADGE,
+            STORM_BADGE, MINERAL_BADGE, GLACIER_BADGE, RISING_BADGE,
             BADGE_CASE,
             BOULDER_TICKET, CASCADE_TICKET, THUNDER_TICKET, RAINBOW_TICKET,
             SOUL_TICKET, MARSH_TICKET, VOLCANO_TICKET, EARTH_TICKET

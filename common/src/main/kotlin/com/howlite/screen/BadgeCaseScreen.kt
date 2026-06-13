@@ -82,7 +82,12 @@ class BadgeCaseScreen(
         ),
         JOHTO(
             "cobblemongymodyssey.badge_case.tab.johto",
-            emptyList(),
+            listOf(
+                GymBadge.ZEPHYR_BADGE, GymBadge.HIVE_BADGE,
+                GymBadge.PLAIN_BADGE,  GymBadge.FOG_BADGE,
+                GymBadge.STORM_BADGE,  GymBadge.MINERAL_BADGE,
+                GymBadge.GLACIER_BADGE, GymBadge.RISING_BADGE
+            ),
             0xFF1E90FF.toInt(), // Bleu Cobalt
             0xFF70A1FF.toInt(),
             0xFF0F6EBD.toInt(),
@@ -309,6 +314,9 @@ class BadgeCaseScreen(
             renderWinningTeam(graphics, x, y, mouseX, mouseY, partialTick)
         } else {
             renderCenterPokeBallAndRibbon(graphics, x, y, partialTick)
+            if (region == Region.JOHTO) {
+                renderShopButton(graphics, x, y, mouseX, mouseY)
+            }
         }
 
         // 5. Dessiner la grille des badges (TOUJOURS visible !)
@@ -369,6 +377,34 @@ class BadgeCaseScreen(
         val backText = Component.translatable("cobblemongymodyssey.badge_case.back").string
         val backW = font.width(backText)
         graphics.drawString(font, backText, backX + (48 - backW) / 2, backY + 3, if (isBackHovered) 0xFFFFA800.toInt() else 0xFFFFFF, false)
+    }
+
+    private fun renderShopButton(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        val shopX = x + 68
+        val shopY = y + 32
+        val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
+        val isHovered = mouseX >= shopX && mouseX < shopX + 48 && mouseY >= shopY && mouseY < shopY + 14
+
+        val buttonV = if (hasAnyJohtoBadge && isHovered) 14f else 0f
+
+        if (!hasAnyJohtoBadge) {
+            RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1.0f)
+        }
+        graphics.blit(REGIONS_BUTTON_TEXTURE, shopX, shopY, 0f, buttonV, 48, 14, 48, 28)
+        if (!hasAnyJohtoBadge) {
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        }
+
+        val text = Component.translatable("cobblemongymodyssey.badge_case.shop_button").string
+        val textW = font.width(text)
+        val textColor = if (!hasAnyJohtoBadge) {
+            0x8E8E93
+        } else if (isHovered) {
+            0xFFFFA800.toInt()
+        } else {
+            0xFFFFFF
+        }
+        graphics.drawString(font, text, shopX + (48 - textW) / 2, shopY + 3, textColor, false)
     }
 
     private fun renderWinningTeam(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -477,7 +513,7 @@ class BadgeCaseScreen(
 
             val badgeTexture = ResourceLocation.fromNamespaceAndPath(
                 CobblemonGymOdyssey.MOD_ID,
-                "textures/item/${badge.id}.png"
+                badge.texturePath
             )
 
             // Rebond/bobbing interactif au survol
@@ -601,6 +637,22 @@ class BadgeCaseScreen(
         val badges = activeRegion.badges
         val unlockedBadges = menu.unlockedBadges
 
+        if (viewedBadgeTeam == null && activeRegion == Region.JOHTO) {
+            val shopX = x + 68
+            val shopY = y + 32
+            if (mouseX >= shopX && mouseX < shopX + 48 && mouseY >= shopY && mouseY < shopY + 14) {
+                val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
+                val lines = mutableListOf<Component>()
+                if (hasAnyJohtoBadge) {
+                    lines += Component.translatable("cobblemongymodyssey.badge_case.shop.tooltip.open")
+                } else {
+                    lines += Component.translatable("cobblemongymodyssey.badge_case.shop.tooltip.locked")
+                }
+                graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
+                return
+            }
+        }
+
         if (viewedBadgeTeam != null) {
             val badge = viewedBadgeTeam!!
             val team = menu.badgeTeams[badge.id] ?: emptyList()
@@ -705,6 +757,21 @@ class BadgeCaseScreen(
             }
             if (mouseY < y + 111 || mouseY >= y + 127) {
                 return true // Bloque les autres clics sauf sur la grille des badges
+            }
+        }
+
+        if (viewedBadgeTeam == null && activeRegion == Region.JOHTO) {
+            val shopX = x + 68
+            val shopY = y + 32
+            if (mouseX >= shopX && mouseX < shopX + 48 && mouseY >= shopY && mouseY < shopY + 14) {
+                val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
+                if (hasAnyJohtoBadge) {
+                    minecraft?.gameMode?.handleInventoryButtonClick(menu.containerId, 0)
+                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
+                } else {
+                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
+                }
+                return true
             }
         }
 

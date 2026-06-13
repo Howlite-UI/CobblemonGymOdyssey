@@ -40,6 +40,16 @@ object GymConfig {
         ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "koga")     to GymBadge.SOUL_BADGE,
         ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "sabrina")  to GymBadge.MARSH_BADGE,
         ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "blaine")   to GymBadge.VOLCANO_BADGE,
-        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "giovanni") to GymBadge.EARTH_BADGE
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "giovanni") to GymBadge.EARTH_BADGE,
+
+        // Johto Gym Leaders
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "falkner")  to GymBadge.ZEPHYR_BADGE,
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "bugsy")    to GymBadge.HIVE_BADGE,
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "whitney")  to GymBadge.PLAIN_BADGE,
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "morty")    to GymBadge.FOG_BADGE,
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "chuck")    to GymBadge.STORM_BADGE,
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "jasmine")  to GymBadge.MINERAL_BADGE,
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "pryce")    to GymBadge.GLACIER_BADGE,
+        ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "clair")    to GymBadge.RISING_BADGE
     )
 }

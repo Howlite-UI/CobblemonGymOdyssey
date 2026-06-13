@@ -3,6 +3,9 @@ package com.howlite.menu
 import com.howlite.data.GymBadge
 import com.howlite.data.PokemonSnapshot
 import net.minecraft.network.FriendlyByteBuf
+import com.howlite.data.GymRegion
+import com.howlite.shop.JohtoShop
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
@@ -32,6 +35,20 @@ class BadgeCaseMenu(
     val levelCap: Int = 10,
     val badgeTeams: Map<String, List<PokemonSnapshot>> = emptyMap()
 ) : AbstractContainerMenu(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get(), syncId) {
+
+    override fun clickMenuButton(player: Player, id: Int): Boolean {
+        if (id == 0) {
+            if (player is ServerPlayer) {
+                val progress = com.howlite.api.PlayerProgressApi.get(player)
+                val hasAnyJohtoBadge = GymBadge.entries.filter { it.region == GymRegion.JOHTO }.any { progress.hasBadge(it) }
+                if (hasAnyJohtoBadge) {
+                    JohtoShop.openShop(player)
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
     companion object {
         private fun readData(buf: FriendlyByteBuf): Triple<Int, Set<GymBadge>, Map<String, List<PokemonSnapshot>>> {
