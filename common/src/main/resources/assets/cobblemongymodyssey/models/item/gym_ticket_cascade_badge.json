@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cobblemongymodyssey:item/gym_ticket_cascade_badge"
+    "layer0": "cobblemongymodyssey:item/indigo/gym_ticket_cascade_badge"
   }
 }

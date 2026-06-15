@@ -113,6 +113,32 @@ object GymBadgeItems {
         GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.EARTH_BADGE)
     }
 
+    // Johto Tickets
+    val ZEPHYR_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_johto_zephyr_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.ZEPHYR_BADGE)
+    }
+    val HIVE_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_johto_hive_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.HIVE_BADGE)
+    }
+    val PLAIN_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_johto_plain_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.PLAIN_BADGE)
+    }
+    val FOG_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_johto_fog_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.FOG_BADGE)
+    }
+    val STORM_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_johto_storm_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.STORM_BADGE)
+    }
+    val MINERAL_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_johto_mineral_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.MINERAL_BADGE)
+    }
+    val GLACIER_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_johto_glacier_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.GLACIER_BADGE)
+    }
+    val RISING_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_johto_rising_badge") {
+        GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.RISING_BADGE)
+    }
+
     // -------------------------------------------------------------------------
     // Onglet créatif "Gym Badges"
     // -------------------------------------------------------------------------
@@ -164,7 +190,9 @@ object GymBadgeItems {
             STORM_BADGE, MINERAL_BADGE, GLACIER_BADGE, RISING_BADGE,
             BADGE_CASE,
             BOULDER_TICKET, CASCADE_TICKET, THUNDER_TICKET, RAINBOW_TICKET,
-            SOUL_TICKET, MARSH_TICKET, VOLCANO_TICKET, EARTH_TICKET
+            SOUL_TICKET, MARSH_TICKET, VOLCANO_TICKET, EARTH_TICKET,
+            ZEPHYR_TICKET, HIVE_TICKET, PLAIN_TICKET, FOG_TICKET,
+            STORM_TICKET, MINERAL_TICKET, GLACIER_TICKET, RISING_TICKET
         )
     }
 }

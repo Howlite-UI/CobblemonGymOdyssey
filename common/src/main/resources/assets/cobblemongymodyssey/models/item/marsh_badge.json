@@ -1,1 +1,1 @@
-{ "parent": "minecraft:item/generated", "textures": { "layer0": "cobblemongymodyssey:item/marsh_badge" } }
+{ "parent": "minecraft:item/generated", "textures": { "layer0": "cobblemongymodyssey:item/indigo/marsh_badge" } }

@@ -513,7 +513,7 @@ class BadgeCaseScreen(
 
             val badgeTexture = ResourceLocation.fromNamespaceAndPath(
                 CobblemonGymOdyssey.MOD_ID,
-                badge.texturePath
+                if (isUnlocked) badge.texturePath else badge.hollowTexturePath
             )
 
             // Rebond/bobbing interactif au survol
@@ -526,13 +526,7 @@ class BadgeCaseScreen(
             }
             val renderY = sy + offset.toInt()
 
-            if (isUnlocked) {
-                graphics.blit(badgeTexture, sx, renderY, 0f, 0f, 16, 16, 16, 16)
-            } else {
-                RenderSystem.setShaderColor(0.06f, 0.06f, 0.06f, 0.75f)
-                graphics.blit(badgeTexture, sx, renderY, 0f, 0f, 16, 16, 16, 16)
-                RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
-            }
+            graphics.blit(badgeTexture, sx, renderY, 0f, 0f, 16, 16, 16, 16)
 
             // Rendu de la bordure pulsante au survol
             if (isHovered) {

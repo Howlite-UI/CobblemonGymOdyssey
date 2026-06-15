@@ -1,1 +1,1 @@
-{ "parent": "minecraft:item/generated", "textures": { "layer0": "cobblemongymodyssey:item/badge_placeholder/glacier_johto_badge" } }
+{ "parent": "minecraft:item/generated", "textures": { "layer0": "cobblemongymodyssey:item/johto/johto_glacier_badge" } }

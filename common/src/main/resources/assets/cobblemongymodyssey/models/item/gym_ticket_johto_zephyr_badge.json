@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cobblemongymodyssey:item/johto/gym_ticket_johto_zephyr_badge"
+  }
+}
+
