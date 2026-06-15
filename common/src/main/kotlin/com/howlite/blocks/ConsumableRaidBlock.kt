@@ -28,6 +28,10 @@ import net.minecraft.server.level.ServerPlayer
 import com.howlite.CobblemonGymOdyssey
 
 
+import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.VoxelShape
+
 class ConsumableRaidBlock(val tier: RaidTier, properties: Properties) : RaidCrystalBlock(properties) {
 
     private val blockCodec: MapCodec<ConsumableRaidBlock> = simpleCodec { ConsumableRaidBlock(tier, it) }
@@ -45,6 +49,24 @@ class ConsumableRaidBlock(val tier: RaidTier, properties: Properties) : RaidCrys
     }
 
     override fun codec(): MapCodec<ConsumableRaidBlock> = blockCodec
+
+    override fun getShape(
+        state: BlockState,
+        level: BlockGetter,
+        pos: BlockPos,
+        context: CollisionContext
+    ): VoxelShape {
+        return box(0.0, 0.0, 0.0, 16.0, 18.0, 16.0)
+    }
+
+    override fun getCollisionShape(
+        state: BlockState,
+        level: BlockGetter,
+        pos: BlockPos,
+        context: CollisionContext
+    ): VoxelShape {
+        return box(0.0, 0.0, 0.0, 16.0, 18.0, 16.0)
+    }
 
     override fun getRenderShape(state: BlockState): RenderShape {
         return RenderShape.MODEL

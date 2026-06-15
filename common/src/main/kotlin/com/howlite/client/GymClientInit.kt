@@ -4,6 +4,7 @@ import com.howlite.CobblemonGymOdyssey
 import com.howlite.blocks.GymBlocks
 import com.howlite.blocks.ConsumableRaidBlockEntity
 import com.howlite.client.render.GymLeaderTeleporterRenderer
+import com.howlite.client.render.ConsumableRaidBlockEntityRenderer
 import com.howlite.client.screen.ConsumableRaidScreen
 import dev.architectury.networking.NetworkManager
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
@@ -14,6 +15,10 @@ object GymClientInit {
     fun init() {
         BlockEntityRendererRegistry.register(GymBlocks.GYM_LEADER_TELEPORTER_ENTITY.get()) { context ->
             GymLeaderTeleporterRenderer(context)
+        }
+
+        BlockEntityRendererRegistry.register(GymBlocks.CONSUMABLE_RAID_BLOCK_ENTITY.get()) { context ->
+            ConsumableRaidBlockEntityRenderer(context)
         }
 
         // Register S2C packet to open Consumable Raid GUI

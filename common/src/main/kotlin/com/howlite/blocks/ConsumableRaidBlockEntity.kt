@@ -17,6 +17,10 @@ class ConsumableRaidBlockEntity(pos: BlockPos, state: BlockState) :
 
     private var clientInitialized = false
 
+    override fun registerControllers(controllers: software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar) {
+        // Do not register default controllers from parent class to avoid searching for non-existent "animation.raid_den.sparkle"
+    }
+
     override fun tick(level: Level, pos: BlockPos, state: BlockState) {
         super.tick(level, pos, state)
         if (level.isClientSide && !clientInitialized) {
