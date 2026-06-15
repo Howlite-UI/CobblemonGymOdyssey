@@ -1,6 +1,8 @@
 package com.howlite
 
 import com.howlite.blocks.GymBlocks
+import com.howlite.blocks.ConsumableRaidBlock
+import com.howlite.blocks.ConsumableRaidBlockEntity
 import com.howlite.commands.GymTestCommand
 import com.howlite.commands.GymTpCommand
 import com.howlite.events.BattleLevelCapEventHandler
@@ -37,6 +39,29 @@ object CobblemonGymOdyssey {
         BattleLevelCapEventHandler.register()
         GymTestCommand.register()
         GymTpCommand.register()
+
+        // Register Enter Consumable Raid Network Packet Receiver (Client -> Server)
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "enter_consumable_raid")
+        ) { buf, context ->
+            val player = context.player
+            val pos = buf.readBlockPos()
+            context.queue {
+                if (player is ServerPlayer) {
+                    val level = player.serverLevel()
+                    // Sanity check to prevent players from entering raids from too far
+                    if (player.distanceToSqr(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5) < 64.0) {
+                        val state = level.getBlockState(pos)
+                        val be = level.getBlockEntity(pos) as? ConsumableRaidBlockEntity
+                        val block = state.block as? ConsumableRaidBlock
+                        if (be != null && block != null && be.isActive(state)) {
+                            block.startOrJoinRaidPublic(player, state, level, pos)
+                        }
+                    }
+                }
+            }
+        }
 
         // Register Open Badge Case Network Packet Receiver (Client -> Server)
         NetworkManager.registerReceiver(

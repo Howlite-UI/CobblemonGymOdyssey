@@ -20,6 +20,13 @@ import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.InteractionHand
+import dev.architectury.networking.NetworkManager
+import io.netty.buffer.Unpooled
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
+import com.howlite.CobblemonGymOdyssey
+
 
 class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties) {
 
@@ -100,6 +107,20 @@ class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties)
         }
     }
 
+    fun startOrJoinRaidPublic(player: Player, state: BlockState, level: Level, pos: BlockPos) {
+        super.useWithoutItem(
+            state,
+            level,
+            pos,
+            player,
+            net.minecraft.world.phys.BlockHitResult.miss(
+                net.minecraft.world.phys.Vec3.ZERO,
+                net.minecraft.core.Direction.UP,
+                pos
+            )
+        )
+    }
+
     override fun useWithoutItem(
         state: BlockState,
         level: Level,
@@ -107,18 +128,26 @@ class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties)
         player: Player,
         hitResult: BlockHitResult
     ): InteractionResult {
-        if (!level.isClientSide) {
-            println("[GymOdyssey] useWithoutItem called at $pos for player ${player.name.string}")
-            val be = level.getBlockEntity(pos)
-            println("[GymOdyssey] BlockEntity at $pos is: ${be?.javaClass?.name ?: "null"}")
-            if (be is ConsumableRaidBlockEntity) {
-                println("[GymOdyssey] BlockEntity raidBoss: ${be.raidBossLocation}")
-                println("[GymOdyssey] BlockEntity uuid: ${be.uuid}")
-                println("[GymOdyssey] BlockEntity isOpen: ${be.isOpen}")
-                println("[GymOdyssey] BlockEntity isActive: ${be.isActive(state)}")
+        if (!level.isClientSide && player is ServerPlayer) {
+            val be = level.getBlockEntity(pos) as? ConsumableRaidBlockEntity
+            if (be != null && be.isActive(state)) {
+                val raidBoss = be.getRaidBoss()
+                if (raidBoss != null) {
+                    val buf = net.minecraft.network.RegistryFriendlyByteBuf(
+                        Unpooled.buffer(),
+                        player.level().registryAccess()
+                    )
+                    buf.writeBlockPos(pos)
+                    NetworkManager.sendToPlayer(
+                        player,
+                        ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "open_consumable_raid_gui"),
+                        buf
+                    )
+                    return InteractionResult.SUCCESS
+                }
             }
         }
-        return super.useWithoutItem(state, level, pos, player, hitResult)
+        return InteractionResult.sidedSuccess(level.isClientSide)
     }
 
     override fun useItemOn(
@@ -130,10 +159,7 @@ class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties)
         hand: InteractionHand,
         hitResult: BlockHitResult
     ): ItemInteractionResult {
-        if (!level.isClientSide) {
-            println("[GymOdyssey] useItemOn called at $pos with stack $stack")
-        }
-        return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
     }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
