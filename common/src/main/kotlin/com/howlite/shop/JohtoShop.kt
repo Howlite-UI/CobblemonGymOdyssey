@@ -86,17 +86,31 @@ object JohtoShop {
             offers.add(createOffer(8, ItemStack(getCobblemonItem("water_stone", Items.WATER_BUCKET))))
             offers.add(createOffer(8, ItemStack(getCobblemonItem("thunder_stone", Items.LIGHTNING_ROD))))
             offers.add(createOffer(8, ItemStack(getCobblemonItem("leaf_stone", Items.OAK_SAPLING))))
+            offers.add(createOffer(8, ItemStack(getCobblemonItem("moon_stone", Items.CLAY_BALL))))
+            offers.add(createOffer(8, ItemStack(getCobblemonItem("sun_stone", Items.GLOWSTONE_DUST))))
+            offers.add(createOffer(8, ItemStack(getCobblemonItem("ice_stone", Items.SNOWBALL))))
+            offers.add(createOffer(5, ItemStack(getCobblemonItem("everstone", Items.STONE))))
+            offers.add(createOffer(2, ItemStack(getCobblemonItem("exp_candy_s", Items.SUGAR), 4)))
         }
 
-        // 4. Badge Brouillard (fog_badge) -> Ultra Balls, Hyper Potions
+        // 4. Badge Brouillard (fog_badge) -> Ultra Balls, Hyper Potions, Pierres Évolutives Supérieures, Poké Balls Spéciales
         if (progress.hasBadge(GymBadge.FOG_BADGE)) {
             offers.add(createOffer(4, ItemStack(getCobblemonItem("ultra_ball", Items.ENDER_EYE), 4)))
             offers.add(createOffer(5, ItemStack(getCobblemonItem("hyper_potion", Items.POTION), 2)))
+            offers.add(createOffer(10, ItemStack(getCobblemonItem("dusk_stone", Items.COAL))))
+            offers.add(createOffer(10, ItemStack(getCobblemonItem("shiny_stone", Items.AMETHYST_SHARD))))
+            offers.add(createOffer(10, ItemStack(getCobblemonItem("dawn_stone", Items.QUARTZ))))
+            offers.add(createOffer(3, ItemStack(getCobblemonItem("dusk_ball", Items.ENDER_PEARL), 4)))
+            offers.add(createOffer(4, ItemStack(getCobblemonItem("quick_ball", Items.FEATHER), 2)))
+            offers.add(createOffer(4, ItemStack(getCobblemonItem("exp_candy_m", Items.COOKIE), 2)))
         }
 
-        // 5. Badge Choc (storm_badge) -> Super Bonbons
+        // 5. Badge Choc (storm_badge) -> Super Bonbons, Timer Balls, Objets d'élevage/entraînement
         if (progress.hasBadge(GymBadge.STORM_BADGE)) {
             offers.add(createOffer(12, ItemStack(getCobblemonItem("rare_candy", Items.GOLDEN_APPLE))))
+            offers.add(createOffer(4, ItemStack(getCobblemonItem("timer_ball", Items.CLOCK), 2)))
+            offers.add(createOffer(15, ItemStack(getCobblemonItem("destiny_knot", Items.STRING))))
+            offers.add(createOffer(8, ItemStack(getCobblemonItem("exp_candy_l", Items.PUMPKIN_PIE))))
         }
 
         // 6. Badge Minéral (mineral_badge) -> Vitamines (Zinc, Carbone, Calcium...)
@@ -123,7 +137,7 @@ object JohtoShop {
         val merchant = JohtoVirtualMerchant(player)
         merchant.overrideOffers(offers)
 
-        player.openMenu(object : MenuProvider {
+        val containerIdOpt = player.openMenu(object : MenuProvider {
             override fun getDisplayName(): Component =
                 Component.translatable("cobblemongymodyssey.shop.johto.title")
 
@@ -131,5 +145,16 @@ object JohtoShop {
                 return MerchantMenu(syncId, inv, merchant)
             }
         })
+
+        if (containerIdOpt != null && containerIdOpt.isPresent) {
+            player.sendMerchantOffers(
+                containerIdOpt.getAsInt(),
+                offers,
+                1,
+                0,
+                false,
+                false
+            )
+        }
     }
 }

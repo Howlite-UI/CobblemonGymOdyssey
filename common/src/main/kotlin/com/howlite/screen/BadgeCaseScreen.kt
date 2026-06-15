@@ -53,6 +53,10 @@ class BadgeCaseScreen(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/regions_button.png"
         )
+        val SHOP_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/shop_button.png"
+        )
         val RIGHT_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/right_button.png"
@@ -380,17 +384,17 @@ class BadgeCaseScreen(
     }
 
     private fun renderShopButton(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
-        val shopX = x + 68
+        val shopX = x - 53
         val shopY = y + 32
         val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
-        val isHovered = mouseX >= shopX && mouseX < shopX + 48 && mouseY >= shopY && mouseY < shopY + 14
+        val isHovered = mouseX >= shopX && mouseX < shopX + 53 && mouseY >= shopY && mouseY < shopY + 14
 
         val buttonV = if (hasAnyJohtoBadge && isHovered) 14f else 0f
 
         if (!hasAnyJohtoBadge) {
             RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1.0f)
         }
-        graphics.blit(REGIONS_BUTTON_TEXTURE, shopX, shopY, 0f, buttonV, 48, 14, 48, 28)
+        graphics.blit(SHOP_BUTTON_TEXTURE, shopX, shopY, 0f, buttonV, 53, 14, 53, 28)
         if (!hasAnyJohtoBadge) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         }
@@ -404,7 +408,7 @@ class BadgeCaseScreen(
         } else {
             0xFFFFFF
         }
-        graphics.drawString(font, text, shopX + (48 - textW) / 2, shopY + 3, textColor, false)
+        graphics.drawString(font, text, shopX + 3 + (31 - textW) / 2, shopY + 3, textColor, false)
     }
 
     private fun renderWinningTeam(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -632,9 +636,9 @@ class BadgeCaseScreen(
         val unlockedBadges = menu.unlockedBadges
 
         if (viewedBadgeTeam == null && activeRegion == Region.JOHTO) {
-            val shopX = x + 68
+            val shopX = x - 53
             val shopY = y + 32
-            if (mouseX >= shopX && mouseX < shopX + 48 && mouseY >= shopY && mouseY < shopY + 14) {
+            if (mouseX >= shopX && mouseX < shopX + 53 && mouseY >= shopY && mouseY < shopY + 14) {
                 val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
                 val lines = mutableListOf<Component>()
                 if (hasAnyJohtoBadge) {
@@ -755,9 +759,9 @@ class BadgeCaseScreen(
         }
 
         if (viewedBadgeTeam == null && activeRegion == Region.JOHTO) {
-            val shopX = x + 68
+            val shopX = x - 53
             val shopY = y + 32
-            if (mouseX >= shopX && mouseX < shopX + 48 && mouseY >= shopY && mouseY < shopY + 14) {
+            if (mouseX >= shopX && mouseX < shopX + 53 && mouseY >= shopY && mouseY < shopY + 14) {
                 val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
                 if (hasAnyJohtoBadge) {
                     minecraft?.gameMode?.handleInventoryButtonClick(menu.containerId, 0)
