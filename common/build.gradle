@@ -13,5 +13,10 @@ dependencies {
 
     // Cobblemon (Compile-only for the common module)
     modCompileOnly "com.cobblemon:mod:$rootProject.cobblemon_version"
+
+    // Cobblemon Raid Dens & GeckoLib (Compile-only for the common module)
+    modCompileOnly "maven.modrinth:cobblemonraiddens:${rootProject.cobblemonraiddens_fabric_version}"
+    modCompileOnly "maven.modrinth:geckolib:${rootProject.geckolib_fabric_version}"
+    modCompileOnly "maven.modrinth:cloth-config:${rootProject.cloth_config_fabric_version}"
 }
 

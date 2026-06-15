@@ -58,6 +58,11 @@ dependencies {
     developmentNeoForge("com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}") { transitive = false }
     shadowBundle("com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}") { transitive = false }
 
+    // Cobblemon Raid Dens & GeckoLib (NeoForge)
+    modImplementation "maven.modrinth:cobblemonraiddens:${rootProject.cobblemonraiddens_neoforge_version}"
+    modImplementation "maven.modrinth:geckolib:${rootProject.geckolib_neoforge_version}"
+    modImplementation "maven.modrinth:cloth-config:${rootProject.cloth_config_neoforge_version}"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

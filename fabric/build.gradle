@@ -55,6 +55,11 @@ dependencies {
     implementation "com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}"
     include "com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}"
 
+    // Cobblemon Raid Dens & GeckoLib (Fabric)
+    modImplementation "maven.modrinth:cobblemonraiddens:${rootProject.cobblemonraiddens_fabric_version}"
+    modImplementation "maven.modrinth:geckolib:${rootProject.geckolib_fabric_version}"
+    modImplementation "maven.modrinth:cloth-config:${rootProject.cloth_config_fabric_version}"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }
