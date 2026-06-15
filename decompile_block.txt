@@ -1,0 +1,813 @@
+﻿Compiled from "RaidCrystalBlock.java"
+public abstract class com.necro.raid.dens.common.blocks.block.RaidCrystalBlock extends net.minecraft.world.level.block.BaseEntityBlock {
+  public static final net.minecraft.world.level.block.state.properties.EnumProperty<com.necro.raid.dens.common.data.raid.RaidType> RAID_TYPE;
+
+  public static final net.minecraft.world.level.block.state.properties.EnumProperty<com.necro.raid.dens.common.data.raid.RaidTier> RAID_TIER;
+
+  public static final net.minecraft.world.level.block.state.properties.BooleanProperty ACTIVE;
+
+  public static final net.minecraft.world.level.block.state.properties.BooleanProperty CAN_RESET;
+
+  public static final net.minecraft.world.level.block.state.properties.EnumProperty<com.necro.raid.dens.common.data.raid.RaidCycleMode> CYCLE_MODE;
+
+  public static final net.minecraft.world.level.block.state.properties.BooleanProperty IS_NATURAL;
+
+  private static final net.minecraft.world.phys.shapes.VoxelShape SHAPE;
+
+  public com.necro.raid.dens.common.blocks.block.RaidCrystalBlock(net.minecraft.world.level.block.state.BlockBehaviour$Properties);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokespecial #42                 // Method net/minecraft/world/level/block/BaseEntityBlock."<init>":(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V
+       5: aload_0
+       6: aload_0
+       7: invokevirtual #46                 // Method defaultBlockState:()Lnet/minecraft/world/level/block/state/BlockState;
+      10: getstatic     #48                 // Field ACTIVE:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      13: iconst_1
+      14: invokestatic  #54                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      17: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+      20: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+      23: getstatic     #62                 // Field RAID_TYPE:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      26: getstatic     #68                 // Field com/necro/raid/dens/common/data/raid/RaidType.STELLAR:Lcom/necro/raid/dens/common/data/raid/RaidType;
+      29: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+      32: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+      35: getstatic     #70                 // Field RAID_TIER:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      38: getstatic     #76                 // Field com/necro/raid/dens/common/data/raid/RaidTier.TIER_ONE:Lcom/necro/raid/dens/common/data/raid/RaidTier;
+      41: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+      44: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+      47: getstatic     #78                 // Field CAN_RESET:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      50: iconst_1
+      51: invokestatic  #54                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      54: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+      57: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+      60: getstatic     #80                 // Field CYCLE_MODE:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      63: getstatic     #86                 // Field com/necro/raid/dens/common/data/raid/RaidCycleMode.CONFIG:Lcom/necro/raid/dens/common/data/raid/RaidCycleMode;
+      66: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+      69: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+      72: getstatic     #88                 // Field IS_NATURAL:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      75: iconst_1
+      76: invokestatic  #54                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      79: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+      82: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+      85: invokevirtual #92                 // Method registerDefaultState:(Lnet/minecraft/world/level/block/state/BlockState;)V
+      88: return
+
+  protected net.minecraft.world.InteractionResult useWithoutItem(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.Level, net.minecraft.core.BlockPos, net.minecraft.world.entity.player.Player, net.minecraft.world.phys.BlockHitResult);
+    Code:
+       0: aload_2
+       1: invokevirtual #109                // Method net/minecraft/world/level/Level.isClientSide:()Z
+       4: ifeq          11
+       7: getstatic     #115                // Field net/minecraft/world/InteractionResult.SUCCESS:Lnet/minecraft/world/InteractionResult;
+      10: areturn
+      11: aload_2
+      12: aload_3
+      13: invokevirtual #119                // Method net/minecraft/world/level/Level.getBlockEntity:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;
+      16: astore        7
+      18: aload         7
+      20: instanceof    #121                // class com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity
+      23: ifeq          36
+      26: aload         7
+      28: checkcast     #121                // class com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity
+      31: astore        6
+      33: goto          40
+      36: getstatic     #126                // Field net/minecraft/world/InteractionResult.FAIL:Lnet/minecraft/world/InteractionResult;
+      39: areturn
+      40: aload_0
+      41: aload         4
+      43: aload_1
+      44: aload         6
+      46: aconst_null
+      47: invokevirtual #136                // Method startOrJoinRaid:(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/block/state/BlockState;Lcom/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity;Lnet/minecraft/world/item/ItemStack;)Z
+      50: istore        7
+      52: iload         7
+      54: ifeq          63
+      57: getstatic     #115                // Field net/minecraft/world/InteractionResult.SUCCESS:Lnet/minecraft/world/InteractionResult;
+      60: goto          66
+      63: getstatic     #126                // Field net/minecraft/world/InteractionResult.FAIL:Lnet/minecraft/world/InteractionResult;
+      66: areturn
+
+  protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack, net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.Level, net.minecraft.core.BlockPos, net.minecraft.world.entity.player.Player, net.minecraft.world.InteractionHand, net.minecraft.world.phys.BlockHitResult);
+    Code:
+       0: aload_3
+       1: invokevirtual #109                // Method net/minecraft/world/level/Level.isClientSide:()Z
+       4: ifeq          11
+       7: getstatic     #154                // Field net/minecraft/world/ItemInteractionResult.SUCCESS:Lnet/minecraft/world/ItemInteractionResult;
+      10: areturn
+      11: aload_3
+      12: aload         4
+      14: invokevirtual #119                // Method net/minecraft/world/level/Level.getBlockEntity:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;
+      17: astore        8
+      19: aload         8
+      21: instanceof    #121                // class com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity
+      24: ifeq          37
+      27: aload         8
+      29: checkcast     #121                // class com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity
+      32: astore        9
+      34: goto          41
+      37: getstatic     #156                // Field net/minecraft/world/ItemInteractionResult.FAIL:Lnet/minecraft/world/ItemInteractionResult;
+      40: areturn
+      41: aload         9
+      43: invokevirtual #160                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getRaidBoss:()Lcom/necro/raid/dens/common/data/raid/RaidBoss;
+      46: ifnonnull     53
+      49: getstatic     #156                // Field net/minecraft/world/ItemInteractionResult.FAIL:Lnet/minecraft/world/ItemInteractionResult;
+      52: areturn
+      53: aload         9
+      55: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+      58: invokestatic  #170                // Method com/necro/raid/dens/common/raids/helpers/RaidRegionHelper.getRegion:(Ljava/util/UUID;)Lcom/necro/raid/dens/common/data/dimension/RaidRegion;
+      61: ifnull        78
+      64: aload         9
+      66: aload         5
+      68: invokevirtual #174                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isPlayerParticipating:(Lnet/minecraft/world/entity/player/Player;)Z
+      71: ifeq          78
+      74: getstatic     #177                // Field net/minecraft/world/ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION:Lnet/minecraft/world/ItemInteractionResult;
+      77: areturn
+      78: aload         9
+      80: invokevirtual #180                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isOpen:()Z
+      83: ifeq          90
+      86: getstatic     #177                // Field net/minecraft/world/ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION:Lnet/minecraft/world/ItemInteractionResult;
+      89: areturn
+      90: aload         9
+      92: invokevirtual #160                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getRaidBoss:()Lcom/necro/raid/dens/common/data/raid/RaidBoss;
+      95: invokevirtual #186                // Method com/necro/raid/dens/common/data/raid/RaidBoss.getKey:()Lcom/necro/raid/dens/common/data/raid/UniqueKey;
+      98: invokevirtual #191                // Method com/necro/raid/dens/common/data/raid/UniqueKey.isEmpty:()Z
+     101: ifeq          134
+     104: getstatic     #197                // Field com/necro/raid/dens/common/CobblemonRaidDens.TIER_CONFIG:Ljava/util/Map;
+     107: aload_2
+     108: getstatic     #70                 // Field RAID_TIER:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+     111: invokevirtual #201                // Method net/minecraft/world/level/block/state/BlockState.getValue:(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;
+     114: invokeinterface #207,  2          // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+     119: checkcast     #209                // class com/necro/raid/dens/common/config/TierConfig
+     122: invokeinterface #212,  1          // InterfaceMethod com/necro/raid/dens/common/config/TierConfig.requiresKey:()Z
+     127: ifne          134
+     130: getstatic     #177                // Field net/minecraft/world/ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION:Lnet/minecraft/world/ItemInteractionResult;
+     133: areturn
+     134: aload_0
+     135: aload         5
+     137: aload         9
+     139: aload_1
+     140: invokevirtual #216                // Method handleKey:(Lnet/minecraft/world/entity/player/Player;Lcom/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity;Lnet/minecraft/world/item/ItemStack;)Z
+     143: ifne          150
+     146: getstatic     #156                // Field net/minecraft/world/ItemInteractionResult.FAIL:Lnet/minecraft/world/ItemInteractionResult;
+     149: areturn
+     150: aload_0
+     151: aload         5
+     153: aload_2
+     154: aload         9
+     156: aload_1
+     157: invokevirtual #136                // Method startOrJoinRaid:(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/block/state/BlockState;Lcom/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity;Lnet/minecraft/world/item/ItemStack;)Z
+     160: istore        10
+     162: iload         10
+     164: ifeq          174
+     167: aload_1
+     168: iconst_1
+     169: aload         5
+     171: invokevirtual #222                // Method net/minecraft/world/item/ItemStack.consume:(ILnet/minecraft/world/entity/LivingEntity;)V
+     174: iload         10
+     176: ifeq          185
+     179: getstatic     #225                // Field net/minecraft/world/ItemInteractionResult.CONSUME:Lnet/minecraft/world/ItemInteractionResult;
+     182: goto          188
+     185: getstatic     #156                // Field net/minecraft/world/ItemInteractionResult.FAIL:Lnet/minecraft/world/ItemInteractionResult;
+     188: areturn
+
+  private boolean startOrJoinRaid(net.minecraft.world.entity.player.Player, net.minecraft.world.level.block.state.BlockState, com.necro.raid.dens.common.blocks.entity.RaidCrystalBlockEntity, net.minecraft.world.item.ItemStack);
+    Code:
+       0: aload_1
+       1: invokevirtual #235                // Method net/minecraft/world/entity/player/Player.getServer:()Lnet/minecraft/server/MinecraftServer;
+       4: ifnonnull     9
+       7: iconst_0
+       8: ireturn
+       9: aload_3
+      10: aload_2
+      11: invokevirtual #239                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isActive:(Lnet/minecraft/world/level/block/state/BlockState;)Z
+      14: ifeq          38
+      17: aload_3
+      18: invokevirtual #242                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isAtMaxClears:()Z
+      21: ifne          38
+      24: aload_3
+      25: invokevirtual #245                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isInProgress:()Z
+      28: ifne          50
+      31: aload_3
+      32: invokevirtual #248                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isIdle:()Z
+      35: ifne          50
+      38: aload_1
+      39: ldc           #250                // String message.cobblemonraiddens.raid.is_not_active
+      41: invokestatic  #256                // Method com/necro/raid/dens/common/util/ComponentUtils.getSystemMessage:(Ljava/lang/String;)Lnet/minecraft/network/chat/Component;
+      44: iconst_1
+      45: invokevirtual #260                // Method net/minecraft/world/entity/player/Player.displayClientMessage:(Lnet/minecraft/network/chat/Component;Z)V
+      48: iconst_0
+      49: ireturn
+      50: aload_3
+      51: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+      54: aload_1
+      55: invokestatic  #266                // Method com/necro/raid/dens/common/raids/helpers/RaidHelper.hasClearedRaid:(Ljava/util/UUID;Lnet/minecraft/world/entity/player/Player;)Z
+      58: ifeq          74
+      61: aload_1
+      62: ldc_w         #268                // String message.cobblemonraiddens.raid.player_cleared
+      65: invokestatic  #256                // Method com/necro/raid/dens/common/util/ComponentUtils.getSystemMessage:(Ljava/lang/String;)Lnet/minecraft/network/chat/Component;
+      68: iconst_1
+      69: invokevirtual #260                // Method net/minecraft/world/entity/player/Player.displayClientMessage:(Lnet/minecraft/network/chat/Component;Z)V
+      72: iconst_0
+      73: ireturn
+      74: aload_3
+      75: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+      78: invokestatic  #170                // Method com/necro/raid/dens/common/raids/helpers/RaidRegionHelper.getRegion:(Ljava/util/UUID;)Lcom/necro/raid/dens/common/data/dimension/RaidRegion;
+      81: astore        5
+      83: aload         5
+      85: ifnull        135
+      88: aload_3
+      89: aload_1
+      90: invokevirtual #174                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isPlayerParticipating:(Lnet/minecraft/world/entity/player/Player;)Z
+      93: ifeq          135
+      96: getstatic     #274                // Field com/necro/raid/dens/common/network/RaidDenNetworkMessages.JOIN_RAID:Ljava/util/function/BiConsumer;
+      99: aload_1
+     100: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+     103: iconst_1
+     104: invokestatic  #54                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+     107: invokeinterface #282,  3          // InterfaceMethod java/util/function/BiConsumer.accept:(Ljava/lang/Object;Ljava/lang/Object;)V
+     112: aload_1
+     113: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+     116: aload_1
+     117: invokevirtual #235                // Method net/minecraft/world/entity/player/Player.getServer:()Lnet/minecraft/server/MinecraftServer;
+     120: aload         5
+     122: invokestatic  #288                // Method com/necro/raid/dens/common/util/RaidUtils.teleportPlayerToRaid:(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/server/MinecraftServer;Lcom/necro/raid/dens/common/data/dimension/RaidRegion;)V
+     125: aload_3
+     126: aload_1
+     127: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+     130: invokevirtual #292                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.syncAspects:(Lnet/minecraft/server/level/ServerPlayer;)V
+     133: iconst_1
+     134: ireturn
+     135: aload_1
+     136: iconst_1
+     137: invokestatic  #300                // Method com/necro/raid/dens/common/raids/helpers/RaidJoinHelper.isParticipatingOrInQueue:(Lnet/minecraft/world/entity/player/Player;Z)Z
+     140: ifeq          145
+     143: iconst_0
+     144: ireturn
+     145: aload_3
+     146: invokevirtual #245                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isInProgress:()Z
+     149: ifne          159
+     152: aload_0
+     153: aload_1
+     154: aload_3
+     155: invokevirtual #304                // Method startRaid:(Lnet/minecraft/world/entity/player/Player;Lcom/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity;)Z
+     158: ireturn
+     159: aload_3
+     160: invokevirtual #307                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isFull:()Z
+     163: ifeq          179
+     166: aload_1
+     167: ldc_w         #309                // String message.cobblemonraiddens.raid.lobby_is_full
+     170: invokestatic  #256                // Method com/necro/raid/dens/common/util/ComponentUtils.getSystemMessage:(Ljava/lang/String;)Lnet/minecraft/network/chat/Component;
+     173: iconst_1
+     174: invokevirtual #260                // Method net/minecraft/world/entity/player/Player.displayClientMessage:(Lnet/minecraft/network/chat/Component;Z)V
+     177: iconst_0
+     178: ireturn
+     179: aload_0
+     180: aload_1
+     181: aload_3
+     182: aload         4
+     184: invokevirtual #312                // Method requestJoinRaid:(Lnet/minecraft/world/entity/player/Player;Lcom/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity;Lnet/minecraft/world/item/ItemStack;)Z
+     187: ireturn
+
+  private boolean requestJoinRaid(net.minecraft.world.entity.player.Player, com.necro.raid.dens.common.blocks.entity.RaidCrystalBlockEntity, net.minecraft.world.item.ItemStack);
+    Code:
+       0: getstatic     #317                // Field com/necro/raid/dens/common/raids/helpers/RaidHelper.ACTIVE_RAIDS:Ljava/util/Map;
+       3: aload_2
+       4: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+       7: invokeinterface #207,  2          // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+      12: checkcast     #319                // class com/necro/raid/dens/common/raids/RaidInstance
+      15: astore        4
+      17: aload         4
+      19: ifnonnull     24
+      22: iconst_0
+      23: ireturn
+      24: aload_1
+      25: invokevirtual #235                // Method net/minecraft/world/entity/player/Player.getServer:()Lnet/minecraft/server/MinecraftServer;
+      28: astore        5
+      30: aload         5
+      32: ifnonnull     37
+      35: iconst_0
+      36: ireturn
+      37: aload         4
+      39: invokevirtual #324                // Method com/necro/raid/dens/common/raids/RaidInstance.getHost:()Ljava/util/UUID;
+      42: ifnonnull     49
+      45: aconst_null
+      46: goto          62
+      49: aload         5
+      51: invokevirtual #328                // Method net/minecraft/server/MinecraftServer.getPlayerList:()Lnet/minecraft/server/players/PlayerList;
+      54: aload         4
+      56: invokevirtual #324                // Method com/necro/raid/dens/common/raids/RaidInstance.getHost:()Ljava/util/UUID;
+      59: invokevirtual #334                // Method net/minecraft/server/players/PlayerList.getPlayer:(Ljava/util/UUID;)Lnet/minecraft/server/level/ServerPlayer;
+      62: astore        6
+      64: aload         6
+      66: ifnonnull     82
+      69: aload_1
+      70: ldc_w         #336                // String message.cobblemonraiddens.raid.no_host
+      73: invokestatic  #256                // Method com/necro/raid/dens/common/util/ComponentUtils.getSystemMessage:(Ljava/lang/String;)Lnet/minecraft/network/chat/Component;
+      76: iconst_1
+      77: invokevirtual #260                // Method net/minecraft/world/entity/player/Player.displayClientMessage:(Lnet/minecraft/network/chat/Component;Z)V
+      80: iconst_0
+      81: ireturn
+      82: aload_1
+      83: aload_3
+      84: invokestatic  #340                // Method com/necro/raid/dens/common/raids/helpers/RaidJoinHelper.addToQueue:(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;)V
+      87: aload         6
+      89: aload_1
+      90: invokestatic  #344                // Method com/necro/raid/dens/common/raids/helpers/RaidHelper.addRequest:(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/entity/player/Player;)V
+      93: getstatic     #347                // Field com/necro/raid/dens/common/network/RaidDenNetworkMessages.REQUEST_PACKET:Ljava/util/function/BiConsumer;
+      96: aload         6
+      98: aload_1
+      99: invokevirtual #351                // Method net/minecraft/world/entity/player/Player.getName:()Lnet/minecraft/network/chat/Component;
+     102: invokeinterface #357,  1          // InterfaceMethod net/minecraft/network/chat/Component.getString:()Ljava/lang/String;
+     107: invokeinterface #282,  3          // InterfaceMethod java/util/function/BiConsumer.accept:(Ljava/lang/Object;Ljava/lang/Object;)V
+     112: iconst_1
+     113: ireturn
+
+  private boolean startRaid(net.minecraft.world.entity.player.Player, com.necro.raid.dens.common.blocks.entity.RaidCrystalBlockEntity);
+    Code:
+       0: aload_1
+       1: invokevirtual #235                // Method net/minecraft/world/entity/player/Player.getServer:()Lnet/minecraft/server/MinecraftServer;
+       4: ifnonnull     9
+       7: iconst_0
+       8: ireturn
+       9: aload_2
+      10: invokevirtual #160                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getRaidBoss:()Lcom/necro/raid/dens/common/data/raid/RaidBoss;
+      13: aload_1
+      14: invokevirtual #366                // Method net/minecraft/world/entity/player/Player.level:()Lnet/minecraft/world/level/Level;
+      17: invokevirtual #370                // Method net/minecraft/world/level/Level.getRandom:()Lnet/minecraft/util/RandomSource;
+      20: invokevirtual #374                // Method com/necro/raid/dens/common/data/raid/RaidBoss.getRandomDen:(Lnet/minecraft/util/RandomSource;)Lnet/minecraft/resources/ResourceLocation;
+      23: astore_3
+      24: aload_2
+      25: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+      28: aload_3
+      29: invokestatic  #378                // Method com/necro/raid/dens/common/raids/helpers/RaidRegionHelper.createRegion:(Ljava/util/UUID;Lnet/minecraft/resources/ResourceLocation;)Lcom/necro/raid/dens/common/data/dimension/RaidRegion;
+      32: astore        4
+      34: aload         4
+      36: ifnull        50
+      39: aload_2
+      40: aload_1
+      41: invokevirtual #381                // Method net/minecraft/world/entity/player/Player.getUUID:()Ljava/util/UUID;
+      44: invokevirtual #385                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.spawnRaidBoss:(Ljava/util/UUID;)Z
+      47: ifne          61
+      50: aload_0
+      51: aload_1
+      52: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+      55: aload_2
+      56: invokevirtual #391                // Method failRaidStart:(Lnet/minecraft/server/level/ServerPlayer;Lcom/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity;)V
+      59: iconst_0
+      60: ireturn
+      61: getstatic     #397                // Field com/necro/raid/dens/common/events/RaidEvents.RAID_JOIN:Lcom/necro/raid/dens/common/events/ResultCancelableObservable;
+      64: new           #399                // class com/necro/raid/dens/common/events/RaidJoinEvent
+      67: dup
+      68: aload_1
+      69: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+      72: iconst_1
+      73: aload_2
+      74: invokevirtual #160                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getRaidBoss:()Lcom/necro/raid/dens/common/data/raid/RaidBoss;
+      77: invokespecial #402                // Method com/necro/raid/dens/common/events/RaidJoinEvent."<init>":(Lnet/minecraft/server/level/ServerPlayer;ZLcom/necro/raid/dens/common/data/raid/RaidBoss;)V
+      80: invokevirtual #408                // Method com/necro/raid/dens/common/events/ResultCancelableObservable.postWithResult:(Lcom/cobblemon/mod/common/api/events/Cancelable;)Z
+      83: istore        5
+      85: iload         5
+      87: ifne          101
+      90: aload_0
+      91: aload_1
+      92: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+      95: aload_2
+      96: invokevirtual #391                // Method failRaidStart:(Lnet/minecraft/server/level/ServerPlayer;Lcom/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity;)V
+      99: iconst_0
+     100: ireturn
+     101: aload_1
+     102: aload_2
+     103: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+     106: iconst_1
+     107: iconst_1
+     108: invokestatic  #412                // Method com/necro/raid/dens/common/raids/helpers/RaidJoinHelper.addParticipant:(Lnet/minecraft/world/entity/player/Player;Ljava/util/UUID;ZZ)Z
+     111: ifne          116
+     114: iconst_0
+     115: ireturn
+     116: aload_1
+     117: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+     120: aload_2
+     121: invokestatic  #415                // Method com/necro/raid/dens/common/raids/helpers/RaidHelper.initRequest:(Lnet/minecraft/server/level/ServerPlayer;Lcom/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity;)V
+     124: getstatic     #317                // Field com/necro/raid/dens/common/raids/helpers/RaidHelper.ACTIVE_RAIDS:Ljava/util/Map;
+     127: aload_2
+     128: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+     131: invokeinterface #207,  2          // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+     136: checkcast     #319                // class com/necro/raid/dens/common/raids/RaidInstance
+     139: astore        6
+     141: aload         6
+     143: aload_1
+     144: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+     147: invokevirtual #418                // Method com/necro/raid/dens/common/raids/RaidInstance.addPlayer:(Lnet/minecraft/server/level/ServerPlayer;)V
+     150: aload_1
+     151: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+     154: aload_1
+     155: invokevirtual #235                // Method net/minecraft/world/entity/player/Player.getServer:()Lnet/minecraft/server/MinecraftServer;
+     158: aload         4
+     160: invokestatic  #288                // Method com/necro/raid/dens/common/util/RaidUtils.teleportPlayerToRaid:(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/server/MinecraftServer;Lcom/necro/raid/dens/common/data/dimension/RaidRegion;)V
+     163: aload_2
+     164: aload_1
+     165: checkcast     #276                // class net/minecraft/server/level/ServerPlayer
+     168: invokevirtual #292                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.syncAspects:(Lnet/minecraft/server/level/ServerPlayer;)V
+     171: aload_1
+     172: ldc_w         #420                // String message.cobblemonraiddens.raid.raid_start
+     175: iconst_1
+     176: anewarray     #422                // class java/lang/Object
+     179: dup
+     180: iconst_0
+     181: aload         6
+     183: invokevirtual #426                // Method com/necro/raid/dens/common/raids/RaidInstance.getBossEntity:()Lcom/cobblemon/mod/common/entity/pokemon/PokemonEntity;
+     186: invokevirtual #431                // Method com/cobblemon/mod/common/entity/pokemon/PokemonEntity.getDisplayName:()Lnet/minecraft/network/chat/Component;
+     189: aastore
+     190: invokestatic  #435                // InterfaceMethod net/minecraft/network/chat/Component.translatable:(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;
+     193: invokestatic  #438                // Method com/necro/raid/dens/common/util/ComponentUtils.getSystemMessage:(Lnet/minecraft/network/chat/MutableComponent;)Lnet/minecraft/network/chat/Component;
+     196: iconst_1
+     197: invokevirtual #260                // Method net/minecraft/world/entity/player/Player.displayClientMessage:(Lnet/minecraft/network/chat/Component;Z)V
+     200: iconst_1
+     201: ireturn
+
+  private void failRaidStart(net.minecraft.server.level.ServerPlayer, com.necro.raid.dens.common.blocks.entity.RaidCrystalBlockEntity);
+    Code:
+       0: getstatic     #274                // Field com/necro/raid/dens/common/network/RaidDenNetworkMessages.JOIN_RAID:Ljava/util/function/BiConsumer;
+       3: aload_1
+       4: iconst_0
+       5: invokestatic  #54                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+       8: invokeinterface #282,  3          // InterfaceMethod java/util/function/BiConsumer.accept:(Ljava/lang/Object;Ljava/lang/Object;)V
+      13: aload_2
+      14: invokevirtual #444                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.closeRaid:()V
+      17: aload_1
+      18: ldc_w         #446                // String message.cobblemonraiddens.raid.boss_spawn_failed
+      21: invokestatic  #449                // Method com/necro/raid/dens/common/util/ComponentUtils.getErrorMessage:(Ljava/lang/String;)Lnet/minecraft/network/chat/Component;
+      24: iconst_1
+      25: invokevirtual #450                // Method net/minecraft/server/level/ServerPlayer.displayClientMessage:(Lnet/minecraft/network/chat/Component;Z)V
+      28: return
+
+  private boolean handleKey(net.minecraft.world.entity.player.Player, com.necro.raid.dens.common.blocks.entity.RaidCrystalBlockEntity, net.minecraft.world.item.ItemStack);
+    Code:
+       0: aload_2
+       1: invokevirtual #160                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getRaidBoss:()Lcom/necro/raid/dens/common/data/raid/RaidBoss;
+       4: astore        4
+       6: aload         4
+       8: invokevirtual #186                // Method com/necro/raid/dens/common/data/raid/RaidBoss.getKey:()Lcom/necro/raid/dens/common/data/raid/UniqueKey;
+      11: astore        5
+      13: aload         5
+      15: invokevirtual #191                // Method com/necro/raid/dens/common/data/raid/UniqueKey.isEmpty:()Z
+      18: ifne          106
+      21: aload_2
+      22: invokevirtual #180                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.isOpen:()Z
+      25: ifeq          30
+      28: iconst_1
+      29: ireturn
+      30: aload         5
+      32: aload_3
+      33: invokevirtual #454                // Method com/necro/raid/dens/common/data/raid/UniqueKey.matches:(Lnet/minecraft/world/item/ItemStack;)Z
+      36: ifne          75
+      39: aload_1
+      40: ldc_w         #456                // String message.cobblemonraiddens.raid.no_unique_key
+      43: iconst_1
+      44: anewarray     #422                // class java/lang/Object
+      47: dup
+      48: iconst_0
+      49: aload         5
+      51: invokevirtual #459                // Method com/necro/raid/dens/common/data/raid/UniqueKey.item:()Ljava/lang/String;
+      54: ldc_w         #461                // String :
+      57: invokevirtual #467                // Method java/lang/String.split:(Ljava/lang/String;)[Ljava/lang/String;
+      60: iconst_1
+      61: aaload
+      62: aastore
+      63: invokestatic  #435                // InterfaceMethod net/minecraft/network/chat/Component.translatable:(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;
+      66: invokestatic  #438                // Method com/necro/raid/dens/common/util/ComponentUtils.getSystemMessage:(Lnet/minecraft/network/chat/MutableComponent;)Lnet/minecraft/network/chat/Component;
+      69: iconst_1
+      70: invokevirtual #260                // Method net/minecraft/world/entity/player/Player.displayClientMessage:(Lnet/minecraft/network/chat/Component;Z)V
+      73: iconst_0
+      74: ireturn
+      75: getstatic     #197                // Field com/necro/raid/dens/common/CobblemonRaidDens.TIER_CONFIG:Ljava/util/Map;
+      78: aload         4
+      80: invokevirtual #471                // Method com/necro/raid/dens/common/data/raid/RaidBoss.getTier:()Lcom/necro/raid/dens/common/data/raid/RaidTier;
+      83: invokeinterface #207,  2          // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+      88: checkcast     #209                // class com/necro/raid/dens/common/config/TierConfig
+      91: invokeinterface #474,  1          // InterfaceMethod com/necro/raid/dens/common/config/TierConfig.allRequireUniqueKey:()Z
+      96: ifne          150
+      99: aload_2
+     100: invokevirtual #477                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.setOpen:()V
+     103: goto          150
+     106: getstatic     #197                // Field com/necro/raid/dens/common/CobblemonRaidDens.TIER_CONFIG:Ljava/util/Map;
+     109: aload         4
+     111: invokevirtual #471                // Method com/necro/raid/dens/common/data/raid/RaidBoss.getTier:()Lcom/necro/raid/dens/common/data/raid/RaidTier;
+     114: invokeinterface #207,  2          // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+     119: checkcast     #209                // class com/necro/raid/dens/common/config/TierConfig
+     122: invokeinterface #212,  1          // InterfaceMethod com/necro/raid/dens/common/config/TierConfig.requiresKey:()Z
+     127: ifeq          150
+     130: aload_3
+     131: invokestatic  #480                // Method com/necro/raid/dens/common/util/RaidUtils.isRaidDenKey:(Lnet/minecraft/world/item/ItemStack;)Z
+     134: ifne          150
+     137: aload_1
+     138: ldc_w         #482                // String message.cobblemonraiddens.raid.no_key
+     141: invokestatic  #256                // Method com/necro/raid/dens/common/util/ComponentUtils.getSystemMessage:(Ljava/lang/String;)Lnet/minecraft/network/chat/Component;
+     144: iconst_1
+     145: invokevirtual #260                // Method net/minecraft/world/entity/player/Player.displayClientMessage:(Lnet/minecraft/network/chat/Component;Z)V
+     148: iconst_0
+     149: ireturn
+     150: iconst_1
+     151: ireturn
+
+  protected void onRemove(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.Level, net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, boolean);
+    Code:
+       0: aload_2
+       1: invokevirtual #109                // Method net/minecraft/world/level/Level.isClientSide:()Z
+       4: ifne          91
+       7: aload_2
+       8: aload_3
+       9: invokevirtual #119                // Method net/minecraft/world/level/Level.getBlockEntity:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;
+      12: astore        7
+      14: aload         7
+      16: instanceof    #121                // class com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity
+      19: ifeq          91
+      22: aload         7
+      24: checkcast     #121                // class com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity
+      27: astore        6
+      29: aload         6
+      31: invokevirtual #444                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.closeRaid:()V
+      34: aload_1
+      35: getstatic     #88                 // Field IS_NATURAL:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      38: invokevirtual #201                // Method net/minecraft/world/level/block/state/BlockState.getValue:(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;
+      41: checkcast     #50                 // class java/lang/Boolean
+      44: invokevirtual #492                // Method java/lang/Boolean.booleanValue:()Z
+      47: ifeq          58
+      50: aload         6
+      52: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+      55: invokestatic  #496                // Method com/necro/raid/dens/common/raids/helpers/RaidHelper.resetClearedRaids:(Ljava/util/UUID;)V
+      58: getstatic     #317                // Field com/necro/raid/dens/common/raids/helpers/RaidHelper.ACTIVE_RAIDS:Ljava/util/Map;
+      61: aload         6
+      63: invokevirtual #164                // Method com/necro/raid/dens/common/blocks/entity/RaidCrystalBlockEntity.getUuid:()Ljava/util/UUID;
+      66: invokeinterface #207,  2          // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+      71: checkcast     #319                // class com/necro/raid/dens/common/raids/RaidInstance
+      74: astore        7
+      76: aload         7
+      78: ifnull        91
+      81: aload         7
+      83: aload_2
+      84: invokevirtual #497                // Method net/minecraft/world/level/Level.getServer:()Lnet/minecraft/server/MinecraftServer;
+      87: iconst_1
+      88: invokevirtual #500                // Method com/necro/raid/dens/common/raids/RaidInstance.closeRaid:(Lnet/minecraft/server/MinecraftServer;Z)V
+      91: aload_0
+      92: aload_1
+      93: aload_2
+      94: aload_3
+      95: aload         4
+      97: iload         5
+      99: invokespecial #502                // Method net/minecraft/world/level/block/BaseEntityBlock.onRemove:(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V
+     102: return
+
+  public net.minecraft.world.level.block.state.BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext);
+    Code:
+       0: aload_0
+       1: invokevirtual #46                 // Method defaultBlockState:()Lnet/minecraft/world/level/block/state/BlockState;
+       4: astore_2
+       5: aload_1
+       6: invokevirtual #510                // Method net/minecraft/world/item/context/BlockPlaceContext.getPlayer:()Lnet/minecraft/world/entity/player/Player;
+       9: ifnull        37
+      12: aload_1
+      13: invokevirtual #510                // Method net/minecraft/world/item/context/BlockPlaceContext.getPlayer:()Lnet/minecraft/world/entity/player/Player;
+      16: invokevirtual #513                // Method net/minecraft/world/entity/player/Player.hasInfiniteMaterials:()Z
+      19: ifne          37
+      22: aload_2
+      23: getstatic     #88                 // Field IS_NATURAL:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      26: iconst_0
+      27: invokestatic  #54                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      30: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+      33: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+      36: astore_2
+      37: aload_1
+      38: invokevirtual #517                // Method net/minecraft/world/item/context/BlockPlaceContext.getItemInHand:()Lnet/minecraft/world/item/ItemStack;
+      41: astore_3
+      42: aload_3
+      43: getstatic     #523                // Field net/minecraft/core/component/DataComponents.BLOCK_ENTITY_DATA:Lnet/minecraft/core/component/DataComponentType;
+      46: invokevirtual #526                // Method net/minecraft/world/item/ItemStack.get:(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;
+      49: checkcast     #528                // class net/minecraft/world/item/component/CustomData
+      52: astore        4
+      54: aload         4
+      56: ifnonnull     61
+      59: aload_2
+      60: areturn
+      61: aload         4
+      63: invokevirtual #532                // Method net/minecraft/world/item/component/CustomData.copyTag:()Lnet/minecraft/nbt/CompoundTag;
+      66: astore        5
+      68: aload         5
+      70: ldc_w         #534                // String raid_boss
+      73: invokevirtual #539                // Method net/minecraft/nbt/CompoundTag.getString:(Ljava/lang/String;)Ljava/lang/String;
+      76: invokestatic  #543                // Method net/minecraft/resources/ResourceLocation.parse:(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+      79: invokestatic  #548                // Method com/necro/raid/dens/common/registry/RaidRegistry.getRaidBoss:(Lnet/minecraft/resources/ResourceLocation;)Lcom/necro/raid/dens/common/data/raid/RaidBoss;
+      82: astore        6
+      84: aload         6
+      86: ifnull        157
+      89: aload_2
+      90: getstatic     #62                 // Field RAID_TYPE:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      93: aload         6
+      95: invokevirtual #552                // Method com/necro/raid/dens/common/data/raid/RaidBoss.getType:()Lcom/necro/raid/dens/common/data/raid/RaidType;
+      98: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+     101: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+     104: getstatic     #70                 // Field RAID_TIER:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+     107: aload         6
+     109: invokevirtual #471                // Method com/necro/raid/dens/common/data/raid/RaidBoss.getTier:()Lcom/necro/raid/dens/common/data/raid/RaidTier;
+     112: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+     115: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+     118: astore_2
+     119: aload         5
+     121: ldc_w         #554                // String raid_cleared
+     124: invokevirtual #558                // Method net/minecraft/nbt/CompoundTag.getInt:(Ljava/lang/String;)I
+     127: istore        7
+     129: iload         7
+     131: aload         6
+     133: invokevirtual #562                // Method com/necro/raid/dens/common/data/raid/RaidBoss.getMaxClears:()Ljava/lang/Integer;
+     136: invokevirtual #568                // Method java/lang/Integer.intValue:()I
+     139: if_icmplt     157
+     142: aload_2
+     143: getstatic     #48                 // Field ACTIVE:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+     146: iconst_0
+     147: invokestatic  #54                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+     150: invokevirtual #60                 // Method net/minecraft/world/level/block/state/BlockState.setValue:(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+     153: checkcast     #56                 // class net/minecraft/world/level/block/state/BlockState
+     156: astore_2
+     157: aload_2
+     158: areturn
+
+  public void setPlacedBy(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState, net.minecraft.world.entity.LivingEntity, net.minecraft.world.item.ItemStack);
+    Code:
+       0: aload_1
+       1: getfield      #580                // Field net/minecraft/world/level/Level.isClientSide:Z
+       4: ifeq          8
+       7: return
+       8: aload_1
+       9: aload_2
+      10: invokevirtual #119                // Method net/minecraft/world/level/Level.getBlockEntity:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;
+      13: astore        6
+      15: aload         6
+      17: ifnonnull     21
+      20: return
+      21: aload         5
+      23: getstatic     #523                // Field net/minecraft/core/component/DataComponents.BLOCK_ENTITY_DATA:Lnet/minecraft/core/component/DataComponentType;
+      26: invokevirtual #526                // Method net/minecraft/world/item/ItemStack.get:(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;
+      29: checkcast     #528                // class net/minecraft/world/item/component/CustomData
+      32: astore        7
+      34: aload         7
+      36: ifnull        53
+      39: aload         6
+      41: aload         7
+      43: invokevirtual #532                // Method net/minecraft/world/item/component/CustomData.copyTag:()Lnet/minecraft/nbt/CompoundTag;
+      46: aload_1
+      47: invokevirtual #584                // Method net/minecraft/world/level/Level.registryAccess:()Lnet/minecraft/core/RegistryAccess;
+      50: invokevirtual #588                // Method net/minecraft/world/level/block/entity/BlockEntity.loadCustomOnly:(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)V
+      53: return
+
+  protected java.util.List<net.minecraft.world.item.ItemStack> getDrops(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.storage.loot.LootParams$Builder);
+    Code:
+       0: aload_1
+       1: getstatic     #88                 // Field IS_NATURAL:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+       4: invokevirtual #201                // Method net/minecraft/world/level/block/state/BlockState.getValue:(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;
+       7: checkcast     #50                 // class java/lang/Boolean
+      10: invokevirtual #492                // Method java/lang/Boolean.booleanValue:()Z
+      13: ifeq          20
+      16: invokestatic  #599                // InterfaceMethod java/util/List.of:()Ljava/util/List;
+      19: areturn
+      20: aload_2
+      21: getstatic     #605                // Field net/minecraft/world/level/storage/loot/parameters/LootContextParams.BLOCK_ENTITY:Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;
+      24: invokevirtual #609                // Method net/minecraft/world/level/storage/loot/LootParams$Builder.getOptionalParameter:(Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;)Ljava/lang/Object;
+      27: checkcast     #123                // class net/minecraft/world/level/block/entity/BlockEntity
+      30: astore_3
+      31: aload_3
+      32: ifnull        42
+      35: aload_3
+      36: invokevirtual #612                // Method net/minecraft/world/level/block/entity/BlockEntity.getLevel:()Lnet/minecraft/world/level/Level;
+      39: ifnonnull     46
+      42: invokestatic  #599                // InterfaceMethod java/util/List.of:()Ljava/util/List;
+      45: areturn
+      46: new           #218                // class net/minecraft/world/item/ItemStack
+      49: dup
+      50: aload_0
+      51: invokespecial #615                // Method net/minecraft/world/item/ItemStack."<init>":(Lnet/minecraft/world/level/ItemLike;)V
+      54: astore        4
+      56: aload_3
+      57: aload         4
+      59: aload_3
+      60: invokevirtual #612                // Method net/minecraft/world/level/block/entity/BlockEntity.getLevel:()Lnet/minecraft/world/level/Level;
+      63: invokevirtual #584                // Method net/minecraft/world/level/Level.registryAccess:()Lnet/minecraft/core/RegistryAccess;
+      66: invokevirtual #619                // Method net/minecraft/world/level/block/entity/BlockEntity.saveToItem:(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/HolderLookup$Provider;)V
+      69: aload         4
+      71: invokestatic  #622                // InterfaceMethod java/util/List.of:(Ljava/lang/Object;)Ljava/util/List;
+      74: areturn
+
+  protected void createBlockStateDefinition(net.minecraft.world.level.block.state.StateDefinition$Builder<net.minecraft.world.level.block.Block, net.minecraft.world.level.block.state.BlockState>);
+    Code:
+       0: aload_1
+       1: iconst_1
+       2: anewarray     #628                // class net/minecraft/world/level/block/state/properties/Property
+       5: dup
+       6: iconst_0
+       7: getstatic     #62                 // Field RAID_TYPE:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      10: aastore
+      11: invokevirtual #632                // Method net/minecraft/world/level/block/state/StateDefinition$Builder.add:([Lnet/minecraft/world/level/block/state/properties/Property;)Lnet/minecraft/world/level/block/state/StateDefinition$Builder;
+      14: pop
+      15: aload_1
+      16: iconst_1
+      17: anewarray     #628                // class net/minecraft/world/level/block/state/properties/Property
+      20: dup
+      21: iconst_0
+      22: getstatic     #70                 // Field RAID_TIER:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      25: aastore
+      26: invokevirtual #632                // Method net/minecraft/world/level/block/state/StateDefinition$Builder.add:([Lnet/minecraft/world/level/block/state/properties/Property;)Lnet/minecraft/world/level/block/state/StateDefinition$Builder;
+      29: pop
+      30: aload_1
+      31: iconst_1
+      32: anewarray     #628                // class net/minecraft/world/level/block/state/properties/Property
+      35: dup
+      36: iconst_0
+      37: getstatic     #48                 // Field ACTIVE:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      40: aastore
+      41: invokevirtual #632                // Method net/minecraft/world/level/block/state/StateDefinition$Builder.add:([Lnet/minecraft/world/level/block/state/properties/Property;)Lnet/minecraft/world/level/block/state/StateDefinition$Builder;
+      44: pop
+      45: aload_1
+      46: iconst_1
+      47: anewarray     #628                // class net/minecraft/world/level/block/state/properties/Property
+      50: dup
+      51: iconst_0
+      52: getstatic     #78                 // Field CAN_RESET:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      55: aastore
+      56: invokevirtual #632                // Method net/minecraft/world/level/block/state/StateDefinition$Builder.add:([Lnet/minecraft/world/level/block/state/properties/Property;)Lnet/minecraft/world/level/block/state/StateDefinition$Builder;
+      59: pop
+      60: aload_1
+      61: iconst_1
+      62: anewarray     #628                // class net/minecraft/world/level/block/state/properties/Property
+      65: dup
+      66: iconst_0
+      67: getstatic     #80                 // Field CYCLE_MODE:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      70: aastore
+      71: invokevirtual #632                // Method net/minecraft/world/level/block/state/StateDefinition$Builder.add:([Lnet/minecraft/world/level/block/state/properties/Property;)Lnet/minecraft/world/level/block/state/StateDefinition$Builder;
+      74: pop
+      75: aload_1
+      76: iconst_1
+      77: anewarray     #628                // class net/minecraft/world/level/block/state/properties/Property
+      80: dup
+      81: iconst_0
+      82: getstatic     #88                 // Field IS_NATURAL:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      85: aastore
+      86: invokevirtual #632                // Method net/minecraft/world/level/block/state/StateDefinition$Builder.add:([Lnet/minecraft/world/level/block/state/properties/Property;)Lnet/minecraft/world/level/block/state/StateDefinition$Builder;
+      89: pop
+      90: return
+
+  public net.minecraft.world.phys.shapes.VoxelShape getShape(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.BlockGetter, net.minecraft.core.BlockPos, net.minecraft.world.phys.shapes.CollisionContext);
+    Code:
+       0: getstatic     #640                // Field SHAPE:Lnet/minecraft/world/phys/shapes/VoxelShape;
+       3: areturn
+
+  public net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.BlockGetter, net.minecraft.core.BlockPos, net.minecraft.world.phys.shapes.CollisionContext);
+    Code:
+       0: getstatic     #640                // Field SHAPE:Lnet/minecraft/world/phys/shapes/VoxelShape;
+       3: areturn
+
+  public net.minecraft.world.level.block.entity.BlockEntity newBlockEntity(net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState);
+    Code:
+       0: aconst_null
+       1: areturn
+
+  protected net.minecraft.world.level.block.RenderShape getRenderShape(net.minecraft.world.level.block.state.BlockState);
+    Code:
+       0: getstatic     #653                // Field net/minecraft/world/level/block/RenderShape.ENTITYBLOCK_ANIMATED:Lnet/minecraft/world/level/block/RenderShape;
+       3: areturn
+
+  protected boolean isPathfindable(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.pathfinder.PathComputationType);
+    Code:
+       0: iconst_0
+       1: ireturn
+
+  static {};
+    Code:
+       0: ldc_w         #660                // String raid_type
+       3: ldc           #64                 // class com/necro/raid/dens/common/data/raid/RaidType
+       5: invokestatic  #666                // Method net/minecraft/world/level/block/state/properties/EnumProperty.create:(Ljava/lang/String;Ljava/lang/Class;)Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+       8: putstatic     #62                 // Field RAID_TYPE:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      11: ldc_w         #668                // String raid_tier
+      14: ldc           #72                 // class com/necro/raid/dens/common/data/raid/RaidTier
+      16: invokestatic  #666                // Method net/minecraft/world/level/block/state/properties/EnumProperty.create:(Ljava/lang/String;Ljava/lang/Class;)Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      19: putstatic     #70                 // Field RAID_TIER:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      22: ldc_w         #670                // String is_active
+      25: invokestatic  #675                // Method net/minecraft/world/level/block/state/properties/BooleanProperty.create:(Ljava/lang/String;)Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      28: putstatic     #48                 // Field ACTIVE:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      31: ldc_w         #677                // String can_reset
+      34: invokestatic  #675                // Method net/minecraft/world/level/block/state/properties/BooleanProperty.create:(Ljava/lang/String;)Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      37: putstatic     #78                 // Field CAN_RESET:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      40: ldc_w         #679                // String cycle_mode
+      43: ldc           #82                 // class com/necro/raid/dens/common/data/raid/RaidCycleMode
+      45: invokestatic  #666                // Method net/minecraft/world/level/block/state/properties/EnumProperty.create:(Ljava/lang/String;Ljava/lang/Class;)Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      48: putstatic     #80                 // Field CYCLE_MODE:Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+      51: ldc_w         #681                // String is_natural
+      54: invokestatic  #675                // Method net/minecraft/world/level/block/state/properties/BooleanProperty.create:(Ljava/lang/String;)Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      57: putstatic     #88                 // Field IS_NATURAL:Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+      60: dconst_0
+      61: dconst_0
+      62: dconst_0
+      63: dconst_1
+      64: ldc2_w        #682                // double 0.9375d
+      67: dconst_1
+      68: invokestatic  #689                // Method net/minecraft/world/phys/shapes/Shapes.box:(DDDDDD)Lnet/minecraft/world/phys/shapes/VoxelShape;
+      71: putstatic     #640                // Field SHAPE:Lnet/minecraft/world/phys/shapes/VoxelShape;
+      74: return
+}

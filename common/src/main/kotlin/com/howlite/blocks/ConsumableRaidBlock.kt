@@ -15,6 +15,11 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import java.util.UUID
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.InteractionHand
 
 class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties) {
 
@@ -92,6 +97,48 @@ class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties)
                 blockEntity.setOpen()
                 blockEntity.generateRaidBoss(level, pos, newState)
             }
+        }
+    }
+
+    override fun useWithoutItem(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hitResult: BlockHitResult
+    ): InteractionResult {
+        if (!level.isClientSide) {
+            println("[GymOdyssey] useWithoutItem called at $pos for player ${player.name.string}")
+            val be = level.getBlockEntity(pos)
+            println("[GymOdyssey] BlockEntity at $pos is: ${be?.javaClass?.name ?: "null"}")
+            if (be is ConsumableRaidBlockEntity) {
+                println("[GymOdyssey] BlockEntity raidBoss: ${be.raidBossLocation}")
+                println("[GymOdyssey] BlockEntity uuid: ${be.uuid}")
+                println("[GymOdyssey] BlockEntity isOpen: ${be.isOpen}")
+                println("[GymOdyssey] BlockEntity isActive: ${be.isActive(state)}")
+            }
+        }
+        return super.useWithoutItem(state, level, pos, player, hitResult)
+    }
+
+    override fun useItemOn(
+        stack: ItemStack,
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hand: InteractionHand,
+        hitResult: BlockHitResult
+    ): ItemInteractionResult {
+        if (!level.isClientSide) {
+            println("[GymOdyssey] useItemOn called at $pos with stack $stack")
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
+    }
+
+    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
+        if (state.block != newState.block) {
+            super.onRemove(state, level, pos, newState, isMoving)
         }
     }
 }
