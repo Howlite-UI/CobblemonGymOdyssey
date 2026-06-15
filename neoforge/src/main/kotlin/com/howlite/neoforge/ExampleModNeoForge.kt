@@ -19,6 +19,7 @@ import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 @Mod(CobblemonGymOdyssey.MOD_ID)
 class ExampleModNeoForge {
     init {
+        println("[GymOdyssey] ExampleModNeoForge constructor running!")
         // 1. Enregistrer les Data Attachments sur le mod event bus
         NeoForgeAttachments.register(MOD_BUS)
 

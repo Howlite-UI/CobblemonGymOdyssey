@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cobblemongymodyssey:block/consumable_raid_block"
+  }
+}

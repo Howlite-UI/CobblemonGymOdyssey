@@ -83,6 +83,9 @@ subprojects {
         kotlinOptions {
             jvmTarget = "21"
         }
+        if (name == "compileKotlin") {
+            destinationDirectory = file("${project.layout.buildDirectory.get().asFile}/classes/java/main")
+        }
     }
 
     // Configure Maven publishing.

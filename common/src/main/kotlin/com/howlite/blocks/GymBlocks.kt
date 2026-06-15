@@ -38,10 +38,24 @@ object GymBlocks {
         BlockItem(SMALL_ROCK.get(), Item.Properties())
     }
 
+    val CONSUMABLE_RAID_BLOCK: RegistrySupplier<Block> = BLOCKS.register("consumable_raid_block") {
+        ConsumableRaidBlock(BlockBehaviour.Properties.of().strength(3.0f).requiresCorrectToolForDrops().noOcclusion())
+    }
+
+    val CONSUMABLE_RAID_BLOCK_ITEM: RegistrySupplier<Item> = ITEMS.register("consumable_raid_block") {
+        BlockItem(CONSUMABLE_RAID_BLOCK.get(), Item.Properties())
+    }
+
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     val GYM_LEADER_TELEPORTER_ENTITY: RegistrySupplier<BlockEntityType<GymLeaderTeleporterBlockEntity>> =
         BLOCK_ENTITY_TYPES.register("gym_leader_teleporter") {
             BlockEntityType.Builder.of(::GymLeaderTeleporterBlockEntity, GYM_LEADER_TELEPORTER.get()).build(null)
+        }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    val CONSUMABLE_RAID_BLOCK_ENTITY: RegistrySupplier<BlockEntityType<ConsumableRaidBlockEntity>> =
+        BLOCK_ENTITY_TYPES.register("consumable_raid_block") {
+            BlockEntityType.Builder.of(::ConsumableRaidBlockEntity, CONSUMABLE_RAID_BLOCK.get()).build(null)
         }
 
     fun register() {
@@ -53,7 +67,8 @@ object GymBlocks {
         CreativeTabRegistry.append(
             GymBadgeItems.GYM_BADGES_TAB,
             GYM_LEADER_TELEPORTER_ITEM,
-            SMALL_ROCK_ITEM
+            SMALL_ROCK_ITEM,
+            CONSUMABLE_RAID_BLOCK_ITEM
         )
     }
 }

@@ -26,6 +26,7 @@ object CobblemonGymOdyssey {
 
     @JvmStatic
     fun init() {
+        println("[GymOdyssey] CobblemonGymOdyssey.init() common initialization running!")
         GymSounds.register()
         GymBadgeItems.register()
         GymBlocks.register()
