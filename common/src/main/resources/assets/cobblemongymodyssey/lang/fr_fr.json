@@ -90,5 +90,7 @@
   "cobblemongymodyssey.badge_case.shop.tooltip.locked": "Battez un champion de Johto pour déverrouiller la boutique",
   "cobblemongymodyssey.shop.johto.title": "Boutique de la Ligue Johto",
   "block.cobblemongymodyssey.consumable_raid_block": "Antre de Raid Consommable",
-  "item.cobblemongymodyssey.consumable_raid_block": "Antre de Raid Consommable"
+  "item.cobblemongymodyssey.consumable_raid_block": "Antre de Raid Consommable",
+  "cobblemongymodyssey.raid.accept": "Accepter",
+  "cobblemongymodyssey.raid.deny": "Refuser"
 }

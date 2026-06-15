@@ -36,7 +36,7 @@ class ConsumableRaidScreen(
 
     companion object {
         const val GUI_WIDTH = 138
-        const val GUI_HEIGHT = 93
+        const val GUI_HEIGHT = 98
         const val GUI_SCALE = 1f
 
         val BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(
@@ -93,6 +93,7 @@ class ConsumableRaidScreen(
     // Hover state tracking for sound feedback
     private var lastAcceptHovered = false
     private var lastDenyHovered = false
+    private var lastRenderTime = System.currentTimeMillis()
 
     override fun init() {
         super.init()
@@ -104,30 +105,6 @@ class ConsumableRaidScreen(
 
         // Play initial chime on GUI open
         minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.AMETHYST_BLOCK_CHIME, 0.7f))
-
-        // Initial burst of particles in virtual coordinates
-        val virtualWidth = width / GUI_SCALE
-        val virtualHeight = height / GUI_SCALE
-        val guiX = ((virtualWidth - GUI_WIDTH) / 2).toInt()
-        val guiY = ((virtualHeight - GUI_HEIGHT) / 2).toInt()
-        for (i in 0 until 12) {
-            val px = (guiX + 69 + (random.nextFloat() - 0.5f) * 30f)
-            val py = (guiY + 50 + (random.nextFloat() - 0.5f) * 20f)
-            val color = when (random.nextInt(3)) {
-                0 -> 0xFFFF0055.toInt() // Magenta
-                1 -> 0xFF9E00FF.toInt() // Purple
-                else -> 0xFFFF3333.toInt() // Red
-            }
-            particles.add(
-                GuiParticle(
-                    px, py,
-                    (random.nextFloat() - 0.5f) * 1.6f,
-                    (random.nextFloat() - 0.5f) * 1.6f - 0.4f,
-                    color,
-                    15 + random.nextInt(10)
-                )
-            )
-        }
     }
 
     override fun tick() {
@@ -147,30 +124,6 @@ class ConsumableRaidScreen(
             if (p.age >= p.maxAge) {
                 iterator.remove()
             }
-        }
-
-        // Ambient particles rise from the raid den in virtual coordinates
-        val virtualWidth = width / GUI_SCALE
-        val virtualHeight = height / GUI_SCALE
-        val guiX = ((virtualWidth - GUI_WIDTH) / 2).toInt()
-        val guiY = ((virtualHeight - GUI_HEIGHT) / 2).toInt()
-        if (random.nextInt(3) == 0) {
-            val px = (guiX + 69 + (random.nextFloat() - 0.5f) * 36f)
-            val py = (guiY + 58 + (random.nextFloat() - 0.5f) * 10f)
-            val color = when (random.nextInt(3)) {
-                0 -> 0xFFFF0055.toInt()
-                1 -> 0xFF9E00FF.toInt()
-                else -> 0xFFFF3333.toInt()
-            }
-            particles.add(
-                GuiParticle(
-                    px, py,
-                    (random.nextFloat() - 0.5f) * 0.4f,
-                    -random.nextFloat() * 0.4f - 0.1f,
-                    color,
-                    20 + random.nextInt(15)
-                )
-            )
         }
     }
 
@@ -193,6 +146,16 @@ class ConsumableRaidScreen(
         // Draw the default dark overlay background (unscaled)
         renderBackground(graphics, mouseX, mouseY, partialTick)
 
+        // Compute precise time delta for custom idle animations (resolving the fast x5 tick speed bug)
+        val currentTime = System.currentTimeMillis()
+        val elapsedTicks = (currentTime - lastRenderTime) / 50.0f
+        lastRenderTime = currentTime
+        val animationDelta = elapsedTicks.coerceIn(0f, 2.0f)
+
+        if (clientTicks % 40 == 0) {
+            println("[ConsumableRaidScreen] currentTime=$currentTime, elapsedTicks=$elapsedTicks, animationDelta=$animationDelta, stateTicks=${floatingState.getPartialTicks()}")
+        }
+
         // Calculate layout coordinates in virtual scaled system
         val virtualWidth = width / GUI_SCALE
         val virtualHeight = height / GUI_SCALE
@@ -211,31 +174,18 @@ class ConsumableRaidScreen(
         setupNearestNeighbor(BACKGROUND_TEXTURE)
         graphics.blit(BACKGROUND_TEXTURE, guiX, guiY, 0f, 0f, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT)
 
-        // 2. Draw pulsating den glow behind Pokemon model
-        val time = clientTicks + partialTick
-        val baseAlpha = (26 + (kotlin.math.sin(time * 0.12) * 12)).toInt().coerceIn(0, 255)
-        val glowColor = 0xFF0055 // Magenta/Red raid energy color
-        val cx = guiX + 69
-        val cy = guiY + 46
+        // 2. [AURA REMOVED] Pulsating den glow has been disabled as requested by the user
 
-        drawGlowCircle(graphics, cx, cy, 22, ((baseAlpha * 0.15f).toInt() shl 24) or glowColor)
-        drawGlowCircle(graphics, cx, cy, 16, ((baseAlpha * 0.35f).toInt() shl 24) or glowColor)
-        drawGlowCircle(graphics, cx, cy, 11, ((baseAlpha * 0.65f).toInt() shl 24) or glowColor)
-        drawGlowCircle(graphics, cx, cy, 6, (baseAlpha shl 24) or glowColor)
-
-        // 3. Draw stars
-        val starCount = raidBoss.tier.ordinal + 1
-        val starsStr = "★".repeat(starCount)
-        graphics.drawString(font, starsStr, guiX + 10, guiY + 10, 0xFFFFA800.toInt(), true)
-
-        // 4. Draw Pokemon Name and Type Icons
+        // 3 & 4. Draw Pokemon Name (left) and Stars (right) on the top line (guiY + 4)
         val species = raidBoss.displaySpecies
         if (species != null) {
             val displayName = species.translatedName.string
+            val starCount = raidBoss.tier.ordinal + 1
+            val starsStr = "★".repeat(starCount)
 
-            // Typewriter LCD effect
-            val charsToShow = lcdTextProgress.toInt().coerceIn(0, displayName.length)
-            val visibleName = displayName.substring(0, charsToShow)
+            // Typewriter LCD effect on the name and stars combined
+            val totalChars = displayName.length + starCount
+            val charsToShow = lcdTextProgress.toInt().coerceIn(0, totalChars)
             
             // Mechanical tick sounds as text appears
             if (charsToShow > lastCharsCount) {
@@ -243,29 +193,45 @@ class ConsumableRaidScreen(
                 minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.8f))
             }
             
-            graphics.drawString(font, visibleName, guiX + 10, guiY + 22, 0xFFFFFF, true)
+            // Draw name at the left (guiX + 12)
+            val visibleNameChars = charsToShow.coerceAtMost(displayName.length)
+            val visibleName = displayName.substring(0, visibleNameChars)
+            graphics.drawString(font, visibleName, guiX + 12, guiY + 5, 0xFFFFFF, true)
 
-            // Draw type icon(s)
+            // Draw stars at the right (guiX + 128 - starsWidth)
+            if (charsToShow > displayName.length) {
+                val starsToShowCount = charsToShow - displayName.length
+                val visibleStars = starsStr.substring(0, starsToShowCount)
+                val starsWidth = font.width(starsStr)
+                val starsX = guiX + 128 - starsWidth
+                graphics.drawString(font, visibleStars, starsX, guiY + 5, 0xFFFFA800.toInt(), true)
+            }
+
+            // Center types horizontally at the bottom of the screen (Y = guiY + 74)
             val typesList = species.types.toList()
+            val totalWidth = if (typesList.size == 2) (18 * 2 + 2) else 18
+            val startX = guiX + 69 - (totalWidth / 2)
             typesList.forEachIndexed { index, type ->
                 val typeName = type.name.lowercase()
                 val typeTexture = ResourceLocation.fromNamespaceAndPath(
                     CobblemonGymOdyssey.MOD_ID,
                     "textures/gui/type/$typeName.png"
                 )
-                val iconY = guiY + 10 + (index * 20)
+                val iconX = startX + (index * 20) // 18px width + 2px gap
+                val iconY = guiY + 74
                 setupNearestNeighbor(typeTexture)
-                graphics.blit(typeTexture, guiX + 110, iconY, 18, 18, 0f, 0f, 36, 36, 36, 36)
+                graphics.blit(typeTexture, iconX, iconY, 18, 18, 0f, 0f, 36, 36, 36, 36)
             }
         }
 
-        // 5. Render rotating 3D Pokemon model (Centered)
+        // 5. Render rotating 3D Pokemon model (Centered & scaled up to 3.5f for GUI_SCALE=1f compatibility)
+        // Raised to Y = guiY + 32 to center it better inside the Pokeball frame
         val renderable = pokemon
         if (renderable != null) {
             val modelPoseStack = graphics.pose()
             modelPoseStack.pushPose()
-            modelPoseStack.translate((guiX + 69).toDouble(), (guiY + 54).toDouble(), 100.0)
-            modelPoseStack.scale(1.1f, 1.1f, 1.0f) // Scaled by 1.1 inside the 2.0 scaled poseStack = 2.2 total scale
+            modelPoseStack.translate((guiX + 69).toDouble(), (guiY + 32).toDouble(), 100.0)
+            modelPoseStack.scale(3.5f, 3.5f, 1.0f)
             
             val rotationYaw = (clientTicks + partialTick) * 0.8f
             
@@ -275,7 +241,7 @@ class ConsumableRaidScreen(
                     matrixStack = modelPoseStack,
                     rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(15f, 180f + rotationYaw, 0f)),
                     state = floatingState,
-                    partialTicks = partialTick,
+                    partialTicks = animationDelta, // Pass correct time delta to fix animation speed
                     scale = 6.5f
                 )
             } catch (e: Exception) {
@@ -284,9 +250,9 @@ class ConsumableRaidScreen(
             modelPoseStack.popPose()
         }
 
-        // 6. Draw Buttons
-        val isAcceptHovered = virtualMouseX >= guiX && virtualMouseX < guiX + 69 && virtualMouseY >= guiY + 81 && virtualMouseY < guiY + 93
-        val isDenyHovered = virtualMouseX >= guiX + 69 && virtualMouseX < guiX + 137 && virtualMouseY >= guiY + 81 && virtualMouseY < guiY + 93
+        // 6. Draw Buttons (Centered side-by-side: both are 64px wide, meeting at guiX + 69)
+        val isAcceptHovered = virtualMouseX >= guiX + 5 && virtualMouseX < guiX + 69 && virtualMouseY >= guiY + 98 && virtualMouseY < guiY + 113
+        val isDenyHovered = virtualMouseX >= guiX + 69 && virtualMouseX < guiX + 133 && virtualMouseY >= guiY + 98 && virtualMouseY < guiY + 113
 
         // Hover sound feedback
         if (isAcceptHovered && !lastAcceptHovered) {
@@ -302,8 +268,8 @@ class ConsumableRaidScreen(
         if (isAcceptHovered && random.nextInt(3) == 0) {
             particles.add(
                 GuiParticle(
-                    (guiX + 34 + (random.nextFloat() - 0.5f) * 40f),
-                    (guiY + 87 + (random.nextFloat() - 0.5f) * 4f),
+                    (guiX + 37 + (random.nextFloat() - 0.5f) * 36f),
+                    (guiY + 105 + (random.nextFloat() - 0.5f) * 4f),
                     (random.nextFloat() - 0.5f) * 0.3f,
                     -random.nextFloat() * 0.4f,
                     0xFFFF0055.toInt(),
@@ -314,8 +280,8 @@ class ConsumableRaidScreen(
         if (isDenyHovered && random.nextInt(3) == 0) {
             particles.add(
                 GuiParticle(
-                    (guiX + 103 + (random.nextFloat() - 0.5f) * 40f),
-                    (guiY + 87 + (random.nextFloat() - 0.5f) * 4f),
+                    (guiX + 101 + (random.nextFloat() - 0.5f) * 36f),
+                    (guiY + 105 + (random.nextFloat() - 0.5f) * 4f),
                     (random.nextFloat() - 0.5f) * 0.3f,
                     -random.nextFloat() * 0.4f,
                     0xFF9E00FF.toInt(),
@@ -324,18 +290,32 @@ class ConsumableRaidScreen(
             )
         }
 
-        val acceptV = if (isAcceptHovered) 12f else 0f
+        val acceptV = if (isAcceptHovered) 15f else 0f
         setupNearestNeighbor(ACCEPT_BUTTON_TEXTURE)
-        graphics.blit(ACCEPT_BUTTON_TEXTURE, guiX, guiY + 81, 0f, acceptV, 69, 12, 69, 24)
+        graphics.blit(ACCEPT_BUTTON_TEXTURE, guiX + 5, guiY + 98, 0f, acceptV, 64, 15, 64, 30)
 
-        val denyV = if (isDenyHovered) 12f else 0f
+        val denyV = if (isDenyHovered) 15f else 0f
         setupNearestNeighbor(DENY_BUTTON_TEXTURE)
-        graphics.blit(DENY_BUTTON_TEXTURE, guiX + 69, guiY + 81, 0f, denyV, 68, 12, 68, 24)
+        graphics.blit(DENY_BUTTON_TEXTURE, guiX + 69, guiY + 98, 0f, denyV, 64, 15, 64, 30)
+
+        // Draw text inside the buttons ("Accept" / "Refuse")
+        val acceptText = Component.translatable("cobblemongymodyssey.raid.accept")
+        val denyText = Component.translatable("cobblemongymodyssey.raid.deny")
+
+        val acceptTextX = (guiX + 5) + (64 - font.width(acceptText)) / 2
+        val acceptTextY = guiY + 98 + 3
+        val acceptColor = if (isAcceptHovered) 0xFFFFA800.toInt() else 0xFFFFFF
+        graphics.drawString(font, acceptText, acceptTextX, acceptTextY, acceptColor, true)
+
+        val denyTextX = (guiX + 69) + (64 - font.width(denyText)) / 2
+        val denyTextY = guiY + 98 + 3
+        val denyColor = if (isDenyHovered) 0xFFFFA800.toInt() else 0xFFFFFF
+        graphics.drawString(font, denyText, denyTextX, denyTextY, denyColor, true)
 
         // Render particles (scaled)
         particles.forEach { it.render(graphics) }
 
-        poseStack.popPose() // Pop the 2.0x scale
+        poseStack.popPose() // Pop the 1.0x/2.0x scale
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -347,8 +327,8 @@ class ConsumableRaidScreen(
         val virtualMouseX = mouseX / GUI_SCALE
         val virtualMouseY = mouseY / GUI_SCALE
 
-        val isAcceptHovered = virtualMouseX >= guiX && virtualMouseX < guiX + 69 && virtualMouseY >= guiY + 81 && virtualMouseY < guiY + 93
-        val isDenyHovered = virtualMouseX >= guiX + 69 && virtualMouseX < guiX + 137 && virtualMouseY >= guiY + 81 && virtualMouseY < guiY + 93
+        val isAcceptHovered = virtualMouseX >= guiX + 5 && virtualMouseX < guiX + 69 && virtualMouseY >= guiY + 98 && virtualMouseY < guiY + 113
+        val isDenyHovered = virtualMouseX >= guiX + 69 && virtualMouseX < guiX + 133 && virtualMouseY >= guiY + 98 && virtualMouseY < guiY + 113
 
         if (isAcceptHovered) {
             minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))

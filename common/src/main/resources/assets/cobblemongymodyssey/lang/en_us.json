@@ -90,5 +90,7 @@
   "cobblemongymodyssey.badge_case.shop.tooltip.locked": "Defeat a Johto Gym Leader to unlock the Shop",
   "cobblemongymodyssey.shop.johto.title": "Johto League Shop",
   "block.cobblemongymodyssey.consumable_raid_block": "Consumable Raid Den",
-  "item.cobblemongymodyssey.consumable_raid_block": "Consumable Raid Den"
+  "item.cobblemongymodyssey.consumable_raid_block": "Consumable Raid Den",
+  "cobblemongymodyssey.raid.accept": "Accept",
+  "cobblemongymodyssey.raid.deny": "Refuse"
 }
