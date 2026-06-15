@@ -2,6 +2,7 @@ package com.howlite.blocks
 
 import com.howlite.CobblemonGymOdyssey
 import com.howlite.items.GymBadgeItems
+import com.necro.raid.dens.common.data.raid.RaidTier
 import dev.architectury.registry.CreativeTabRegistry
 import dev.architectury.registry.registries.DeferredRegister
 import dev.architectury.registry.registries.RegistrySupplier
@@ -39,11 +40,27 @@ object GymBlocks {
     }
 
     val CONSUMABLE_RAID_BLOCK: RegistrySupplier<Block> = BLOCKS.register("consumable_raid_block") {
-        ConsumableRaidBlock(BlockBehaviour.Properties.of().strength(3.0f).requiresCorrectToolForDrops().noOcclusion())
+        ConsumableRaidBlock(RaidTier.TIER_FIVE, BlockBehaviour.Properties.of().strength(3.0f).requiresCorrectToolForDrops().noOcclusion())
     }
 
     val CONSUMABLE_RAID_BLOCK_ITEM: RegistrySupplier<Item> = ITEMS.register("consumable_raid_block") {
         BlockItem(CONSUMABLE_RAID_BLOCK.get(), Item.Properties())
+    }
+
+    val CONSUMABLE_RAID_BLOCK_6: RegistrySupplier<Block> = BLOCKS.register("consumable_raid_block_6") {
+        ConsumableRaidBlock(RaidTier.TIER_SIX, BlockBehaviour.Properties.of().strength(3.0f).requiresCorrectToolForDrops().noOcclusion())
+    }
+
+    val CONSUMABLE_RAID_BLOCK_6_ITEM: RegistrySupplier<Item> = ITEMS.register("consumable_raid_block_6") {
+        BlockItem(CONSUMABLE_RAID_BLOCK_6.get(), Item.Properties())
+    }
+
+    val CONSUMABLE_RAID_BLOCK_7: RegistrySupplier<Block> = BLOCKS.register("consumable_raid_block_7") {
+        ConsumableRaidBlock(RaidTier.TIER_SEVEN, BlockBehaviour.Properties.of().strength(3.0f).requiresCorrectToolForDrops().noOcclusion())
+    }
+
+    val CONSUMABLE_RAID_BLOCK_7_ITEM: RegistrySupplier<Item> = ITEMS.register("consumable_raid_block_7") {
+        BlockItem(CONSUMABLE_RAID_BLOCK_7.get(), Item.Properties())
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -55,7 +72,12 @@ object GymBlocks {
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     val CONSUMABLE_RAID_BLOCK_ENTITY: RegistrySupplier<BlockEntityType<ConsumableRaidBlockEntity>> =
         BLOCK_ENTITY_TYPES.register("consumable_raid_block") {
-            BlockEntityType.Builder.of(::ConsumableRaidBlockEntity, CONSUMABLE_RAID_BLOCK.get()).build(null)
+            BlockEntityType.Builder.of(
+                ::ConsumableRaidBlockEntity,
+                CONSUMABLE_RAID_BLOCK.get(),
+                CONSUMABLE_RAID_BLOCK_6.get(),
+                CONSUMABLE_RAID_BLOCK_7.get()
+            ).build(null)
         }
 
     fun register() {
@@ -68,7 +90,9 @@ object GymBlocks {
             GymBadgeItems.GYM_BADGES_TAB,
             GYM_LEADER_TELEPORTER_ITEM,
             SMALL_ROCK_ITEM,
-            CONSUMABLE_RAID_BLOCK_ITEM
+            CONSUMABLE_RAID_BLOCK_ITEM,
+            CONSUMABLE_RAID_BLOCK_6_ITEM,
+            CONSUMABLE_RAID_BLOCK_7_ITEM
         )
     }
 }

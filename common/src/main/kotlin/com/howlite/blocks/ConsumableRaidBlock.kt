@@ -28,11 +28,9 @@ import net.minecraft.server.level.ServerPlayer
 import com.howlite.CobblemonGymOdyssey
 
 
-class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties) {
+class ConsumableRaidBlock(val tier: RaidTier, properties: Properties) : RaidCrystalBlock(properties) {
 
-    companion object {
-        val CODEC: MapCodec<ConsumableRaidBlock> = simpleCodec { ConsumableRaidBlock(it) }
-    }
+    private val blockCodec: MapCodec<ConsumableRaidBlock> = simpleCodec { ConsumableRaidBlock(tier, it) }
 
     init {
         registerDefaultState(
@@ -41,12 +39,12 @@ class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties)
                 .setValue(CAN_RESET, false)
                 .setValue(CYCLE_MODE, RaidCycleMode.NONE)
                 .setValue(IS_NATURAL, false)
-                .setValue(RAID_TIER, RaidTier.TIER_FIVE)
+                .setValue(RAID_TIER, tier)
                 .setValue(RAID_TYPE, RaidType.NONE)
         )
     }
 
-    override fun codec(): MapCodec<ConsumableRaidBlock> = CODEC
+    override fun codec(): MapCodec<ConsumableRaidBlock> = blockCodec
 
     override fun getRenderShape(state: BlockState): RenderShape {
         return RenderShape.MODEL
@@ -82,17 +80,13 @@ class ConsumableRaidBlock(properties: Properties) : RaidCrystalBlock(properties)
         super.setPlacedBy(level, pos, state, placer, stack)
         
         if (!level.isClientSide) {
-            // Select random tier between 5, 6, 7 stars
-            val tiers = listOf(RaidTier.TIER_FIVE, RaidTier.TIER_SIX, RaidTier.TIER_SEVEN)
-            val randomTier = tiers[level.random.nextInt(tiers.size)]
-            
             // Choose a random elemental type for the raid (excluding NONE)
             val types = RaidType.values().filter { it != RaidType.NONE }
             val randomType = types[level.random.nextInt(types.size)]
             
             val newState = state
                 .setValue(ACTIVE, true)
-                .setValue(RAID_TIER, randomTier)
+                .setValue(RAID_TIER, this.tier)
                 .setValue(RAID_TYPE, randomType)
             
             level.setBlock(pos, newState, 3)

@@ -1,0 +1,7 @@
+{
+  "multipart": [
+    {
+      "apply": { "model": "cobblemongymodyssey:block/consumable_raid_block" }
+    }
+  ]
+}
