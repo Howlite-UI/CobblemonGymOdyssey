@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:ramos",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/ramos.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:steve.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

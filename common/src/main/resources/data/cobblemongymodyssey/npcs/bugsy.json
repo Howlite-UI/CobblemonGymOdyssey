@@ -1,0 +1,24 @@
+﻿{
+    "battleConfiguration":  {
+                                "canChallenge":  true
+                            },
+    "hitbox":  "player",
+    "skill":  5,
+    "resourceIdentifier":  "cobblemongymodyssey:bugsy",
+    "interaction":  {
+                        "type":  "dialogue",
+                        "dialogue":  "cobblemongymodyssey:bugsy_dialogue"
+                    },
+    "names":  [
+                  "Bugsy"
+              ],
+    "party":  {
+                  "pokemon":  [
+                                  "metapod level=14 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+                                  "kakuna level=14 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+                                  "scyther level=16 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+                              ],
+                  "type":  "simple"
+              },
+    "autoHealParty":  true
+}

@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:burgh",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/burgh.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:steve.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

@@ -1,0 +1,23 @@
+﻿{
+    "battleConfiguration":  {
+                                "canChallenge":  true
+                            },
+    "hitbox":  "player",
+    "skill":  5,
+    "resourceIdentifier":  "cobblemongymodyssey:drayden",
+    "interaction":  {
+                        "type":  "dialogue",
+                        "dialogue":  "cobblemongymodyssey:drayden_dialogue"
+                    },
+    "names":  [
+                  "Drayden"
+              ],
+    "party":  {
+                  "pokemon":  [
+                                  "druddigon level=46 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+                                  "haxorus level=48 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+                              ],
+                  "type":  "simple"
+              },
+    "autoHealParty":  true
+}

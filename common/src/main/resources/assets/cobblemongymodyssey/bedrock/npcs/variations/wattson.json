@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:wattson",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/wattson.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:steve.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

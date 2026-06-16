@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:falkner",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/falkner.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:steve.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

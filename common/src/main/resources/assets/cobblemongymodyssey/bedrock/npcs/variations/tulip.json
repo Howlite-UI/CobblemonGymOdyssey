@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:tulip",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/tulip.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:alex.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

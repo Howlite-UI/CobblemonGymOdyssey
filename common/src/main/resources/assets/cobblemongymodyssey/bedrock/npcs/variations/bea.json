@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:bea",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/bea.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:alex.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

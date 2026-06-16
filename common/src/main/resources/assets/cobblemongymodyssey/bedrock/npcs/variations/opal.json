@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:opal",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/opal.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:alex.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

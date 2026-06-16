@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:lass",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/lass.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:alex.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

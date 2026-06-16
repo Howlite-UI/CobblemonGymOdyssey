@@ -1,0 +1,23 @@
+﻿{
+    "battleConfiguration":  {
+                                "canChallenge":  true
+                            },
+    "hitbox":  "player",
+    "skill":  5,
+    "resourceIdentifier":  "cobblemongymodyssey:tulip",
+    "interaction":  {
+                        "type":  "dialogue",
+                        "dialogue":  "cobblemongymodyssey:tulip_dialogue"
+                    },
+    "names":  [
+                  "Tulip"
+              ],
+    "party":  {
+                  "pokemon":  [
+                                  "farigiraf level=44 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+                                  "florges level=45 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+                              ],
+                  "type":  "simple"
+              },
+    "autoHealParty":  true
+}

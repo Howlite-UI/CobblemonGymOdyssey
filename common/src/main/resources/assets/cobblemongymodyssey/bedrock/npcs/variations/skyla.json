@@ -1,0 +1,17 @@
+﻿{
+    "name":  "cobblemongymodyssey:skyla",
+    "variations":  [
+                       {
+                           "poser":  "cobblemon:standard",
+                           "texture":  "cobblemongymodyssey:textures/npc/skyla.png",
+                           "aspects":  [
+
+                                       ],
+                           "model":  "cobblemon:alex.geo",
+                           "layers":  [
+
+                                      ]
+                       }
+                   ],
+    "order":  0
+}

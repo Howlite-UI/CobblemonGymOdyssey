@@ -1,0 +1,24 @@
+﻿{
+    "battleConfiguration":  {
+                                "canChallenge":  true
+                            },
+    "hitbox":  "player",
+    "skill":  5,
+    "resourceIdentifier":  "cobblemongymodyssey:morty",
+    "interaction":  {
+                        "type":  "dialogue",
+                        "dialogue":  "cobblemongymodyssey:morty_dialogue"
+                    },
+    "names":  [
+                  "Morty"
+              ],
+    "party":  {
+                  "pokemon":  [
+                                  "gastly level=21 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+                                  "haunter level=22 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+                                  "gengar level=25 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+                              ],
+                  "type":  "simple"
+              },
+    "autoHealParty":  true
+}

@@ -1,0 +1,24 @@
+﻿{
+    "battleConfiguration":  {
+                                "canChallenge":  true
+                            },
+    "hitbox":  "player",
+    "skill":  5,
+    "resourceIdentifier":  "cobblemongymodyssey:nanu",
+    "interaction":  {
+                        "type":  "dialogue",
+                        "dialogue":  "cobblemongymodyssey:nanu_dialogue"
+                    },
+    "names":  [
+                  "Nanu"
+              ],
+    "party":  {
+                  "pokemon":  [
+                                  "sableye level=43 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+                                  "krookodile level=43 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
+                                  "persian level=44 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
+                              ],
+                  "type":  "simple"
+              },
+    "autoHealParty":  true
+}

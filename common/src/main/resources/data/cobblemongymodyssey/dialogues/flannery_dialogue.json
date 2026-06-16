@@ -1,0 +1,51 @@
+﻿{
+    "pages":  [
+                  {
+                      "input":  {
+                                    "vertical":  false,
+                                    "options":  [
+                                                    {
+                                                        "isSelectable":  "c.npc.can_battle;",
+                                                        "value":  "battle",
+                                                        "text":  "Battle!",
+                                                        "action":  [
+                                                                       "q.dialogue.close();",
+                                                                       "q.npc.start_battle(q.player);"
+                                                                   ]
+                                                    },
+                                                    {
+                                                        "value":  "cancel",
+                                                        "text":  "Not yet",
+                                                        "action":  [
+                                                                       "q.dialogue.close()"
+                                                                   ]
+                                                    }
+                                                ],
+                                    "type":  "option"
+                                },
+                      "speaker":  "npc",
+                      "id":  "npc-chat",
+                      "lines":  [
+                                    "I\u0027m Flannery! Let the hot flames of my passion burn you up!",
+                                    "Are you ready to challenge the Lavaridge Town Gym?"
+                                ]
+                  }
+              ],
+    "speakers":  {
+                     "npc":  {
+                                 "name":  {
+                                              "expression":  "q.npc.name",
+                                              "type":  "expression"
+                                          },
+                                 "face":  "q.npc.face(false);"
+                             },
+                     "player":  {
+                                    "name":  {
+                                                 "expression":  "q.player.username",
+                                                 "type":  "expression"
+                                             },
+                                    "face":  "q.player.face();"
+                                }
+                 },
+    "initializationAction":  "(q.npc.is_in_battle_with(q.player) || !q.npc.is_doing_activity(\u0027minecraft:idle\u0027, \u0027cobblemon:battling\u0027)) ? q.dialogue.close()"
+}
