@@ -6,10 +6,20 @@ import net.minecraft.nbt.CompoundTag
  * Type de pièce avec sa valeur en CCC (Copper Cobble Coin).
  */
 enum class CoinType(val valueCCC: Long, val itemId: String) {
-    COPPER(1L, "cobble_copper_coin"),
-    SILVER(100L, "cobble_silver_coin"),
-    GOLD(10_000L, "cobble_gold_coin"),
-    PLATINUM(1_000_000L, "cobble_platinum_coin");
+    COPPER(1L, "cobble_copper_coin") {
+        override fun getItem(): net.minecraft.world.item.Item = com.howlite.items.CobbleCoins.COBBLE_COPPER_COIN.get()
+    },
+    SILVER(100L, "cobble_silver_coin") {
+        override fun getItem(): net.minecraft.world.item.Item = com.howlite.items.CobbleCoins.COBBLE_SILVER_COIN.get()
+    },
+    GOLD(10_000L, "cobble_gold_coin") {
+        override fun getItem(): net.minecraft.world.item.Item = com.howlite.items.CobbleCoins.COBBLE_GOLD_COIN.get()
+    },
+    PLATINUM(1_000_000L, "cobble_platinum_coin") {
+        override fun getItem(): net.minecraft.world.item.Item = com.howlite.items.CobbleCoins.COBBLE_PLATINUM_COIN.get()
+    };
+
+    abstract fun getItem(): net.minecraft.world.item.Item
 }
 
 /**

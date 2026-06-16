@@ -4,6 +4,7 @@ import com.howlite.CobblemonGymOdyssey
 import com.howlite.client.screen.InventoryWalletButton
 import com.howlite.client.screen.WalletHudOverlay
 import com.howlite.client.screen.WalletOverlay
+import com.howlite.wallet.WalletNetwork
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
@@ -14,10 +15,8 @@ import net.neoforged.neoforge.client.event.ScreenEvent
 /**
  * Gestion des events NeoForge FORGE bus côté client pour le wallet.
  *
- * - Injection du bouton wallet dans l'InventoryScreen.
- * - Rendu de l'overlay wallet par-dessus l'inventaire.
- * - Rendu du HUD wallet en coin d'écran.
- * - Clics souris sur l'overlay.
+ * Implémente toutes les interactions de l'inventaire en Kotlin (bouton, overlay, clics, Shift-Clics)
+ * pour éviter les limitations d'ordre de compilation Java/Kotlin.
  */
 @EventBusSubscriber(
     modid = CobblemonGymOdyssey.MOD_ID,
@@ -30,10 +29,9 @@ object NeoForgeWalletClientEvents {
     fun onScreenInit(event: ScreenEvent.Init.Post) {
         val screen = event.screen
         if (screen is InventoryScreen) {
-            // Position : à droite du slot résultat de craft, entre craft et inventaire
             val btnX = screen.guiLeft + 161
             val btnY = screen.guiTop + 44
-            event.addListener(InventoryWalletButton(btnX, btnY, 12, 12))
+            event.addListener(InventoryWalletButton(btnX, btnY, 14, 17))
         }
     }
 
@@ -50,7 +48,36 @@ object NeoForgeWalletClientEvents {
     fun onScreenMouseClick(event: ScreenEvent.MouseButtonPressed.Pre) {
         val screen = event.screen
         if (screen is InventoryScreen) {
+            // 1. Clic sur les slots ou switches de l'overlay
             if (WalletOverlay.mouseClicked(screen.guiLeft, screen.guiTop,
+                    event.mouseX, event.mouseY, event.button)) {
+                event.isCanceled = true
+                return
+            }
+
+            // 2. Shift-Clic rapide sur une pièce de l'inventaire standard pour la déposer
+            if (WalletOverlay.isOpen && event.button == 0 && net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
+                val slot = screen.slotUnderMouse
+                if (slot != null && slot.hasItem()) {
+                    val stack = slot.item
+                    val isCoin = stack.item == com.howlite.items.CobbleCoins.COBBLE_COPPER_COIN.get() ||
+                                 stack.item == com.howlite.items.CobbleCoins.COBBLE_SILVER_COIN.get() ||
+                                 stack.item == com.howlite.items.CobbleCoins.COBBLE_GOLD_COIN.get() ||
+                                 stack.item == com.howlite.items.CobbleCoins.COBBLE_PLATINUM_COIN.get()
+                    if (isCoin) {
+                        WalletNetwork.sendDepositSlot(slot.index)
+                        event.isCanceled = true
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    fun onScreenMouseRelease(event: ScreenEvent.MouseButtonReleased.Pre) {
+        val screen = event.screen
+        if (screen is InventoryScreen) {
+            if (WalletOverlay.isHovering(screen.guiLeft, screen.guiTop,
                     event.mouseX, event.mouseY)) {
                 event.isCanceled = true
             }

@@ -10,17 +10,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Mixin sur InventoryScreen (Fabric) pour :
- * 1. Injecter le bouton wallet dans la zone à droite du slot de résultat de craft.
- * 2. Rendre l'overlay wallet par-dessus l'inventaire.
- * 3. Intercepter les clics souris pour l'overlay.
- *
- * Position du bouton : à droite du slot résultat de craft (index 0 de crafting output),
- * entre ce slot et l'inventaire principal.
- * En vanilla, le slot résultat craft est à (guiLeft+154, guiTop+28).
- * On place le bouton à (guiLeft+161, guiTop+44) — à droite et légèrement plus bas.
- */
 @Mixin(InventoryScreen.class)
 public abstract class InventoryScreenMixin extends net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<net.minecraft.world.inventory.InventoryMenu> {
 
@@ -32,12 +21,9 @@ public abstract class InventoryScreenMixin extends net.minecraft.client.gui.scre
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo ci) {
-        // Bouton wallet : à droite du slot craft result, entre craft et inventaire
-        // guiLeft + 154 (craft result x) + 18 + 2 (margin) = guiLeft + 174
-        // guiTop + 28 (craft result y) + 8 = guiTop + 36
         int btnX = this.leftPos + 161;
         int btnY = this.topPos + 44;
-        this.addRenderableWidget(new InventoryWalletButton(btnX, btnY, 12, 12));
+        this.addRenderableWidget(new InventoryWalletButton(btnX, btnY, 14, 17));
     }
 
     @Inject(method = "render", at = @At("TAIL"))
@@ -47,8 +33,35 @@ public abstract class InventoryScreenMixin extends net.minecraft.client.gui.scre
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void onMouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        if (WalletOverlay.INSTANCE.mouseClicked(this.leftPos, this.topPos, mouseX, mouseY)) {
+        if (WalletOverlay.INSTANCE.mouseClicked(this.leftPos, this.topPos, mouseX, mouseY, button)) {
             cir.setReturnValue(true);
         }
+    }
+
+    @Inject(method = "mouseReleased", at = @At("HEAD"), cancellable = true)
+    private void onMouseReleased(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+        if (WalletOverlay.INSTANCE.isHovering(this.leftPos, this.topPos, mouseX, mouseY)) {
+            cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "slotClicked", at = @At("HEAD"), cancellable = true)
+    private void onSlotClicked(net.minecraft.world.inventory.Slot slot, int slotId, int mouseButton, net.minecraft.world.inventory.ClickType clickType, CallbackInfo ci) {
+        if (WalletOverlay.INSTANCE.isOpen() && clickType == net.minecraft.world.inventory.ClickType.QUICK_MOVE) {
+            if (slot != null && slot.hasItem()) {
+                net.minecraft.world.item.ItemStack stack = slot.getItem();
+                if (isCoin(stack.getItem())) {
+                    com.howlite.wallet.WalletNetwork.INSTANCE.sendDepositSlot(slotId);
+                    ci.cancel();
+                }
+            }
+        }
+    }
+
+    private boolean isCoin(net.minecraft.world.item.Item item) {
+        return item == com.howlite.items.CobbleCoins.INSTANCE.getCOBBLE_COPPER_COIN().get() ||
+               item == com.howlite.items.CobbleCoins.INSTANCE.getCOBBLE_SILVER_COIN().get() ||
+               item == com.howlite.items.CobbleCoins.INSTANCE.getCOBBLE_GOLD_COIN().get() ||
+               item == com.howlite.items.CobbleCoins.INSTANCE.getCOBBLE_PLATINUM_COIN().get();
     }
 }
