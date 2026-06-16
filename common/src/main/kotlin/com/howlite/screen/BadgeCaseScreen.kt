@@ -41,6 +41,10 @@ class BadgeCaseScreen(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/badge_box_background.png"
         )
+        val BACKGROUND_ALOLA_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/badge_box_background_alola.png"
+        )
         val TOPBAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/badge_box_topbar.png"
@@ -99,7 +103,12 @@ class BadgeCaseScreen(
         ),
         HOENN(
             "cobblemongymodyssey.badge_case.tab.hoenn",
-            emptyList(),
+            listOf(
+                GymBadge.STONE_BADGE, GymBadge.KNUCKLE_BADGE,
+                GymBadge.DYNAMO_BADGE, GymBadge.HEAT_BADGE,
+                GymBadge.BALANCE_BADGE, GymBadge.FEATHER_BADGE,
+                GymBadge.MIND_BADGE, GymBadge.RAIN_BADGE
+            ),
             0xFFFF4757.toInt(), // Rouge Rubis
             0xFFFF6B81.toInt(),
             0xFFC92836.toInt(),
@@ -107,7 +116,12 @@ class BadgeCaseScreen(
         ),
         SINNOH(
             "cobblemongymodyssey.badge_case.tab.sinnoh",
-            emptyList(),
+            listOf(
+                GymBadge.COAL_BADGE, GymBadge.FOREST_BADGE,
+                GymBadge.COBBLE_BADGE, GymBadge.FEN_BADGE,
+                GymBadge.RELIC_BADGE, GymBadge.MINE_BADGE,
+                GymBadge.ICICLE_BADGE, GymBadge.BEACON_BADGE
+            ),
             0xFFA29BFE.toInt(), // Violet Platine
             0xFFD6A2E8.toInt(),
             0xFF6D214F.toInt(),
@@ -115,7 +129,12 @@ class BadgeCaseScreen(
         ),
         UNOVA(
             "cobblemongymodyssey.badge_case.tab.unova",
-            emptyList(),
+            listOf(
+                GymBadge.TOXIC_BADGE, GymBadge.BASIC_BADGE,
+                GymBadge.INSECT_BADGE, GymBadge.BOLT_BADGE,
+                GymBadge.QUAKE_BADGE, GymBadge.JET_BADGE,
+                GymBadge.LEGEND_BADGE, GymBadge.WAVE_BADGE
+            ),
             0xFF34495E.toInt(), // Gris foncé / Bleu nuit
             0xFF7F8C8D.toInt(),
             0xFF2C3E50.toInt(),
@@ -123,7 +142,12 @@ class BadgeCaseScreen(
         ),
         KALOS(
             "cobblemongymodyssey.badge_case.tab.kalos",
-            emptyList(),
+            listOf(
+                GymBadge.BUG_BADGE, GymBadge.CLIFF_BADGE,
+                GymBadge.RUMBLE_BADGE, GymBadge.PLANT_BADGE,
+                GymBadge.VOLTAGE_BADGE, GymBadge.KALOS_FAIRY_BADGE,
+                GymBadge.PSYCHIC_BADGE, GymBadge.ICEBERG_BADGE
+            ),
             0xFF3B3B98.toInt(), // Indigo
             0xFFFEA47F.toInt(),
             0xFF1B1464.toInt(),
@@ -131,7 +155,10 @@ class BadgeCaseScreen(
         ),
         ALOLA(
             "cobblemongymodyssey.badge_case.tab.alola",
-            emptyList(),
+            listOf(
+                GymBadge.MELEMELE_STAMP, GymBadge.AKALA_STAMP,
+                GymBadge.ULAULA_STAMP, GymBadge.PONI_STAMP
+            ),
             0xFFFF9F43.toInt(), // Orange chaud
             0xFFFFF200.toInt(),
             0xFFEE5253.toInt(),
@@ -139,7 +166,12 @@ class BadgeCaseScreen(
         ),
         GALAR(
             "cobblemongymodyssey.badge_case.tab.galar",
-            emptyList(),
+            listOf(
+                GymBadge.GRASS_BADGE, GymBadge.WATER_BADGE,
+                GymBadge.FIRE_BADGE, GymBadge.FIGHTING_BADGE,
+                GymBadge.GALAR_FAIRY_BADGE, GymBadge.ROCK_BADGE,
+                GymBadge.DARK_BADGE, GymBadge.DRAGON_BADGE
+            ),
             0xFFE056FD.toInt(), // Magenta
             0xFFF8EFBA.toInt(),
             0xFFBE2EDD.toInt(),
@@ -147,7 +179,12 @@ class BadgeCaseScreen(
         ),
         PALDEA(
             "cobblemongymodyssey.badge_case.tab.paldea",
-            emptyList(),
+            listOf(
+                GymBadge.CORTONDO_BADGE, GymBadge.ARTAZON_BADGE,
+                GymBadge.LEVINCIA_BADGE, GymBadge.CASCARRAFA_BADGE,
+                GymBadge.MEDALI_BADGE, GymBadge.MONTENEVERA_BADGE,
+                GymBadge.ALFORNADA_BADGE, GymBadge.GLASEADO_BADGE
+            ),
             0xFF6F1E51.toInt(), // Violet/Bordeaux
             0xFFED4C67.toInt(),
             0xFF353B48.toInt(),
@@ -298,7 +335,8 @@ class BadgeCaseScreen(
         val region = activeRegion
 
         // 1. Dessiner le fond principal
-        graphics.blit(BACKGROUND_TEXTURE, x, y, 0f, 0f, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT)
+        val bgTexture = if (region == Region.ALOLA) BACKGROUND_ALOLA_TEXTURE else BACKGROUND_TEXTURE
+        graphics.blit(bgTexture, x, y, 0f, 0f, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT)
 
         // 2. Dessiner et teinter la barre supérieure
         val color = region.primaryColor
@@ -475,6 +513,10 @@ class BadgeCaseScreen(
     }
 
     private fun getSlotX(index: Int): Int {
+        if (activeRegion == Region.ALOLA) {
+            val alolaSlotXs = intArrayOf(46, 64, 104, 122)
+            return alolaSlotXs.getOrElse(index) { 0 }
+        }
         val slotXs = intArrayOf(10, 28, 46, 64, 104, 122, 140, 158)
         return slotXs.getOrElse(index) { 0 }
     }
@@ -530,7 +572,17 @@ class BadgeCaseScreen(
             }
             val renderY = sy + offset.toInt()
 
+            val useShaderColor = !isUnlocked && badge.texturePath == badge.hollowTexturePath
+            if (useShaderColor) {
+                // Rendre assombri/presque noir pour simuler un badge verrouillé
+                RenderSystem.setShaderColor(0.12f, 0.12f, 0.12f, 0.75f)
+            }
+
             graphics.blit(badgeTexture, sx, renderY, 0f, 0f, 16, 16, 16, 16)
+
+            if (useShaderColor) {
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+            }
 
             // Rendu de la bordure pulsante au survol
             if (isHovered) {

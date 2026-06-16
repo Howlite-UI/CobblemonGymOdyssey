@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.howlite.api.PlayerProgressApi
 import com.howlite.data.GymBadge
+import com.howlite.data.GymRegion
 import com.howlite.data.PokemonSnapshot
 import com.cobblemon.mod.common.Cobblemon
 import dev.architectury.event.events.common.CommandRegistrationEvent
@@ -85,6 +86,28 @@ object GymTestCommand {
                                     Commands.argument("player", EntityArgument.player())
                                         .executes { context -> setLevelCap(context, IntegerArgumentType.getInteger(context, "level"), EntityArgument.getPlayer(context, "player")) }
                                 )
+                        )
+                )
+                .then(
+                    Commands.literal("addregion")
+                        .then(
+                            Commands.argument("region", StringArgumentType.word())
+                                .suggests { _, builder ->
+                                    SharedSuggestionProvider.suggest(GymRegion.entries.map { it.name }, builder)
+                                }
+                                .executes { context -> addRegionBadges(context, StringArgumentType.getString(context, "region"), context.source.playerOrException) }
+                                .then(
+                                    Commands.argument("player", EntityArgument.player())
+                                        .executes { context -> addRegionBadges(context, StringArgumentType.getString(context, "region"), EntityArgument.getPlayer(context, "player")) }
+                                )
+                        )
+                )
+                .then(
+                    Commands.literal("addall")
+                        .executes { context -> addAllBadges(context, context.source.playerOrException) }
+                        .then(
+                            Commands.argument("player", EntityArgument.player())
+                                .executes { context -> addAllBadges(context, EntityArgument.getPlayer(context, "player")) }
                         )
                 )
         )
@@ -177,6 +200,95 @@ object GymTestCommand {
             { Component.translatable("commands.gymtest.setlevelcap.success", player.scoreboardName, level) },
             true
         )
+        return 1
+    }
+
+    private fun addRegionBadges(context: CommandContext<CommandSourceStack>, regionName: String, player: ServerPlayer): Int {
+        val region = try {
+            GymRegion.valueOf(regionName.uppercase())
+        } catch (e: IllegalArgumentException) {
+            context.source.sendFailure(Component.literal("Région inconnue: $regionName"))
+            return 0
+        }
+        val data = PlayerProgressApi.get(player)
+        val badgesToAdd = GymBadge.entries.filter { it.region == region }
+        var addedCount = 0
+        
+        val snapshots = try {
+            val party = Cobblemon.storage.getParty(player)
+            party.filterNotNull().map { pokemon ->
+                PokemonSnapshot(
+                    species = pokemon.species.name,
+                    level = pokemon.level,
+                    isShiny = pokemon.shiny,
+                    displayName = pokemon.getDisplayName().string
+                )
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+
+        for (badge in badgesToAdd) {
+            if (!data.hasBadge(badge)) {
+                if (snapshots.isNotEmpty()) {
+                    data.recordTeam(badge.id, snapshots)
+                }
+                data.earnBadge(badge)
+                addedCount++
+            }
+        }
+
+        if (addedCount > 0) {
+            PlayerProgressApi.markDirty(player)
+            context.source.sendSuccess(
+                { Component.literal("Ajouté $addedCount badges de la région $region à ${player.scoreboardName}. Nouveau Level Cap : ${data.levelCap}") },
+                true
+            )
+        } else {
+            context.source.sendFailure(Component.literal("${player.scoreboardName} possède déjà tous les badges de la région $region"))
+            return 0
+        }
+        return 1
+    }
+
+    private fun addAllBadges(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
+        val data = PlayerProgressApi.get(player)
+        var addedCount = 0
+        
+        val snapshots = try {
+            val party = Cobblemon.storage.getParty(player)
+            party.filterNotNull().map { pokemon ->
+                PokemonSnapshot(
+                    species = pokemon.species.name,
+                    level = pokemon.level,
+                    isShiny = pokemon.shiny,
+                    displayName = pokemon.getDisplayName().string
+                )
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+
+        for (badge in GymBadge.entries) {
+            if (!data.hasBadge(badge)) {
+                if (snapshots.isNotEmpty()) {
+                    data.recordTeam(badge.id, snapshots)
+                }
+                data.earnBadge(badge)
+                addedCount++
+            }
+        }
+
+        if (addedCount > 0) {
+            PlayerProgressApi.markDirty(player)
+            context.source.sendSuccess(
+                { Component.literal("Ajouté tous les badges ($addedCount) à ${player.scoreboardName}. Nouveau Level Cap : ${data.levelCap}") },
+                true
+            )
+        } else {
+            context.source.sendFailure(Component.literal("${player.scoreboardName} possède déjà tous les badges."))
+            return 0
+        }
         return 1
     }
 }
