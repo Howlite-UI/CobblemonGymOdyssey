@@ -25,11 +25,11 @@ public abstract class MerchantScreenMixin extends AbstractContainerScreen<Mercha
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo ci) {
-        boolean isJohtoShop = this.title != null && 
-                             this.title.getContents() instanceof TranslatableContents &&
-                             ((TranslatableContents) this.title.getContents()).getKey().equals("cobblemongymodyssey.shop.johto.title");
+        boolean isGymShop = this.title != null && 
+                            this.title.getContents() instanceof TranslatableContents &&
+                            ((TranslatableContents) this.title.getContents()).getKey().startsWith("cobblemongymodyssey.shop.");
 
-        if (isJohtoShop) {
+        if (isGymShop) {
             // Position the back button to stick out of the left side of the screen
             // MerchantScreen background width is 276.
             // X position: leftPos - 26

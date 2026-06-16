@@ -356,9 +356,7 @@ class BadgeCaseScreen(
             renderWinningTeam(graphics, x, y, mouseX, mouseY, partialTick)
         } else {
             renderCenterPokeBallAndRibbon(graphics, x, y, partialTick)
-            if (region == Region.JOHTO) {
-                renderShopButton(graphics, x, y, mouseX, mouseY)
-            }
+            renderShopButton(graphics, x, y, mouseX, mouseY)
         }
 
         // 5. Dessiner la grille des badges (TOUJOURS visible !)
@@ -424,22 +422,22 @@ class BadgeCaseScreen(
     private fun renderShopButton(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         val shopX = x - 53
         val shopY = y + 32
-        val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
+        val hasAnyBadge = activeRegion.badges.any { it in menu.unlockedBadges }
         val isHovered = mouseX >= shopX && mouseX < shopX + 53 && mouseY >= shopY && mouseY < shopY + 14
 
-        val buttonV = if (hasAnyJohtoBadge && isHovered) 14f else 0f
+        val buttonV = if (hasAnyBadge && isHovered) 14f else 0f
 
-        if (!hasAnyJohtoBadge) {
+        if (!hasAnyBadge) {
             RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1.0f)
         }
         graphics.blit(SHOP_BUTTON_TEXTURE, shopX, shopY, 0f, buttonV, 53, 14, 53, 28)
-        if (!hasAnyJohtoBadge) {
+        if (!hasAnyBadge) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         }
 
         val text = Component.translatable("cobblemongymodyssey.badge_case.shop_button").string
         val textW = font.width(text)
-        val textColor = if (!hasAnyJohtoBadge) {
+        val textColor = if (!hasAnyBadge) {
             0x8E8E93
         } else if (isHovered) {
             0xFFFFA800.toInt()
@@ -687,13 +685,13 @@ class BadgeCaseScreen(
         val badges = activeRegion.badges
         val unlockedBadges = menu.unlockedBadges
 
-        if (viewedBadgeTeam == null && activeRegion == Region.JOHTO) {
+        if (viewedBadgeTeam == null) {
             val shopX = x - 53
             val shopY = y + 32
             if (mouseX >= shopX && mouseX < shopX + 53 && mouseY >= shopY && mouseY < shopY + 14) {
-                val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
+                val hasAnyBadge = activeRegion.badges.any { it in menu.unlockedBadges }
                 val lines = mutableListOf<Component>()
-                if (hasAnyJohtoBadge) {
+                if (hasAnyBadge) {
                     lines += Component.translatable("cobblemongymodyssey.badge_case.shop.tooltip.open")
                 } else {
                     lines += Component.translatable("cobblemongymodyssey.badge_case.shop.tooltip.locked")
@@ -810,13 +808,13 @@ class BadgeCaseScreen(
             }
         }
 
-        if (viewedBadgeTeam == null && activeRegion == Region.JOHTO) {
+        if (viewedBadgeTeam == null) {
             val shopX = x - 53
             val shopY = y + 32
             if (mouseX >= shopX && mouseX < shopX + 53 && mouseY >= shopY && mouseY < shopY + 14) {
-                val hasAnyJohtoBadge = Region.JOHTO.badges.any { it in menu.unlockedBadges }
-                if (hasAnyJohtoBadge) {
-                    minecraft?.gameMode?.handleInventoryButtonClick(menu.containerId, 0)
+                val hasAnyBadge = activeRegion.badges.any { it in menu.unlockedBadges }
+                if (hasAnyBadge) {
+                    minecraft?.gameMode?.handleInventoryButtonClick(menu.containerId, activeRegion.ordinal)
                     minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
                 } else {
                     minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))

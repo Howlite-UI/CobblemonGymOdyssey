@@ -4,7 +4,7 @@ import com.howlite.data.GymBadge
 import com.howlite.data.PokemonSnapshot
 import net.minecraft.network.FriendlyByteBuf
 import com.howlite.data.GymRegion
-import com.howlite.shop.JohtoShop
+import com.howlite.shop.GymShop
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
@@ -37,12 +37,13 @@ class BadgeCaseMenu(
 ) : AbstractContainerMenu(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get(), syncId) {
 
     override fun clickMenuButton(player: Player, id: Int): Boolean {
-        if (id == 0) {
+        if (id in 0 until GymRegion.entries.size) {
             if (player is ServerPlayer) {
+                val region = GymRegion.entries[id]
                 val progress = com.howlite.api.PlayerProgressApi.get(player)
-                val hasAnyJohtoBadge = GymBadge.entries.filter { it.region == GymRegion.JOHTO }.any { progress.hasBadge(it) }
-                if (hasAnyJohtoBadge) {
-                    JohtoShop.openShop(player)
+                val hasAnyBadge = GymBadge.entries.filter { it.region == region }.any { progress.hasBadge(it) }
+                if (hasAnyBadge) {
+                    GymShop.openShop(player, region)
                     return true
                 }
             }
