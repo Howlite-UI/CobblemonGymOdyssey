@@ -6,9 +6,11 @@ import com.howlite.blocks.ConsumableRaidBlockEntity
 import com.howlite.commands.GymTestCommand
 import com.howlite.commands.GymTpCommand
 import com.howlite.events.BattleLevelCapEventHandler
+import com.howlite.events.CoinPickupHandler
 import com.howlite.events.GymBattleEventHandler
 import com.howlite.events.GymBattleReturnHandler
 import com.howlite.events.LevelCapEventHandler
+import com.howlite.items.CobbleCoins
 import com.howlite.items.GymBadgeItems
 import com.howlite.menu.BadgeCaseMenu
 import com.howlite.menu.BadgeCaseMenus
@@ -31,12 +33,14 @@ object CobblemonGymOdyssey {
         println("[GymOdyssey] CobblemonGymOdyssey.init() common initialization running!")
         GymSounds.register()
         GymBadgeItems.register()
+        CobbleCoins.register()
         GymBlocks.register()
         BadgeCaseMenus.register()
         LevelCapEventHandler.register()
         GymBattleEventHandler.register()
         GymBattleReturnHandler.register()
         BattleLevelCapEventHandler.register()
+        CoinPickupHandler.register()
         GymTestCommand.register()
         GymTpCommand.register()
 

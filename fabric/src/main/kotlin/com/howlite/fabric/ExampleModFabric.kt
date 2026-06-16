@@ -4,6 +4,10 @@ import com.howlite.CobblemonGymOdyssey
 import com.howlite.api.PlayerProgressApi
 import com.howlite.fabric.data.FabricComponents
 import com.howlite.fabric.data.FabricPlayerProgressProvider
+import com.howlite.fabric.wallet.FabricWalletComponents
+import com.howlite.fabric.wallet.FabricWalletProvider
+import com.howlite.wallet.WalletManager
+import com.howlite.wallet.WalletNetwork
 import net.fabricmc.api.ModInitializer
 import net.minecraft.server.level.ServerPlayer
 import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry
@@ -34,6 +38,14 @@ class ExampleModFabric : ModInitializer, EntityComponentInitializer {
                 FabricComponents.PLAYER_PROGRESS.get(player).markDirty(player)
         }
 
+        // Brancher le provider Wallet Fabric
+        WalletManager.provider = com.howlite.wallet.WalletProvider { player ->
+            FabricWalletComponents.PLAYER_WALLET.get(player).wallet
+        }
+
+        // Enregistrer les packets réseau wallet (serveur)
+        WalletNetwork.registerServerReceivers()
+
         // Initialiser les listeners d'événements Cobblemon (Common)
         CobblemonGymOdyssey.init()
     }
@@ -48,6 +60,12 @@ class ExampleModFabric : ModInitializer, EntityComponentInitializer {
         registry.registerForPlayers(
             FabricComponents.PLAYER_PROGRESS,
             { _ -> FabricPlayerProgressProvider() },
+            RespawnCopyStrategy.ALWAYS_COPY
+        )
+        // Wallet : persist après mort
+        registry.registerForPlayers(
+            FabricWalletComponents.PLAYER_WALLET,
+            { _ -> FabricWalletProvider() },
             RespawnCopyStrategy.ALWAYS_COPY
         )
     }

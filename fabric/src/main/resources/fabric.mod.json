@@ -48,7 +48,8 @@
   },
   "custom": {
     "cardinal-components": [
-      "cobblemongymodyssey:player_progress"
+      "cobblemongymodyssey:player_progress",
+      "cobblemongymodyssey:player_wallet"
     ]
   }
 }

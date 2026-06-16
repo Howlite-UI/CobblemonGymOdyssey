@@ -1,8 +1,13 @@
 package com.howlite.neoforge.client
 
 import com.howlite.CobblemonGymOdyssey
+import com.howlite.client.screen.InventoryWalletButton
+import com.howlite.client.screen.WalletHudOverlay
+import com.howlite.client.screen.WalletOverlay
 import com.howlite.menu.BadgeCaseMenus
 import com.howlite.screen.BadgeCaseScreen
+import com.howlite.wallet.WalletNetwork
+import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
@@ -32,5 +37,7 @@ object NeoForgeClientSetup {
     @SubscribeEvent
     fun onClientSetup(event: net.neoforged.fml.event.lifecycle.FMLClientSetupEvent) {
         com.howlite.client.GymClientInit.init()
+        // Enregistrer les packets wallet S2C
+        WalletNetwork.registerClientReceivers()
     }
 }

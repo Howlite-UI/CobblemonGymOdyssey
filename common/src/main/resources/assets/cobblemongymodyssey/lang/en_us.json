@@ -217,5 +217,15 @@
   "item.cobblemongymodyssey.gym_ticket_paldea_medali_badge": "Medali Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_paldea_montenevera_badge": "Montenevera Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_paldea_alfornada_badge": "Alfornada Gym Ticket",
-  "item.cobblemongymodyssey.gym_ticket_paldea_glaseado_badge": "Glaseado Gym Ticket"
+  "item.cobblemongymodyssey.gym_ticket_paldea_glaseado_badge": "Glaseado Gym Ticket",
+
+  "item.cobblemongymodyssey.cobble_copper_coin": "Cobble Copper Coin",
+  "item.cobblemongymodyssey.cobble_silver_coin": "Cobble Silver Coin",
+  "item.cobblemongymodyssey.cobble_gold_coin": "Cobble Gold Coin",
+  "item.cobblemongymodyssey.cobble_platinum_coin": "Cobble Platinum Coin",
+
+  "gui.cobblemongymodyssey.wallet.title": "Cobble Wallet",
+  "gui.cobblemongymodyssey.wallet.total": "Total",
+  "gui.cobblemongymodyssey.wallet.auto_collect": "Auto-Collect",
+  "gui.cobblemongymodyssey.wallet.hud": "Show HUD"
 }
