@@ -72,7 +72,7 @@ class GymShopMenu(
             val success = WalletManager.removeAndSync(player, totalCostCCC)
             if (success) {
                 val stack = ItemStack(resultItem, totalResultCount)
-                player.inventory.add(stack)
+                giveOrDrop(player, stack)
                 player.connection.send(net.minecraft.network.protocol.game.ClientboundSoundPacket(
                     net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(net.minecraft.sounds.SoundEvents.VILLAGER_YES),
                     net.minecraft.sounds.SoundSource.PLAYERS,
@@ -87,7 +87,7 @@ class GymShopMenu(
             if (hasRequiredItems(player, costItem, totalCostCount.toInt())) {
                 consumeItems(player, costItem, totalCostCount.toInt())
                 val stack = ItemStack(resultItem, totalResultCount)
-                player.inventory.add(stack)
+                giveOrDrop(player, stack)
                 player.connection.send(net.minecraft.network.protocol.game.ClientboundSoundPacket(
                     net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(net.minecraft.sounds.SoundEvents.VILLAGER_YES),
                     net.minecraft.sounds.SoundSource.PLAYERS,
@@ -135,6 +135,25 @@ class GymShopMenu(
                 }
             }
         }
+    }
+
+    /**
+     * Tente d'ajouter [stack] à l'inventaire du joueur.
+     * Si l'inventaire est plein (ou partiellement plein), le reste est droppé
+     * aux pieds du joueur — le joueur ne perd jamais l'item qu'il vient d'acheter.
+     */
+    private fun giveOrDrop(player: ServerPlayer, stack: ItemStack) {
+        // inventory.add() tente de remplir les slots existants + vides.
+        // Si elle retourne false, TOUT le stack n'a pas pu être placé.
+        // Si elle retourne true, le stack a été entièrement absorbé.
+        // Cas particulier : add() peut modifier stack.count si elle a placé une partie.
+        val copy = stack.copy()
+        val added = player.inventory.add(copy)
+        if (!added && !copy.isEmpty) {
+            // L'inventaire était plein — on droppe le reste par terre
+            player.drop(copy, false)
+        }
+        player.inventory.setChanged()
     }
 
     override fun quickMoveStack(player: Player, index: Int): ItemStack {
