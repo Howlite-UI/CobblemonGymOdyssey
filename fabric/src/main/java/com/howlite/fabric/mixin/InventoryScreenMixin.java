@@ -21,9 +21,9 @@ public abstract class InventoryScreenMixin extends net.minecraft.client.gui.scre
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo ci) {
-        int btnX = this.leftPos + 161;
-        int btnY = this.topPos + 44;
-        this.addRenderableWidget(new InventoryWalletButton(btnX, btnY, 14, 17));
+        int btnX = this.leftPos + 176;
+        int btnY = this.topPos + 16;
+        this.addRenderableWidget(new InventoryWalletButton(btnX, btnY, 8, 20));
     }
 
     @Inject(method = "render", at = @At("TAIL"))

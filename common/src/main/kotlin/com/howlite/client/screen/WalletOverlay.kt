@@ -7,8 +7,10 @@ import com.howlite.wallet.CoinType
 import com.howlite.wallet.WalletNetwork
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.item.ItemStack
 
 /**
@@ -220,6 +222,7 @@ object WalletOverlay {
             val newVal = !ClientWalletCache.autoCollect
             ClientWalletCache.autoCollect = newVal
             WalletNetwork.sendToggle(0, newVal)
+            mc.soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
             return true
         }
 
@@ -228,6 +231,7 @@ object WalletOverlay {
             val newVal = !ClientWalletCache.hudEnabled
             ClientWalletCache.hudEnabled = newVal
             WalletNetwork.sendToggle(1, newVal)
+            mc.soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
             return true
         }
 

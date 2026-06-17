@@ -229,5 +229,6 @@
   "gui.cobblemongymodyssey.wallet.auto_collect": "Auto-Collect",
   "gui.cobblemongymodyssey.wallet.hud": "Show HUD",
   "cobblemongymodyssey.wallet.tooltip.autocollect": "Auto-Collect: Automatically collects coins from the ground",
-  "cobblemongymodyssey.wallet.tooltip.hud": "HUD: Toggles the in-game balance display HUD"
+  "cobblemongymodyssey.wallet.tooltip.hud": "HUD: Toggles the in-game balance display HUD",
+  "itemGroup.cobblemongymodyssey.cobble_coins": "Cobble Coins"
 }

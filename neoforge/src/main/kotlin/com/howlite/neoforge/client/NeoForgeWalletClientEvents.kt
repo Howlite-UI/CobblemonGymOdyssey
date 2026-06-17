@@ -29,9 +29,13 @@ object NeoForgeWalletClientEvents {
     fun onScreenInit(event: ScreenEvent.Init.Post) {
         val screen = event.screen
         if (screen is InventoryScreen) {
-            val btnX = screen.guiLeft + 161
-            val btnY = screen.guiTop + 44
-            event.addListener(InventoryWalletButton(btnX, btnY, 14, 17))
+            val btnX = screen.guiLeft + 176
+            val btnY = screen.guiTop + 16
+            event.addListener(InventoryWalletButton(btnX, btnY, 8, 20))
+        } else if (screen is net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen) {
+            val btnX = screen.guiLeft + screen.getXSize()
+            val btnY = screen.guiTop + 16
+            event.addListener(InventoryWalletButton(btnX, btnY, 8, 20))
         }
     }
 
@@ -41,6 +45,11 @@ object NeoForgeWalletClientEvents {
         if (screen is InventoryScreen) {
             WalletOverlay.render(event.guiGraphics, screen.guiLeft, screen.guiTop,
                 event.mouseX, event.mouseY)
+        } else if (screen is net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen) {
+            if (screen.isInventoryOpen) {
+                WalletOverlay.render(event.guiGraphics, screen.guiLeft, screen.guiTop,
+                    event.mouseX, event.mouseY)
+            }
         }
     }
 
@@ -70,6 +79,29 @@ object NeoForgeWalletClientEvents {
                     }
                 }
             }
+        } else if (screen is net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen) {
+            if (screen.isInventoryOpen) {
+                if (WalletOverlay.mouseClicked(screen.guiLeft, screen.guiTop,
+                        event.mouseX, event.mouseY, event.button)) {
+                    event.isCanceled = true
+                    return
+                }
+
+                if (WalletOverlay.isOpen && event.button == 0 && net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
+                    val slot = screen.slotUnderMouse
+                    if (slot != null && slot.hasItem()) {
+                        val stack = slot.item
+                        val isCoin = stack.item == com.howlite.items.CobbleCoins.COBBLE_COPPER_COIN.get() ||
+                                     stack.item == com.howlite.items.CobbleCoins.COBBLE_SILVER_COIN.get() ||
+                                     stack.item == com.howlite.items.CobbleCoins.COBBLE_GOLD_COIN.get() ||
+                                     stack.item == com.howlite.items.CobbleCoins.COBBLE_PLATINUM_COIN.get()
+                        if (isCoin) {
+                            WalletNetwork.sendDepositSlot(slot.index)
+                            event.isCanceled = true
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -80,6 +112,13 @@ object NeoForgeWalletClientEvents {
             if (WalletOverlay.isHovering(screen.guiLeft, screen.guiTop,
                     event.mouseX, event.mouseY)) {
                 event.isCanceled = true
+            }
+        } else if (screen is net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen) {
+            if (screen.isInventoryOpen) {
+                if (WalletOverlay.isHovering(screen.guiLeft, screen.guiTop,
+                        event.mouseX, event.mouseY)) {
+                    event.isCanceled = true
+                }
             }
         }
     }

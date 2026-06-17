@@ -24,17 +24,14 @@ class InventoryWalletButton(
 ) : AbstractWidget(x, y, width, height, Component.empty()) {
 
     companion object {
-        val ICO_NORMAL: ResourceLocation = ResourceLocation.fromNamespaceAndPath(
-            CobblemonGymOdyssey.MOD_ID, "textures/gui/coin/inventory_wallet_ico.png"
-        )
-        val ICO_HOVER: ResourceLocation = ResourceLocation.fromNamespaceAndPath(
-            CobblemonGymOdyssey.MOD_ID, "textures/gui/coin/inventory_wallet_ico_hover.png"
+        val BUTTON_TEX: ResourceLocation = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID, "textures/gui/coin/inventory_wallet_button.png"
         )
     }
 
     override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        val texture = if (isHovered) ICO_HOVER else ICO_NORMAL
-        graphics.blit(texture, x, y, 0f, 0f, width, height, width, height)
+        val textureV = if (this.isHovered || WalletOverlay.isOpen) 20f else 0f
+        graphics.blit(BUTTON_TEX, x, y, 0f, textureV, width, height, width, height * 2)
     }
 
     override fun onClick(mouseX: Double, mouseY: Double) {
