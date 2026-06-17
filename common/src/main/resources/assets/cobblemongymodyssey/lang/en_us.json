@@ -1,4 +1,4 @@
-{
+﻿{
   "cobblemongymodyssey.shop.buy": "Buy",
   "cobblemongymodyssey.shop.kanto.title": "Kanto Shop",
   "cobblemongymodyssey.shop.johto.title": "Johto Shop",
@@ -37,9 +37,7 @@
   "item.cobblemongymodyssey.volcano_badge": "Volcano Badge",
   "item.cobblemongymodyssey.earth_badge": "Earth Badge",
   "itemGroup.cobblemongymodyssey.gym_badges": "Gym Badges",
-
   "cobblemongymodyssey.level_cap.battle_blocked": "⛔ Battle cancelled! %s (level %s) exceeds your Level Cap of %s. Defeat more Gym Leaders to raise it!",
-
   "item.cobblemongymodyssey.badge_case": "Badge Case",
   "cobblemongymodyssey.badge_case.title": "Badge Case",
   "cobblemongymodyssey.badge_case.league_format": "— %s LEAGUE —",
@@ -85,7 +83,6 @@
   "commands.gymtest.remove.success": "Badge %s removed from %s. New Level Cap: %s",
   "commands.gymtest.reset.success": "Progress reset for %s. Level Cap: %s",
   "commands.gymtest.setlevelcap.success": "Level Cap of %s forced to %s",
-
   "item.cobblemongymodyssey.zephyr_badge": "Zephyr Badge",
   "item.cobblemongymodyssey.hive_badge": "Hive Badge",
   "item.cobblemongymodyssey.plain_badge": "Plain Badge",
@@ -94,7 +91,6 @@
   "item.cobblemongymodyssey.mineral_badge": "Mineral Badge",
   "item.cobblemongymodyssey.glacier_badge": "Glacier Badge",
   "item.cobblemongymodyssey.rising_badge": "Rising Badge",
-
   "cobblemongymodyssey.badge_case.shop_button": "Shop",
   "cobblemongymodyssey.badge_case.shop.tooltip.open": "Click to open the region Shop",
   "cobblemongymodyssey.badge_case.shop.tooltip.locked": "Defeat a Gym Leader/Kahuna in this region to unlock the Shop",
@@ -115,7 +111,6 @@
   "item.cobblemongymodyssey.consumable_raid_block_7": "Consumable Raid Den (7 Stars)",
   "cobblemongymodyssey.raid.accept": "Accept",
   "cobblemongymodyssey.raid.deny": "Refuse",
-
   "item.cobblemongymodyssey.stone_badge": "Stone Badge",
   "item.cobblemongymodyssey.knuckle_badge": "Knuckle Badge",
   "item.cobblemongymodyssey.dynamo_badge": "Dynamo Badge",
@@ -228,17 +223,19 @@
   "item.cobblemongymodyssey.gym_ticket_paldea_montenevera_badge": "Montenevera Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_paldea_alfornada_badge": "Alfornada Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_paldea_glaseado_badge": "Glaseado Gym Ticket",
-
   "item.cobblemongymodyssey.cobble_copper_coin": "Cobble Copper Coin",
   "item.cobblemongymodyssey.cobble_silver_coin": "Cobble Silver Coin",
   "item.cobblemongymodyssey.cobble_gold_coin": "Cobble Gold Coin",
   "item.cobblemongymodyssey.cobble_platinum_coin": "Cobble Platinum Coin",
-
   "gui.cobblemongymodyssey.wallet.title": "Cobble Wallet",
   "gui.cobblemongymodyssey.wallet.total": "Total",
   "gui.cobblemongymodyssey.wallet.auto_collect": "Auto-Collect",
   "gui.cobblemongymodyssey.wallet.hud": "Show HUD",
   "cobblemongymodyssey.wallet.tooltip.autocollect": "Auto-Collect: Automatically collects coins from the ground",
   "cobblemongymodyssey.wallet.tooltip.hud": "HUD: Toggles the in-game balance display HUD",
+  "block.cobblemongymodyssey.unown_stone": "Unown Stone",
+  "item.cobblemongymodyssey.unown_stone": "Unown Stone",
+  "block.cobblemongymodyssey.unown_stone_activated": "Unown Stone (Activated)",
+  "item.cobblemongymodyssey.unown_stone_activated": "Unown Stone (Activated)",
   "itemGroup.cobblemongymodyssey.cobble_coins": "Cobble Coins"
 }

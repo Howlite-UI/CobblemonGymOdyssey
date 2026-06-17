@@ -63,6 +63,24 @@ object GymBlocks {
         BlockItem(CONSUMABLE_RAID_BLOCK_7.get(), Item.Properties())
     }
 
+    // ── Unown Stone ──────────────────────────────────────────────────────────
+    val UNOWN_STONE: RegistrySupplier<Block> = BLOCKS.register("unown_stone") {
+        UnownStoneBlock(BlockBehaviour.Properties.of().strength(2.0f).requiresCorrectToolForDrops())
+    }
+
+    val UNOWN_STONE_ITEM: RegistrySupplier<Item> = ITEMS.register("unown_stone") {
+        BlockItem(UNOWN_STONE.get(), Item.Properties())
+    }
+
+    // ── Unown Stone Activated ────────────────────────────────────────────────
+    val UNOWN_STONE_ACTIVATED: RegistrySupplier<Block> = BLOCKS.register("unown_stone_activated") {
+        UnownStoneActivatedBlock(BlockBehaviour.Properties.of().strength(2.0f).requiresCorrectToolForDrops().noOcclusion())
+    }
+
+    val UNOWN_STONE_ACTIVATED_ITEM: RegistrySupplier<Item> = ITEMS.register("unown_stone_activated") {
+        BlockItem(UNOWN_STONE_ACTIVATED.get(), Item.Properties())
+    }
+
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     val GYM_LEADER_TELEPORTER_ENTITY: RegistrySupplier<BlockEntityType<GymLeaderTeleporterBlockEntity>> =
         BLOCK_ENTITY_TYPES.register("gym_leader_teleporter") {
@@ -80,6 +98,12 @@ object GymBlocks {
             ).build(null)
         }
 
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    val UNOWN_STONE_ACTIVATED_ENTITY: RegistrySupplier<BlockEntityType<UnownStoneActivatedBlockEntity>> =
+        BLOCK_ENTITY_TYPES.register("unown_stone_activated") {
+            BlockEntityType.Builder.of(::UnownStoneActivatedBlockEntity, UNOWN_STONE_ACTIVATED.get()).build(null)
+        }
+
     fun register() {
         BLOCKS.register()
         BLOCK_ENTITY_TYPES.register()
@@ -92,7 +116,9 @@ object GymBlocks {
             SMALL_ROCK_ITEM,
             CONSUMABLE_RAID_BLOCK_ITEM,
             CONSUMABLE_RAID_BLOCK_6_ITEM,
-            CONSUMABLE_RAID_BLOCK_7_ITEM
+            CONSUMABLE_RAID_BLOCK_7_ITEM,
+            UNOWN_STONE_ITEM,
+            UNOWN_STONE_ACTIVATED_ITEM
         )
     }
 }

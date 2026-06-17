@@ -3,8 +3,10 @@ package com.howlite.client
 import com.howlite.CobblemonGymOdyssey
 import com.howlite.blocks.GymBlocks
 import com.howlite.blocks.ConsumableRaidBlockEntity
+import com.howlite.blocks.UnownStoneActivatedBlockEntity
 import com.howlite.client.render.GymLeaderTeleporterRenderer
 import com.howlite.client.render.ConsumableRaidBlockEntityRenderer
+import com.howlite.client.render.UnownStoneActivatedRenderer
 import com.howlite.client.screen.ConsumableRaidScreen
 import dev.architectury.networking.NetworkManager
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
@@ -19,6 +21,10 @@ object GymClientInit {
 
         BlockEntityRendererRegistry.register(GymBlocks.CONSUMABLE_RAID_BLOCK_ENTITY.get()) { context ->
             ConsumableRaidBlockEntityRenderer(context)
+        }
+
+        BlockEntityRendererRegistry.register(GymBlocks.UNOWN_STONE_ACTIVATED_ENTITY.get()) { context ->
+            UnownStoneActivatedRenderer(context)
         }
 
         // Register S2C packet to open Consumable Raid GUI

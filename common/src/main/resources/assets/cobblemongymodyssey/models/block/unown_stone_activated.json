@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cobblemongymodyssey:block/zarbi/zarbi_stone",
+    "particle": "cobblemongymodyssey:block/zarbi/zarbi_stone"
+  }
+}

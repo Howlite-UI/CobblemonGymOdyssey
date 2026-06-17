@@ -1,4 +1,4 @@
-{
+﻿{
   "item.cobblemongymodyssey.boulder_badge": "Médaille Roc",
   "item.cobblemongymodyssey.cascade_badge": "Médaille Cascade",
   "block.cobblemongymodyssey.gym_leader_teleporter": "Téléporteur de Champion d'Arène",
@@ -27,9 +27,7 @@
   "item.cobblemongymodyssey.volcano_badge": "Médaille Volcan",
   "item.cobblemongymodyssey.earth_badge": "Médaille Terre",
   "itemGroup.cobblemongymodyssey.gym_badges": "Badges d'Arène",
-
   "cobblemongymodyssey.level_cap.battle_blocked": "⛔ Combat annulé ! %s (niveau %s) dépasse votre Level Cap de %s. Battez d'autres Champions d'Arène pour le relever !",
-
   "item.cobblemongymodyssey.badge_case": "Boîte à Badges",
   "cobblemongymodyssey.badge_case.title": "Boîte à Badges",
   "cobblemongymodyssey.badge_case.league_format": "— LIGUE %s —",
@@ -75,7 +73,6 @@
   "commands.gymtest.remove.success": "Badge %s retiré de %s. Limite Level : %s",
   "commands.gymtest.reset.success": "Progression réinitialisée pour %s. Limite Level : %s",
   "commands.gymtest.setlevelcap.success": "Limite Level de %s forcée à %s",
-
   "item.cobblemongymodyssey.zephyr_badge": "Badge Zéphyr",
   "item.cobblemongymodyssey.hive_badge": "Badge Essaim",
   "item.cobblemongymodyssey.plain_badge": "Badge Plaine",
@@ -84,7 +81,6 @@
   "item.cobblemongymodyssey.mineral_badge": "Badge Minéral",
   "item.cobblemongymodyssey.glacier_badge": "Badge Glacier",
   "item.cobblemongymodyssey.rising_badge": "Badge Lever",
-
   "cobblemongymodyssey.badge_case.shop_button": "Boutique",
   "cobblemongymodyssey.badge_case.shop.tooltip.open": "Cliquer pour ouvrir la boutique de la région",
   "cobblemongymodyssey.badge_case.shop.tooltip.locked": "Battez un Champion/Doyen dans cette région pour déverrouiller la boutique",
@@ -105,7 +101,6 @@
   "item.cobblemongymodyssey.consumable_raid_block_7": "Antre de Raid Consommable (7 Étoiles)",
   "cobblemongymodyssey.raid.accept": "Accepter",
   "cobblemongymodyssey.raid.deny": "Refuser",
-
   "item.cobblemongymodyssey.stone_badge": "Médaille Roche",
   "item.cobblemongymodyssey.knuckle_badge": "Médaille Poing",
   "item.cobblemongymodyssey.dynamo_badge": "Médaille Dynamo",
@@ -217,5 +212,9 @@
   "item.cobblemongymodyssey.gym_ticket_paldea_medali_badge": "Ticket d'Arène de Medali",
   "item.cobblemongymodyssey.gym_ticket_paldea_montenevera_badge": "Ticket d'Arène de Montenevera",
   "item.cobblemongymodyssey.gym_ticket_paldea_alfornada_badge": "Ticket d'Arène d'Alfornada",
-  "item.cobblemongymodyssey.gym_ticket_paldea_glaseado_badge": "Ticket d'Arène de Glaseado"
+  "block.cobblemongymodyssey.unown_stone": "Pierre Zarbi",
+  "item.cobblemongymodyssey.unown_stone": "Pierre Zarbi",
+  "block.cobblemongymodyssey.unown_stone_activated": "Pierre Zarbi (Activee)",
+  "item.cobblemongymodyssey.unown_stone_activated": "Pierre Zarbi (Activee)",
+  "item.cobblemongymodyssey.gym_ticket_paldea_glaseado_badge": "Ticket d'Arene de Glaseado"
 }
