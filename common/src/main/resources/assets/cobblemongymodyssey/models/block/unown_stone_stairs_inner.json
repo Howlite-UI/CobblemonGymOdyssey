@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "cobblemongymodyssey:block/zarbi/zarbi_stone",
+    "top":    "cobblemongymodyssey:block/zarbi/zarbi_stone",
+    "side":   "cobblemongymodyssey:block/zarbi/zarbi_stone"
+  }
+}

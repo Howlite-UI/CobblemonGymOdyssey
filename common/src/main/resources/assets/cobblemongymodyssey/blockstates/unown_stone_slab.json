@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "cobblemongymodyssey:block/unown_stone_slab" },
+    "type=double":  { "model": "cobblemongymodyssey:block/unown_stone" },
+    "type=top":     { "model": "cobblemongymodyssey:block/unown_stone_slab_top" }
+  }
+}

@@ -3,6 +3,7 @@ package com.howlite.client.render
 import com.howlite.blocks.UnownStoneActivatedBlockEntity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
@@ -15,75 +16,69 @@ import kotlin.math.sin
 import kotlin.math.cos
 
 /**
- * Renderer for the Unown Stone Activated block.
+ * Juicy renderer for the Unown Stone Activated block.
  *
- * — texture path must include "textures/" prefix and ".png" suffix for entity render types.
- * — Rune layout (count, position, rotation, size) is seeded from blockPos so every
- *   placed block looks different but stays stable.
- * — 1 or 2 runes can appear simultaneously, randomly offset and rotated on the top face.
- * — Each rune fades in, holds, then fades out before cycling to the next glyph.
+ * Visual layers per rune (ordered back → front):
+ *   1. 3 bloom halo quads  (same glyph, larger + very transparent → soft glow)
+ *   2. Main rune quad       (pulsing scale, full alpha)
+ *   3. Rising spark quads   (4 tiny billboarded glyphs that drift upward)
  *
- * zarbi_rune.png layout: 7 px wide × 208 px tall.
- *   Each glyph occupies rows [i*8 .. i*8+6] (7 px glyph + 1 px gap).
- *   26 glyphs total.
+ * Colours: pure neon palette — violet / magenta / cyan (green kept near 0).
+ * Layout: seeded from BlockPos → each block is permanently unique.
  */
 class UnownStoneActivatedRenderer(
     @Suppress("UNUSED_PARAMETER") context: BlockEntityRendererProvider.Context
 ) : BlockEntityRenderer<UnownStoneActivatedBlockEntity> {
 
-    // ── Texture ───────────────────────────────────────────────────────────────
     companion object {
         private val RUNE_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             "cobblemongymodyssey",
-            "textures/block/zarbi/zarbi_rune.png"   // full path required for entity RT
+            "textures/block/zarbi/zarbi_rune.png"
         )
 
-        private const val TOTAL_GLYPHS  = 26
-        private const val GLYPH_PX      = 7f
-        private const val SPACING_PX    = 1f
-        private const val TEX_HEIGHT    = 208f      // 26 × 8 = 208 px
+        private const val TOTAL_GLYPHS = 26
+        private const val GLYPH_PX     = 7f
+        private const val SPACING_PX   = 1f
+        private const val TEX_HEIGHT   = 208f       // 26 × 8
 
-        // Animation timings (ticks at 20 TPS)
-        private const val FADE_IN   = 15f
-        private const val HOLD      = 60f
-        private const val FADE_OUT  = 20f
-        private const val CYCLE     = FADE_IN + HOLD + FADE_OUT  // 95 ticks per glyph
+        // Animation timings (ticks)
+        private const val FADE_IN  = 15f
+        private const val HOLD     = 60f
+        private const val FADE_OUT = 20f
+        private const val CYCLE    = FADE_IN + HOLD + FADE_OUT   // 95 ticks / glyph
 
-        // Y position of the rune quad (just above the top face)
-        private const val Y_TOP = 1.002f
+        // Geometry constants
+        private const val Y_TOP       = 1.002f      // slightly above block surface
+        private const val SPARK_COUNT = 4
+        private const val SPARK_RISE  = 0.65f       // blocks above surface sparks travel
     }
 
-    // ── Per-block layout (seeded from BlockPos) ────────────────────────────────
+    // ── Per-block layout ──────────────────────────────────────────────────────
     private data class RuneConfig(
-        val cx: Float,          // center X on top face
-        val cz: Float,          // center Z on top face
-        val halfSize: Float,    // half-side of the square rune quad
-        val cosR: Float,        // pre-computed cos(rotation)
-        val sinR: Float,        // pre-computed sin(rotation)
-        val glyphOffset: Int,   // phase offset in the glyph cycle
-        val timeOffset: Float,  // animation phase offset (ticks)
-        val colorPhase: Float   // hue offset
+        val cx: Float, val cz: Float,
+        val halfSize: Float,
+        val cosR: Float, val sinR: Float,
+        val glyphOffset: Int,
+        val timeOffset: Float,
+        val colorPhase: Float
     )
 
     private val layoutCache = HashMap<Long, List<RuneConfig>>()
 
     private fun getLayout(posKey: Long): List<RuneConfig> {
         return layoutCache.getOrPut(posKey) {
-            // Deterministic pseudo-random from block position
             val rng = java.util.Random(posKey xor 6364136223846793005L)
-
-            val numRunes = if (rng.nextFloat() < 0.35f) 2 else 1
-
-            List(numRunes) {
-                val rot  = rng.nextFloat() * Math.PI.toFloat() * 2f
+            val n = if (rng.nextFloat() < 0.35f) 2 else 1
+            List(n) {
+                val rot = rng.nextFloat() * Math.PI.toFloat() * 2f
                 RuneConfig(
-                    cx          = 0.15f + rng.nextFloat() * 0.70f,  // keep within [0.15, 0.85]
+                    cx          = 0.15f + rng.nextFloat() * 0.70f,
                     cz          = 0.15f + rng.nextFloat() * 0.70f,
-                    halfSize    = 0.22f + rng.nextFloat() * 0.22f,  // [0.22, 0.44]
+                    halfSize    = 0.22f + rng.nextFloat() * 0.22f,
                     cosR        = cos(rot),
                     sinR        = sin(rot),
                     glyphOffset = rng.nextInt(TOTAL_GLYPHS),
-                    timeOffset  = rng.nextFloat() * CYCLE,           // stagger two runes
+                    timeOffset  = rng.nextFloat() * CYCLE,
                     colorPhase  = rng.nextFloat() * Math.PI.toFloat() * 2f
                 )
             }
@@ -99,66 +94,112 @@ class UnownStoneActivatedRenderer(
         packedLight: Int,
         packedOverlay: Int
     ) {
-        val rawTick  = be.animationTick + partialTick
-        val layout   = getLayout(be.blockPos.asLong())
-        val buffer   = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(RUNE_TEXTURE))
-        val last     = poseStack.last()
-        val mat      = last.pose()
+        val rawTick = be.animationTick + partialTick
+        val layout  = getLayout(be.blockPos.asLong())
+        val buffer  = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(RUNE_TEXTURE))
+        val last    = poseStack.last()
+        val mat     = last.pose()
+
+        // Camera yaw for billboarded sparks
+        val camYawRad = -Minecraft.getInstance().entityRenderDispatcher.camera.yRot *
+                        Math.PI.toFloat() / 180f
+        val camCos = cos(camYawRad)
+        val camSin = sin(camYawRad)
 
         for (rune in layout) {
-            // ── Animation ──────────────────────────────────────────────────
-            val shifted      = (rawTick + rune.timeOffset) % (CYCLE * TOTAL_GLYPHS)
-            val cycleIndex   = (shifted / CYCLE).toInt()
-            val tickInCycle  = shifted % CYCLE
 
-            val alpha: Float = when {
-                tickInCycle < FADE_IN               -> tickInCycle / FADE_IN
-                tickInCycle < FADE_IN + HOLD        -> 1f
+            // ── Animation ──────────────────────────────────────────────────
+            val shifted     = (rawTick + rune.timeOffset) % (CYCLE * TOTAL_GLYPHS)
+            val cycleIdx    = (shifted / CYCLE).toInt()
+            val tickInCycle = shifted % CYCLE
+
+            val alpha = when {
+                tickInCycle < FADE_IN            -> tickInCycle / FADE_IN
+                tickInCycle < FADE_IN + HOLD     -> 1f
                 else -> 1f - (tickInCycle - FADE_IN - HOLD) / FADE_OUT
             }.coerceIn(0f, 1f)
 
-            if (alpha <= 0f) continue
+            if (alpha <= 0.01f) continue
 
             // ── Glyph UV ───────────────────────────────────────────────────
-            val glyph = (cycleIndex + rune.glyphOffset) % TOTAL_GLYPHS
+            val glyph = (cycleIdx + rune.glyphOffset) % TOTAL_GLYPHS
             val v0 = (glyph * (GLYPH_PX + SPACING_PX)) / TEX_HEIGHT
             val v1 = (glyph * (GLYPH_PX + SPACING_PX) + GLYPH_PX) / TEX_HEIGHT
-            // u covers the full 7-px width of the texture
-            val u0 = 0f
-            val u1 = 1f
 
-            // ── Neon colour (violet → blue → magenta) ──────────────────────
+            // ── Pure neon palette (no green) ───────────────────────────────
             val hue = rawTick * 0.008f + rune.colorPhase
-            val r   = ((sin(hue)                        ) * 0.35f + 0.75f).coerceIn(0f, 1f)
-            val g   = ((sin(hue + 2.09f)                ) * 0.10f + 0.15f).coerceIn(0f, 1f)
-            val b   = ((sin(hue + Math.PI.toFloat())    ) * 0.40f + 0.90f).coerceIn(0f, 1f)
+            val r   = (sin(hue)          * 0.5f + 0.60f).coerceIn(0f, 1f)
+            val g   = (sin(hue + 2.09f)  * 0.08f + 0.07f).coerceIn(0f, 1f)  // near-zero
+            val b   = (sin(hue + 3.67f)  * 0.45f + 0.95f).coerceIn(0f, 1f)
+            val ri  = (r * 255).toInt()
+            val gi  = (g * 255).toInt()
+            val bi  = (b * 255).toInt()
 
-            val ri = (r * 255).toInt()
-            val gi = (g * 255).toInt()
-            val bi = (b * 255).toInt()
+            // ── Pulse (breathe) ────────────────────────────────────────────
+            val pulse = 1f + sin(rawTick * 0.18f + rune.colorPhase) * 0.06f
+
+            // ── 3 × Bloom halo (back → front, largest → smallest) ──────────
+            for (bloom in 3 downTo 1) {
+                val bScale = pulse * (1f + bloom * 0.55f)
+                val bAlpha = (alpha * 0.22f / bloom.toFloat()).coerceIn(0f, 1f)
+                val bai    = (bAlpha * 255).toInt()
+                val bhs    = rune.halfSize * bScale
+                addRotated(buffer, mat, last, -bhs, -bhs, rune, 0f, v1, ri, gi, bi, bai)
+                addRotated(buffer, mat, last,  bhs, -bhs, rune, 1f, v1, ri, gi, bi, bai)
+                addRotated(buffer, mat, last,  bhs,  bhs, rune, 1f, v0, ri, gi, bi, bai)
+                addRotated(buffer, mat, last, -bhs,  bhs, rune, 0f, v0, ri, gi, bi, bai)
+            }
+
+            // ── Main rune ──────────────────────────────────────────────────
+            val hs = rune.halfSize * pulse
             val ai = (alpha * 255).toInt()
+            addRotated(buffer, mat, last, -hs, -hs, rune, 0f, v1, ri, gi, bi, ai)
+            addRotated(buffer, mat, last,  hs, -hs, rune, 1f, v1, ri, gi, bi, ai)
+            addRotated(buffer, mat, last,  hs,  hs, rune, 1f, v0, ri, gi, bi, ai)
+            addRotated(buffer, mat, last, -hs,  hs, rune, 0f, v0, ri, gi, bi, ai)
 
-            // ── Rotated quad on the top face ───────────────────────────────
-            // Corners in local rune space (before rotation):
-            //   (-hs, -hs) = u0,v1   (hs, -hs) = u1,v1
-            //   (hs,   hs) = u1,v0   (-hs, hs) = u0,v0
-            val hs = rune.halfSize
-            addRotatedVertex(buffer, mat, last,  -hs, -hs, rune, u0, v1, ri, gi, bi, ai)
-            addRotatedVertex(buffer, mat, last,   hs, -hs, rune, u1, v1, ri, gi, bi, ai)
-            addRotatedVertex(buffer, mat, last,   hs,  hs, rune, u1, v0, ri, gi, bi, ai)
-            addRotatedVertex(buffer, mat, last,  -hs,  hs, rune, u0, v0, ri, gi, bi, ai)
+            // ── Rising sparks ──────────────────────────────────────────────
+            for (sk in 0 until SPARK_COUNT) {
+                val skSeed  = sk * 1.618f + rune.colorPhase
+                val skPhase = ((rawTick * 0.022f + skSeed) % 1f).let { if (it < 0) it + 1f else it }
+                val skY     = Y_TOP + skPhase * SPARK_RISE
+                // Ease-out² so sparks slow and fade near the top
+                val skAlpha = (alpha * (1f - skPhase) * (1f - skPhase) * 0.85f).coerceIn(0f, 1f)
+                if (skAlpha <= 0.01f) continue
+
+                val skAi = (skAlpha * 255).toInt()
+                val skX  = rune.cx + sin(skSeed * 6.28f) * rune.halfSize * 0.55f
+                val skZ  = rune.cz + cos(skSeed * 6.28f) * rune.halfSize * 0.55f
+                val skH  = 0.05f   // half-width of the spark quad
+                // Billboard: axis-aligned along camera yaw
+                val dX   = skH * camCos
+                val dZ   = skH * camSin
+
+                buffer.addVertex(mat, skX - dX, skY,          skZ - dZ)
+                    .setColor(ri, gi, bi, skAi).setUv(0f, v0)
+                    .setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                    .setNormal(last, 0f, 1f, 0f)
+                buffer.addVertex(mat, skX + dX, skY,          skZ + dZ)
+                    .setColor(ri, gi, bi, skAi).setUv(1f, v0)
+                    .setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                    .setNormal(last, 0f, 1f, 0f)
+                buffer.addVertex(mat, skX + dX, skY + skH * 2f, skZ + dZ)
+                    .setColor(ri, gi, bi, skAi).setUv(1f, v1)
+                    .setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                    .setNormal(last, 0f, 1f, 0f)
+                buffer.addVertex(mat, skX - dX, skY + skH * 2f, skZ - dZ)
+                    .setColor(ri, gi, bi, skAi).setUv(0f, v1)
+                    .setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                    .setNormal(last, 0f, 1f, 0f)
+            }
         }
     }
 
-    /** Rotate (dx, dz) around the rune center, then emit a vertex. */
-    private fun addRotatedVertex(
-        buffer: VertexConsumer,
-        mat: Matrix4f,
-        pose: PoseStack.Pose,
-        dx: Float, dz: Float,
-        rune: RuneConfig,
-        u: Float, v: Float,
-        r: Int, g: Int, b: Int, a: Int
+    // ── Helper: rotate (dx, dz) around rune center then emit vertex ──────────
+    private fun addRotated(
+        buffer: VertexConsumer, mat: Matrix4f, pose: PoseStack.Pose,
+        dx: Float, dz: Float, rune: RuneConfig,
+        u: Float, v: Float, r: Int, g: Int, b: Int, a: Int
     ) {
         val wx = dx * rune.cosR - dz * rune.sinR + rune.cx
         val wz = dx * rune.sinR + dz * rune.cosR + rune.cz
@@ -170,5 +211,6 @@ class UnownStoneActivatedRenderer(
             .setNormal(pose, 0f, 1f, 0f)
     }
 
-    override fun shouldRenderOffScreen(be: UnownStoneActivatedBlockEntity) = false
+    // Sparks extend above the block so disable off-screen culling
+    override fun shouldRenderOffScreen(be: UnownStoneActivatedBlockEntity) = true
 }

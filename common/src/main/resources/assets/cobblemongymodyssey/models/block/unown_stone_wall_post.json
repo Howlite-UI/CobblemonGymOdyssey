@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/template_wall_post",
+  "textures": { "wall": "cobblemongymodyssey:block/zarbi/zarbi_stone" }
+}

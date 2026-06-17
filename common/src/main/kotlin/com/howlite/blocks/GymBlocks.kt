@@ -10,6 +10,9 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.SlabBlock
+import net.minecraft.world.level.block.StairBlock
+import net.minecraft.world.level.block.WallBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockBehaviour
 
@@ -73,6 +76,31 @@ object GymBlocks {
     }
 
     // ── Unown Stone Activated ────────────────────────────────────────────────
+    val UNOWN_STONE_SLAB: RegistrySupplier<Block> = BLOCKS.register("unown_stone_slab") {
+        SlabBlock(BlockBehaviour.Properties.of().strength(2.0f).requiresCorrectToolForDrops())
+    }
+
+    val UNOWN_STONE_SLAB_ITEM: RegistrySupplier<Item> = ITEMS.register("unown_stone_slab") {
+        BlockItem(UNOWN_STONE_SLAB.get(), Item.Properties())
+    }
+
+    val UNOWN_STONE_STAIRS: RegistrySupplier<Block> = BLOCKS.register("unown_stone_stairs") {
+        StairBlock(UNOWN_STONE.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(2.0f).requiresCorrectToolForDrops())
+    }
+
+    val UNOWN_STONE_STAIRS_ITEM: RegistrySupplier<Item> = ITEMS.register("unown_stone_stairs") {
+        BlockItem(UNOWN_STONE_STAIRS.get(), Item.Properties())
+    }
+
+    val UNOWN_STONE_WALL: RegistrySupplier<Block> = BLOCKS.register("unown_stone_wall") {
+        WallBlock(BlockBehaviour.Properties.of().strength(2.0f).requiresCorrectToolForDrops())
+    }
+
+    val UNOWN_STONE_WALL_ITEM: RegistrySupplier<Item> = ITEMS.register("unown_stone_wall") {
+        BlockItem(UNOWN_STONE_WALL.get(), Item.Properties())
+    }
+
+    // ── Unown Stone Activated ────────────────────────────────────────────────
     val UNOWN_STONE_ACTIVATED: RegistrySupplier<Block> = BLOCKS.register("unown_stone_activated") {
         UnownStoneActivatedBlock(BlockBehaviour.Properties.of().strength(2.0f).requiresCorrectToolForDrops().noOcclusion())
     }
@@ -118,7 +146,10 @@ object GymBlocks {
             CONSUMABLE_RAID_BLOCK_6_ITEM,
             CONSUMABLE_RAID_BLOCK_7_ITEM,
             UNOWN_STONE_ITEM,
-            UNOWN_STONE_ACTIVATED_ITEM
+            UNOWN_STONE_ACTIVATED_ITEM,
+            UNOWN_STONE_SLAB_ITEM,
+            UNOWN_STONE_STAIRS_ITEM,
+            UNOWN_STONE_WALL_ITEM
         )
     }
 }
