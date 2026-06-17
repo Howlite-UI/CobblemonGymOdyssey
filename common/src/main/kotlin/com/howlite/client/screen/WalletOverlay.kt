@@ -7,6 +7,7 @@ import com.howlite.wallet.CoinType
 import com.howlite.wallet.WalletNetwork
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 
@@ -59,9 +60,37 @@ object WalletOverlay {
     }
 
     /**
+     * Formate le nombre affiché dans un slot spécifique (supporte K et M pour rester compact).
+     */
+    fun formatSlotCount(value: Long): String {
+        if (value < 1000L) {
+            return value.toString()
+        }
+        if (value < 1_000_000L) {
+            val thousands = value / 1000L
+            val tenths = (value % 1000L) / 100L
+            return if (thousands < 10L && tenths > 0L) {
+                "${thousands}.${tenths}K"
+            } else {
+                "${thousands}K"
+            }
+        }
+        val millions = value / 1_000_000L
+        val tenths = (value % 1_000_000L) / 100_000L
+        return if (millions < 10L && tenths > 0L) {
+            "${millions}.${tenths}M"
+        } else {
+            "${millions}M"
+        }
+    }
+
+    /**
      * Appelé après le rendu du fond de l'inventaire.
      */
     fun render(graphics: GuiGraphics, guiLeft: Int, guiTop: Int, mouseX: Int, mouseY: Int) {
+        val mc = Minecraft.getInstance()
+        ClientWalletCache.checkSync(mc)
+
         if (!isOpen) return
 
         // Ajusté 1 pixel plus à gauche (était + 4)
@@ -71,57 +100,62 @@ object WalletOverlay {
         // Fond
         graphics.blit(BACKGROUND, ox, oy, 0f, 0f, OVERLAY_W, OVERLAY_H, OVERLAY_W, OVERLAY_H)
 
-        val mc = Minecraft.getInstance()
         val font = mc.font
 
         // ── 4 slots visuels avec items ──
+        val balance = ClientWalletCache.balance
         val coins = listOf(
-            Triple(CobbleCoins.COBBLE_COPPER_COIN.get(), ClientWalletCache.copper, ClientWalletCache.balance >= CoinType.COPPER.valueCCC),
-            Triple(CobbleCoins.COBBLE_SILVER_COIN.get(), ClientWalletCache.silver, ClientWalletCache.balance >= CoinType.SILVER.valueCCC),
-            Triple(CobbleCoins.COBBLE_GOLD_COIN.get(), ClientWalletCache.gold, ClientWalletCache.balance >= CoinType.GOLD.valueCCC),
-            Triple(CobbleCoins.COBBLE_PLATINUM_COIN.get(), ClientWalletCache.platinum, ClientWalletCache.balance >= CoinType.PLATINUM.valueCCC)
+            Triple(CobbleCoins.COBBLE_COPPER_COIN.get(), balance / CoinType.COPPER.valueCCC, balance >= CoinType.COPPER.valueCCC),
+            Triple(CobbleCoins.COBBLE_SILVER_COIN.get(), balance / CoinType.SILVER.valueCCC, balance >= CoinType.SILVER.valueCCC),
+            Triple(CobbleCoins.COBBLE_GOLD_COIN.get(), balance / CoinType.GOLD.valueCCC, balance >= CoinType.GOLD.valueCCC),
+            Triple(CobbleCoins.COBBLE_PLATINUM_COIN.get(), balance / CoinType.PLATINUM.valueCCC, balance >= CoinType.PLATINUM.valueCCC)
         )
 
-        // Coordonnées X des 4 slots par rapport au coin de l'overlay : 10, 28, 46, 64
-        val slotXOffsets = listOf(10, 28, 46, 64)
+        // Coordonnées X des 4 slots par rapport au coin de l'overlay : 11, 29, 47, 65 (+1px à droite)
+        val slotXOffsets = listOf(11, 29, 47, 65)
         val slotYOffset = 6
 
         coins.forEachIndexed { index, (item, count, shouldShow) ->
             if (shouldShow) {
                 val slotX = ox + slotXOffsets[index]
                 val slotY = oy + slotYOffset
-                val displayCount = if (count > 0L) count.coerceAtMost(64L).toInt() else 1
+                val displayCount = if (count > 0L) count.coerceAtMost(99L).toInt() else 1
                 val stack = ItemStack(item, displayCount)
                 graphics.renderItem(stack, slotX, slotY)
                 
                 // Affiche la quantité (si > 1 ou si == 0 pour indiquer la dispo à 0)
                 if (count > 1 || count == 0L) {
-                    val countStr = count.toString()
-                    val textWidth = font.width(countStr)
-                    val scale = 0.75f
-                    
+                    val countStr = formatSlotCount(count)
+                    val scale = 0.55f
                     graphics.pose().pushPose()
                     graphics.pose().scale(scale, scale, 1.0f)
-                    val scaledX = ((slotX + 16) / scale - textWidth).toInt()
-                    val scaledY = ((slotY + 10) / scale).toInt()
-                    graphics.drawString(font, countStr, scaledX, scaledY, 0xFFFFFF, true)
+                    val scaledX = ((slotX + 16) / scale - 17).toInt()
+                    val scaledY = ((slotY + 16) / scale - 17).toInt()
+                    graphics.renderItemDecorations(font, stack, scaledX, scaledY, countStr)
                     graphics.pose().popPose()
                 }
             }
         }
 
-        // ── Balance totale compacte dans la zone noire en bas à gauche ──
+        // ── Balance totale compacte dans la zone noire en bas à gauche (+2px à droite, -1px en haut) ──
         val totalText = formatCompact(ClientWalletCache.balance)
-        graphics.drawString(font, totalText, ox + 10, oy + 29, 0xFFFFFF, true)
+        graphics.drawString(font, totalText, ox + 12, oy + 28, 0xFFFFFF, true)
 
-        // ── Bouton Switch 1 : Auto-Collect (empilés verticalement à droite) ──
-        val btnX = ox + 86
+        // ── Bouton Switch 1 : Auto-Collect (empilés verticalement à droite, -2px à gauche) ──
+        val btnX = ox + 84
         val btn1Y = oy + 12
         drawSwitch(graphics, btnX, btn1Y, ClientWalletCache.autoCollect)
 
-        // ── Bouton Switch 2 : HUD (empilés verticalement à droite) ──
+        // ── Bouton Switch 2 : HUD (empilés verticalement à droite, -2px à gauche) ──
         val btn2Y = oy + 26
         drawSwitch(graphics, btnX, btn2Y, ClientWalletCache.hudEnabled)
+
+        // ── Info-bulles (Tooltips) au survol des interrupteurs ──
+        if (mouseX >= btnX && mouseX <= btnX + BTN_W && mouseY >= btn1Y && mouseY <= btn1Y + BTN_H) {
+            graphics.renderComponentTooltip(font, listOf(Component.translatable("cobblemongymodyssey.wallet.tooltip.autocollect")), mouseX, mouseY)
+        } else if (mouseX >= btnX && mouseX <= btnX + BTN_W && mouseY >= btn2Y && mouseY <= btn2Y + BTN_H) {
+            graphics.renderComponentTooltip(font, listOf(Component.translatable("cobblemongymodyssey.wallet.tooltip.hud")), mouseX, mouseY)
+        }
     }
 
     /**
@@ -134,8 +168,8 @@ object WalletOverlay {
         val ox = guiLeft + 176 + 3
         val oy = guiTop + 4
 
-        // 1. Clic sur les slots de pièces (retrait/dépot)
-        val slotXOffsets = listOf(10, 28, 46, 64)
+        // 1. Clic sur les slots de pièces (retrait/dépot, +1px à droite)
+        val slotXOffsets = listOf(11, 29, 47, 65)
         val slotYOffset = 6
 
         val mc = Minecraft.getInstance()
@@ -176,8 +210,8 @@ object WalletOverlay {
             }
         }
 
-        // 2. Clic sur les interrupteurs de basculement (empilés à droite à x = 86)
-        val btnX = ox + 86
+        // 2. Clic sur les interrupteurs de basculement (empilés à droite à x = 84, -2px à gauche)
+        val btnX = ox + 84
         val btn1Y = oy + 12
         val btn2Y = oy + 26
 

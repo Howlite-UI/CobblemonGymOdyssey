@@ -44,6 +44,14 @@ object CobblemonGymOdyssey {
         GymTestCommand.register()
         GymTpCommand.register()
 
+        // Synchroniser le wallet lors de la connexion du joueur
+        dev.architectury.event.events.common.PlayerEvent.PLAYER_JOIN.register { player ->
+            if (player is ServerPlayer) {
+                val wallet = com.howlite.wallet.WalletManager.get(player)
+                com.howlite.wallet.WalletNetwork.syncToClient(player, wallet)
+            }
+        }
+
         // Register Enter Consumable Raid Network Packet Receiver (Client -> Server)
         NetworkManager.registerReceiver(
             NetworkManager.Side.C2S,

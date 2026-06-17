@@ -26,9 +26,10 @@ object WalletHudOverlay {
      * Appelé chaque frame de rendu HUD.
      */
     fun render(graphics: GuiGraphics, partialTick: Float) {
-        if (!ClientWalletCache.hudEnabled) return
-
         val mc = Minecraft.getInstance()
+        ClientWalletCache.checkSync(mc)
+
+        if (!ClientWalletCache.hudEnabled) return
         if (mc.options.hideGui) return
 
         val window = mc.window

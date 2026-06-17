@@ -1,5 +1,7 @@
 package com.howlite.wallet
 
+import net.minecraft.client.Minecraft
+
 /**
  * Cache client-side du wallet du joueur local.
  *
@@ -15,6 +17,8 @@ object ClientWalletCache {
     var autoCollect: Boolean = true
     var hudEnabled: Boolean = false
 
+    private var lastPlayerInstance: Any? = null
+
     // Décomposition pour affichage
     val platinum: Long get() = balance / CoinType.PLATINUM.valueCCC
     val gold: Long     get() = (balance % CoinType.PLATINUM.valueCCC) / CoinType.GOLD.valueCCC
@@ -26,4 +30,18 @@ object ClientWalletCache {
         autoCollect = true
         hudEnabled = false
     }
+
+    /**
+     * Vérifie si le joueur local a changé (connexion, déconnexion, changement de monde).
+     * Si oui, réinitialise le cache et demande une synchronisation au serveur.
+     */
+    fun checkSync(mc: Minecraft) {
+        val player = mc.player
+        if (player != null && lastPlayerInstance !== player) {
+            lastPlayerInstance = player
+            reset()
+            WalletNetwork.sendRequestSync()
+        }
+    }
 }
+

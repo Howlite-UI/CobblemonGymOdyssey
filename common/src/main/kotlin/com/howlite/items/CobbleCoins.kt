@@ -24,19 +24,19 @@ object CobbleCoins {
         DeferredRegister.create(CobblemonGymOdyssey.MOD_ID, Registries.ITEM)
 
     val COBBLE_COPPER_COIN: RegistrySupplier<Item> = ITEMS.register("cobble_copper_coin") {
-        Item(Item.Properties().stacksTo(64))
+        Item(Item.Properties().stacksTo(99))
     }
 
     val COBBLE_SILVER_COIN: RegistrySupplier<Item> = ITEMS.register("cobble_silver_coin") {
-        Item(Item.Properties().stacksTo(64))
+        Item(Item.Properties().stacksTo(99))
     }
 
     val COBBLE_GOLD_COIN: RegistrySupplier<Item> = ITEMS.register("cobble_gold_coin") {
-        Item(Item.Properties().stacksTo(64))
+        Item(Item.Properties().stacksTo(99))
     }
 
     val COBBLE_PLATINUM_COIN: RegistrySupplier<Item> = ITEMS.register("cobble_platinum_coin") {
-        Item(Item.Properties().stacksTo(64))
+        Item(Item.Properties().stacksTo(99))
     }
 
     fun register() {

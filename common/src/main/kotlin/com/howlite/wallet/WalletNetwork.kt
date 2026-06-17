@@ -28,11 +28,25 @@ object WalletNetwork {
     val WALLET_DEPOSIT_SLOT_ID: ResourceLocation =
         ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "wallet_deposit_slot")
 
+    val WALLET_REQUEST_SYNC_ID: ResourceLocation =
+        ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "wallet_request_sync")
+
     // -------------------------------------------------------------------------
     // Enregistrement des receivers (côté commun)
     // -------------------------------------------------------------------------
 
     fun registerServerReceivers() {
+        // C2S : le client demande une synchronisation de son wallet (ex: connexion/changement monde)
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            WALLET_REQUEST_SYNC_ID
+        ) { buf, context ->
+            context.queue {
+                val player = context.player as? ServerPlayer ?: return@queue
+                val wallet = WalletManager.get(player)
+                syncToClient(player, wallet)
+            }
+        }
         // C2S : le client bascule un setting (0 = autoCollect, 1 = hudEnabled)
         NetworkManager.registerReceiver(
             NetworkManager.Side.C2S,
@@ -106,7 +120,7 @@ object WalletNetwork {
                         // Withdraw from wallet
                         val available = wallet.balanceCCC / coinType.valueCCC
                         if (available > 0) {
-                            val limit = if (button == 1) 32L else 64L
+                            val limit = if (button == 1) 50L else 99L
                             val toWithdraw = available.coerceAtMost(limit)
                             if (wallet.removeCoins(coinType, toWithdraw)) {
                                 val itemStack = net.minecraft.world.item.ItemStack(item, toWithdraw.toInt())
@@ -190,5 +204,16 @@ object WalletNetwork {
         )
         buf.writeInt(slotId)
         NetworkManager.sendToServer(WALLET_DEPOSIT_SLOT_ID, buf)
+    }
+
+    /** Envoie une demande de synchronisation depuis le client vers le serveur. */
+    fun sendRequestSync() {
+        val mc = net.minecraft.client.Minecraft.getInstance()
+        val level = mc.level ?: return
+        val buf = RegistryFriendlyByteBuf(
+            Unpooled.buffer(),
+            level.registryAccess()
+        )
+        NetworkManager.sendToServer(WALLET_REQUEST_SYNC_ID, buf)
     }
 }
