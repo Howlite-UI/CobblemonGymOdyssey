@@ -31,6 +31,9 @@ class ExampleModFabricClient : ClientModInitializer {
         MenuRegistry.registerScreenFactory(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get()) { menu, inv, title ->
             BadgeCaseScreen(menu, inv, title)
         }
+        MenuRegistry.registerScreenFactory(BadgeCaseMenus.GYM_SHOP_MENU_TYPE.get()) { menu, inv, title ->
+            com.howlite.client.screen.GymShopScreen(menu, inv, title)
+        }
     }
 }
 

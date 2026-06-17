@@ -32,6 +32,9 @@ object NeoForgeClientSetup {
         event.register(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get()) { menu, inv, title ->
             BadgeCaseScreen(menu, inv, title)
         }
+        event.register(BadgeCaseMenus.GYM_SHOP_MENU_TYPE.get()) { menu, inv, title ->
+            com.howlite.client.screen.GymShopScreen(menu, inv, title)
+        }
     }
 
     @SubscribeEvent
