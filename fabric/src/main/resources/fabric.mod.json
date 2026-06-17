@@ -41,7 +41,8 @@
     "cobblefurnies": ">=1.1",
     "chipped": ">=4.0.2",
     "athena": ">=4.0.6",
-    "resourcefullib": ">=3.0.12"
+    "resourcefullib": ">=3.0.12",
+    "cobblesafari": ">=0.2.3"
   },
   "suggests": {
     "trinkets": ">=3.10.0"

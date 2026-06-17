@@ -86,3 +86,11 @@ type = "optional"
 versionRange = "[1.1.0,)"
 ordering = "NONE"
 side = "BOTH"
+
+# CobbleSafari — dépendance requise
+[[dependencies.cobblemongymodyssey]]
+modId = "cobblesafari"
+type = "required"
+versionRange = "[0.2.3,)"
+ordering = "AFTER"
+side = "BOTH"
