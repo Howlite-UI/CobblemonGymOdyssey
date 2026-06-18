@@ -26,6 +26,8 @@ class GymShopScreen(
     private val MINUS_BTN = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/shop/quantity_text_minus_button.png")
     private val PLUS_BTN = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/shop/quantity_text_plus_button.png")
     private val BUY_BTN = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/shop/buy_button.png")
+    private val BACK_BUTTON = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/back_button.png")
+    private val BACK_BUTTON_ICON = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/back_button_icon.png")
 
     private var scrollProgress: Float = 0f
     private var isDraggingScroller: Boolean = false
@@ -148,6 +150,15 @@ class GymShopScreen(
         val balanceText = WalletOverlay.formatCompact(balance)
         val balanceW = font.width(balanceText)
         graphics.drawString(font, balanceText, x + 92 - balanceW, y + 85, 0x3F3F3F, false)
+
+        // 6. Draw Back Button (Bottom-left outside the interface)
+        val backX = x - 29
+        val backY = y + 167
+        val isBackHovered = mouseX >= backX && mouseX < backX + 26 && mouseY >= backY && mouseY < backY + 13
+        val backV = if (isBackHovered) 13f else 0f
+
+        graphics.blit(BACK_BUTTON, backX, backY, 0f, backV, 26, 13, 26, 26)
+        graphics.blit(BACK_BUTTON_ICON, backX + 2, backY + 1, 0f, 0f, 21, 11, 21, 11)
     }
 
     override fun renderTooltip(graphics: GuiGraphics, x: Int, y: Int) {
@@ -187,6 +198,24 @@ class GymShopScreen(
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val x = leftPos
         val y = topPos
+
+        // Back button click (Bottom-left outside the interface)
+        val backX = x - 29
+        val backY = y + 167
+        if (mouseX >= backX && mouseX < backX + 26 && mouseY >= backY && mouseY < backY + 13) {
+            minecraft?.soundManager?.play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1.0f
+            ))
+            val buf = net.minecraft.network.RegistryFriendlyByteBuf(
+                io.netty.buffer.Unpooled.buffer(),
+                minecraft?.level?.registryAccess() ?: throw java.lang.IllegalStateException("Registry access not available")
+            )
+            dev.architectury.networking.NetworkManager.sendToServer(
+                ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "open_badge_case"),
+                buf
+            )
+            return true
+        }
 
         if (isMouseOver(mouseX.toInt(), mouseY.toInt(), x + 8, y + 1, 77, 80)) {
             val totalListHeight = if (menu.items.isEmpty()) 0 else menu.items.size * 23 - 1
