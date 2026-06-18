@@ -53,7 +53,16 @@ class BadgeCaseItem(properties: Properties) : Item(properties) {
                         Component.translatable("cobblemongymodyssey.badge_case.title")
 
                     override fun createMenu(syncId: Int, inv: Inventory, p: Player): AbstractContainerMenu =
-                        BadgeCaseMenu(syncId, badges, levelCap, badgeTeams)
+                        BadgeCaseMenu(
+                            syncId,
+                            badges,
+                            levelCap,
+                            badgeTeams,
+                            progress.pvpWins,
+                            progress.pvpLosses,
+                            progress.pvpRewardsClaimedToday,
+                            progress.pvpFights
+                        )
                 }
             ) { buf: FriendlyByteBuf ->
                 buf.writeInt(levelCap)
@@ -69,6 +78,19 @@ class BadgeCaseItem(properties: Properties) : Item(properties) {
                         b.writeBoolean(pokemon.isShiny)
                         b.writeUtf(pokemon.displayName)
                     }
+                }
+
+                // Sync PvP stats to client
+                buf.writeInt(progress.pvpWins)
+                buf.writeInt(progress.pvpLosses)
+                buf.writeInt(progress.pvpRewardsClaimedToday)
+                buf.writeInt(progress.pvpFights.size)
+                progress.pvpFights.forEach { (opponentUuid, record) ->
+                    buf.writeUtf(opponentUuid)
+                    buf.writeUtf(record.lastFightDate)
+                    buf.writeInt(record.consecutiveDays)
+                    buf.writeInt(record.wins)
+                    buf.writeInt(record.losses)
                 }
             }
         }

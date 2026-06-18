@@ -3,6 +3,8 @@ package com.howlite.events
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.howlite.api.PlayerProgressApi
+import com.howlite.data.GymBadge
+import com.howlite.data.GymRegion
 import com.howlite.data.PvpFightRecord
 import com.howlite.wallet.CoinType
 import com.howlite.wallet.WalletManager
@@ -13,8 +15,7 @@ import java.time.ZoneOffset
 
 object PvpBattleEventHandler {
 
-    private const val BASE_REWARD = 50L // 50 Silver Coins
-    private const val MAX_DAILY_REWARDS = 3
+    private const val BASE_REWARD = 50L // 50 Silver Coins (equivalent to 5000 Copper)
 
     fun register() {
         CobblemonEvents.BATTLE_VICTORY.subscribe { event ->
@@ -43,11 +44,19 @@ object PvpBattleEventHandler {
                     PlayerProgressApi.markDirty(winner)
                 }
 
+                // Calcul dynamique de la limite quotidienne de combats récompensés
+                // Base de 3, +1 pour chaque région terminée (tous les badges obtenus)
+                val completedRegions = GymRegion.entries.count { region ->
+                    val regionBadges = GymBadge.entries.filter { it.region == region }
+                    regionBadges.isNotEmpty() && regionBadges.all { progress.hasBadge(it) }
+                }
+                val maxDailyRewards = 3 + completedRegions
+
                 for (loser in losingPlayers) {
-                    // Limite globale de 3 par jour
-                    if (progress.pvpRewardsClaimedToday >= MAX_DAILY_REWARDS) {
+                    // Limite globale quotidienne dynamique
+                    if (progress.pvpRewardsClaimedToday >= maxDailyRewards) {
                         winner.sendSystemMessage(
-                            Component.translatable("cobblemongymodyssey.pvp.daily_limit_reached", MAX_DAILY_REWARDS)
+                            Component.translatable("cobblemongymodyssey.pvp.daily_limit_reached", maxDailyRewards)
                         )
                         continue
                     }
@@ -78,15 +87,37 @@ object PvpBattleEventHandler {
                         else -> 0.0
                     }
 
-                    // Enregistrer le combat
+                    // Enregistrer le combat pour le gagnant
+                    val oldRecord = progress.pvpFights[opponentUuid]
                     val newRecord = PvpFightRecord(
                         lastFightDate = todayStr,
-                        consecutiveDays = consecutive
+                        consecutiveDays = consecutive,
+                        wins = (oldRecord?.wins ?: 0) + 1,
+                        losses = oldRecord?.losses ?: 0
                     )
                     progress.recordPvpFight(opponentUuid, newRecord)
+                    progress.pvpWins++
+                    println("[GymOdyssey] Server: Winner ${winner.scoreboardName} (${winner.uuid}) progress updated. Wins: ${progress.pvpWins}, Losses: ${progress.pvpLosses}, Opponent fights: ${progress.pvpFights.size}")
+
+                    // Enregistrer le combat pour le perdant
+                    val loserProgress = PlayerProgressApi.get(loser)
+                    val oldLoserRecord = loserProgress.pvpFights[winner.uuid.toString()]
+                    val newLoserRecord = PvpFightRecord(
+                        lastFightDate = oldLoserRecord?.lastFightDate ?: "",
+                        consecutiveDays = oldLoserRecord?.consecutiveDays ?: 0,
+                        wins = oldLoserRecord?.wins ?: 0,
+                        losses = (oldLoserRecord?.losses ?: 0) + 1
+                    )
+                    loserProgress.recordPvpFight(winner.uuid.toString(), newLoserRecord)
+                    loserProgress.pvpLosses++
+                    println("[GymOdyssey] Server: Loser ${loser.scoreboardName} (${loser.uuid}) progress updated. Wins: ${loserProgress.pvpWins}, Losses: ${loserProgress.pvpLosses}, Opponent fights: ${loserProgress.pvpFights.size}")
+                    PlayerProgressApi.markDirty(loser)
 
                     // Attribuer la récompense si le multiplicateur est positif
-                    val rewardAmount = (BASE_REWARD * multiplier).toLong()
+                    // Base: 50 Silver (5000 Copper). Pour chaque badge possédés par le gagnant: +5 Silver (+500 Copper)
+                    val totalBadges = progress.badges.size
+                    val baseRewardAmount = BASE_REWARD + 5L * totalBadges
+                    val rewardAmount = (baseRewardAmount * multiplier).toLong()
                     if (rewardAmount > 0) {
                         progress.pvpRewardsClaimedToday++
                         WalletManager.addAndSync(winner, CoinType.SILVER, rewardAmount)
@@ -96,7 +127,7 @@ object PvpBattleEventHandler {
                                 rewardAmount,
                                 loser.scoreboardName,
                                 progress.pvpRewardsClaimedToday,
-                                MAX_DAILY_REWARDS
+                                maxDailyRewards
                             )
                         )
                     } else {

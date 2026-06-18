@@ -35,6 +35,8 @@ class PlayerProgressData {
 
     var lastPvpResetDate: String? = null
     var pvpRewardsClaimedToday: Int = 0
+    var pvpWins: Int = 0
+    var pvpLosses: Int = 0
 
     fun recordPvpFight(opponentUuid: String, record: PvpFightRecord) {
         _pvpFights[opponentUuid] = record
@@ -105,6 +107,8 @@ class PlayerProgressData {
         _pvpFights.clear()
         lastPvpResetDate = null
         pvpRewardsClaimedToday = 0
+        pvpWins = 0
+        pvpLosses = 0
         levelCap = INITIAL_LEVEL_CAP
     }
 
@@ -154,6 +158,8 @@ class PlayerProgressData {
         tag.put(KEY_PVP_FIGHTS, pvpFightsTag)
         lastPvpResetDate?.let { tag.putString(KEY_LAST_PVP_RESET, it) }
         tag.putInt(KEY_PVP_REWARDS_CLAIMED, pvpRewardsClaimedToday)
+        tag.putInt("PvpWins", pvpWins)
+        tag.putInt("PvpLosses", pvpLosses)
     }
 
     fun readFromNbt(tag: CompoundTag) {
@@ -193,6 +199,8 @@ class PlayerProgressData {
         }
         lastPvpResetDate = if (tag.contains(KEY_LAST_PVP_RESET)) tag.getString(KEY_LAST_PVP_RESET) else null
         pvpRewardsClaimedToday = if (tag.contains(KEY_PVP_REWARDS_CLAIMED)) tag.getInt(KEY_PVP_REWARDS_CLAIMED) else 0
+        pvpWins = if (tag.contains("PvpWins")) tag.getInt("PvpWins") else 0
+        pvpLosses = if (tag.contains("PvpLosses")) tag.getInt("PvpLosses") else 0
     }
 
     companion object {
@@ -233,8 +241,10 @@ class PlayerProgressData {
                     .orElse(emptyMap())
                     .forGetter { it.pvpFights },
                 Codec.STRING.optionalFieldOf("last_pvp_reset_date").forGetter { Optional.ofNullable(it.lastPvpResetDate) },
-                Codec.INT.fieldOf("pvp_rewards_claimed_today").orElse(0).forGetter { it.pvpRewardsClaimedToday }
-            ).apply(instance) { cap, badgeIds, teams, arenaIndexOpt, returnDimOpt, returnXOpt, returnYOpt, returnZOpt, returnYawOpt, returnPitchOpt, pvpFights, lastPvpResetDateOpt, pvpRewardsClaimedToday ->
+                Codec.INT.fieldOf("pvp_rewards_claimed_today").orElse(0).forGetter { it.pvpRewardsClaimedToday },
+                Codec.INT.fieldOf("pvp_wins").orElse(0).forGetter { it.pvpWins },
+                Codec.INT.fieldOf("pvp_losses").orElse(0).forGetter { it.pvpLosses }
+            ).apply(instance) { cap, badgeIds, teams, arenaIndexOpt, returnDimOpt, returnXOpt, returnYOpt, returnZOpt, returnYawOpt, returnPitchOpt, pvpFights, lastPvpResetDateOpt, pvpRewardsClaimedToday, pvpWins, pvpLosses ->
                 PlayerProgressData().also { d ->
                     d.levelCap = cap
                     badgeIds.mapNotNull { GymBadge.fromId(it) }.forEach { d._badges.add(it) }
@@ -249,6 +259,8 @@ class PlayerProgressData {
                     d._pvpFights.putAll(pvpFights)
                     d.lastPvpResetDate = lastPvpResetDateOpt.orElse(null)
                     d.pvpRewardsClaimedToday = pvpRewardsClaimedToday
+                    d.pvpWins = pvpWins
+                    d.pvpLosses = pvpLosses
                 }
             }
         }

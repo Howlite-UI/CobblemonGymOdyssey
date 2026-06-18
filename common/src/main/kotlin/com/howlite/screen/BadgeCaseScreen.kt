@@ -45,6 +45,10 @@ class BadgeCaseScreen(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/badge_box_background_alola.png"
         )
+        val BACKGROUND_GALAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/badge_box_background_galar.png"
+        )
         val TOPBAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/badge_box_topbar.png"
@@ -60,6 +64,10 @@ class BadgeCaseScreen(
         val SHOP_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/shop_button.png"
+        )
+        val FIGHT_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/fight_button.png"
         )
         val RIGHT_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             CobblemonGymOdyssey.MOD_ID,
@@ -169,7 +177,8 @@ class BadgeCaseScreen(
             listOf(
                 GymBadge.GRASS_BADGE, GymBadge.WATER_BADGE,
                 GymBadge.FIRE_BADGE, GymBadge.FIGHTING_BADGE,
-                GymBadge.GALAR_FAIRY_BADGE, GymBadge.ROCK_BADGE,
+                GymBadge.GHOST_BADGE, GymBadge.GALAR_FAIRY_BADGE,
+                GymBadge.ROCK_BADGE, GymBadge.ICE_BADGE,
                 GymBadge.DARK_BADGE, GymBadge.DRAGON_BADGE
             ),
             0xFFE056FD.toInt(), // Magenta
@@ -317,8 +326,9 @@ class BadgeCaseScreen(
         if (obtainedBadgeIndices.isNotEmpty() && random.nextInt(25) == 0) {
             val randomIdx = obtainedBadgeIndices[random.nextInt(obtainedBadgeIndices.size)]
             val slotX = getSlotX(randomIdx)
+            val slotY = getSlotY(randomIdx)
             val px = (x + slotX + 2 + random.nextInt(12)).toFloat()
-            val py = (y + 111 + 2 + random.nextInt(12)).toFloat()
+            val py = (y + slotY + 2 + random.nextInt(12)).toFloat()
             particles.add(GuiParticle(
                 px, py,
                 (random.nextFloat() - 0.5f) * 0.4f,
@@ -335,7 +345,11 @@ class BadgeCaseScreen(
         val region = activeRegion
 
         // 1. Dessiner le fond principal
-        val bgTexture = if (region == Region.ALOLA) BACKGROUND_ALOLA_TEXTURE else BACKGROUND_TEXTURE
+        val bgTexture = when (region) {
+            Region.ALOLA -> BACKGROUND_ALOLA_TEXTURE
+            Region.GALAR -> BACKGROUND_GALAR_TEXTURE
+            else -> BACKGROUND_TEXTURE
+        }
         graphics.blit(bgTexture, x, y, 0f, 0f, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT)
 
         // 2. Dessiner et teinter la barre supérieure
@@ -357,6 +371,7 @@ class BadgeCaseScreen(
         } else {
             renderCenterPokeBallAndRibbon(graphics, x, y, partialTick)
             renderShopButton(graphics, x, y, mouseX, mouseY)
+            renderFightButton(graphics, x, y, mouseX, mouseY)
         }
 
         // 5. Dessiner la grille des badges (TOUJOURS visible !)
@@ -447,6 +462,20 @@ class BadgeCaseScreen(
         graphics.drawString(font, text, shopX + 3 + (31 - textW) / 2, shopY + 3, textColor, false)
     }
 
+    private fun renderFightButton(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        val fightX = x - 53
+        val fightY = y + 48
+        val isHovered = mouseX >= fightX && mouseX < fightX + 53 && mouseY >= fightY && mouseY < fightY + 14
+        val buttonV = if (isHovered) 14f else 0f
+
+        graphics.blit(FIGHT_BUTTON_TEXTURE, fightX, fightY, 0f, buttonV, 53, 14, 53, 28)
+
+        val text = Component.translatable("cobblemongymodyssey.badge_case.fight_button").string
+        val textW = font.width(text)
+        val textColor = if (isHovered) 0xFFFFA800.toInt() else 0xFFFFFF
+        graphics.drawString(font, text, fightX + 3 + (31 - textW) / 2, fightY + 3, textColor, false)
+    }
+
     private fun renderWinningTeam(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, partialTick: Float) {
         val badge = viewedBadgeTeam ?: return
         val team = menu.badgeTeams[badge.id] ?: emptyList()
@@ -515,8 +544,26 @@ class BadgeCaseScreen(
             val alolaSlotXs = intArrayOf(46, 64, 104, 122)
             return alolaSlotXs.getOrElse(index) { 0 }
         }
+        if (activeRegion == Region.GALAR) {
+            val galarSlotXs = intArrayOf(
+                10, 158, // Row 1 (y=93)
+                10, 28, 46, 64, 104, 122, 140, 158 // Row 2 (y=111)
+            )
+            return galarSlotXs.getOrElse(index) { 0 }
+        }
         val slotXs = intArrayOf(10, 28, 46, 64, 104, 122, 140, 158)
         return slotXs.getOrElse(index) { 0 }
+    }
+
+    private fun getSlotY(index: Int): Int {
+        if (activeRegion == Region.GALAR) {
+            val galarSlotYs = intArrayOf(
+                93, 93,
+                111, 111, 111, 111, 111, 111, 111, 111
+            )
+            return galarSlotYs.getOrElse(index) { 111 }
+        }
+        return 111
     }
 
     private fun drawHoverBorder(graphics: GuiGraphics, sx: Int, sy: Int, color: Int) {
@@ -549,7 +596,7 @@ class BadgeCaseScreen(
 
         badges.forEachIndexed { i, badge ->
             val slotX = getSlotX(i)
-            val slotY = 111
+            val slotY = getSlotY(i)
             val sx = guiX + slotX
             val sy = guiY + slotY
             val isUnlocked = badge in unlockedBadges
@@ -699,6 +746,15 @@ class BadgeCaseScreen(
                 graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
                 return
             }
+
+            val fightX = x - 53
+            val fightY = y + 48
+            if (mouseX >= fightX && mouseX < fightX + 53 && mouseY >= fightY && mouseY < fightY + 14) {
+                val lines = mutableListOf<Component>()
+                lines += Component.translatable("cobblemongymodyssey.badge_case.fight.tooltip")
+                graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
+                return
+            }
         }
 
         if (viewedBadgeTeam != null) {
@@ -727,24 +783,27 @@ class BadgeCaseScreen(
                     return
                 }
             }
-            if (mouseY < y + 111) {
+            val gridMinY = if (activeRegion == Region.GALAR) 93 else 111
+            if (mouseY < y + gridMinY) {
                 return
             }
         }
 
         badges.forEachIndexed { i, badge ->
             val slotX = getSlotX(i)
-            val slotY = 111
+            val slotY = getSlotY(i)
             val sx = x + slotX
             val sy = y + slotY
             if (mouseX >= sx && mouseX < sx + 16 && mouseY >= sy && mouseY < sy + 16) {
                 val lines = mutableListOf<Component>()
                 lines += Component.translatable("item.cobblemongymodyssey.${badge.id}")
                 if (badge in unlockedBadges) {
-                    lines += Component.translatable(
-                        "cobblemongymodyssey.badge_case.level_cap_tooltip",
-                        badge.levelCap
-                    )
+                    if (badge.region == com.howlite.data.GymRegion.KANTO) {
+                        lines += Component.translatable(
+                            "cobblemongymodyssey.badge_case.level_cap_tooltip",
+                            badge.levelCap
+                        )
+                    }
                 } else {
                     lines += Component.translatable("cobblemongymodyssey.badge_case.locked_tooltip")
                 }
@@ -803,7 +862,12 @@ class BadgeCaseScreen(
                     return true
                 }
             }
-            if (mouseY < y + 111 || mouseY >= y + 127) {
+            val clickedOnGrid = if (activeRegion == Region.GALAR) {
+                (mouseY >= y + 93 && mouseY < y + 109) || (mouseY >= y + 111 && mouseY < y + 127)
+            } else {
+                mouseY >= y + 111 && mouseY < y + 127
+            }
+            if (!clickedOnGrid) {
                 return true // Bloque les autres clics sauf sur la grille des badges
             }
         }
@@ -819,6 +883,21 @@ class BadgeCaseScreen(
                 } else {
                     minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
                 }
+                return true
+            }
+
+            val fightX = x - 53
+            val fightY = y + 48
+            if (mouseX >= fightX && mouseX < fightX + 53 && mouseY >= fightY && mouseY < fightY + 14) {
+                minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
+                val buf = net.minecraft.network.RegistryFriendlyByteBuf(
+                    io.netty.buffer.Unpooled.buffer(),
+                    minecraft?.level?.registryAccess() ?: throw java.lang.IllegalStateException("Registry access not available")
+                )
+                dev.architectury.networking.NetworkManager.sendToServer(
+                    ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "request_pvp_player_list"),
+                    buf
+                )
                 return true
             }
         }
@@ -870,7 +949,7 @@ class BadgeCaseScreen(
         val unlockedBadges = menu.unlockedBadges
         badges.forEachIndexed { i, badge ->
             val slotX = getSlotX(i)
-            val slotY = 111
+            val slotY = getSlotY(i)
             val sx = x + slotX
             val sy = y + slotY
             if (mouseX >= sx && mouseX < sx + 16 && mouseY >= sy && mouseY < sy + 16) {

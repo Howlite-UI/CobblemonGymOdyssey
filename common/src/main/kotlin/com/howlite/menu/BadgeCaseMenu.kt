@@ -33,7 +33,11 @@ class BadgeCaseMenu(
     syncId: Int,
     val unlockedBadges: Set<GymBadge>,
     val levelCap: Int = 10,
-    val badgeTeams: Map<String, List<PokemonSnapshot>> = emptyMap()
+    val badgeTeams: Map<String, List<PokemonSnapshot>> = emptyMap(),
+    val pvpWins: Int = 0,
+    val pvpLosses: Int = 0,
+    val pvpRewardsClaimedToday: Int = 0,
+    val pvpFights: Map<String, com.howlite.data.PvpFightRecord> = emptyMap()
 ) : AbstractContainerMenu(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get(), syncId) {
 
     override fun clickMenuButton(player: Player, id: Int): Boolean {
@@ -51,8 +55,18 @@ class BadgeCaseMenu(
         return false
     }
 
+    class MenuData(
+        val levelCap: Int,
+        val badges: Set<GymBadge>,
+        val badgeTeams: Map<String, List<PokemonSnapshot>>,
+        val pvpWins: Int,
+        val pvpLosses: Int,
+        val pvpRewardsClaimedToday: Int,
+        val pvpFights: Map<String, com.howlite.data.PvpFightRecord>
+    )
+
     companion object {
-        private fun readData(buf: FriendlyByteBuf): Triple<Int, Set<GymBadge>, Map<String, List<PokemonSnapshot>>> {
+        private fun readMenuData(buf: FriendlyByteBuf): MenuData {
             val levelCap = buf.readInt()
             val badges = buf.readCollection(
                 { size -> HashSet(size) },
@@ -78,7 +92,28 @@ class BadgeCaseMenu(
                     badgeTeams[badgeId] = team
                 }
             }
-            return Triple(levelCap, badges, badgeTeams)
+
+            var pvpWins = 0
+            var pvpLosses = 0
+            var pvpRewardsClaimedToday = 0
+            val pvpFights = mutableMapOf<String, com.howlite.data.PvpFightRecord>()
+
+            if (buf.readableBytes() > 0) {
+                pvpWins = buf.readInt()
+                pvpLosses = buf.readInt()
+                pvpRewardsClaimedToday = buf.readInt()
+                val pvpFightsSize = buf.readInt()
+                for (i in 0 until pvpFightsSize) {
+                    val opponentUuid = buf.readUtf()
+                    val lastFightDate = buf.readUtf()
+                    val consecutiveDays = buf.readInt()
+                    val wins = buf.readInt()
+                    val losses = buf.readInt()
+                    pvpFights[opponentUuid] = com.howlite.data.PvpFightRecord(lastFightDate, consecutiveDays, wins, losses)
+                }
+            }
+
+            return MenuData(levelCap, badges, badgeTeams, pvpWins, pvpLosses, pvpRewardsClaimedToday, pvpFights)
         }
     }
 
@@ -88,14 +123,18 @@ class BadgeCaseMenu(
      */
     constructor(syncId: Int, buf: FriendlyByteBuf) : this(
         syncId,
-        readData(buf)
+        readMenuData(buf)
     )
 
-    private constructor(syncId: Int, data: Triple<Int, Set<GymBadge>, Map<String, List<PokemonSnapshot>>>) : this(
+    private constructor(syncId: Int, data: MenuData) : this(
         syncId,
-        unlockedBadges = data.second,
-        levelCap = data.first,
-        badgeTeams = data.third
+        unlockedBadges = data.badges,
+        levelCap = data.levelCap,
+        badgeTeams = data.badgeTeams,
+        pvpWins = data.pvpWins,
+        pvpLosses = data.pvpLosses,
+        pvpRewardsClaimedToday = data.pvpRewardsClaimedToday,
+        pvpFights = data.pvpFights
     )
 
     /** Pas de déplacement rapide d'items — menu en lecture seule. */

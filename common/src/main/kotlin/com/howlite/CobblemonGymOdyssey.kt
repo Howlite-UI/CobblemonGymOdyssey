@@ -47,11 +47,50 @@ object CobblemonGymOdyssey {
         GymTestCommand.register()
         GymTpCommand.register()
 
-        // Synchroniser le wallet lors de la connexion du joueur
+        // Synchroniser le wallet lors de la connexion du joueur et l'enregistrer dans le tracker PvP
         dev.architectury.event.events.common.PlayerEvent.PLAYER_JOIN.register { player ->
             if (player is ServerPlayer) {
+                val server = player.server
+                if (server != null) {
+                    if (com.howlite.data.PvpPlayerTracker.registeredPlayers.isEmpty()) {
+                        com.howlite.data.PvpPlayerTracker.load(server)
+                    }
+                    com.howlite.data.PvpPlayerTracker.registerPlayer(server, player.uuid, player.scoreboardName)
+                }
+
                 val wallet = com.howlite.wallet.WalletManager.get(player)
                 com.howlite.wallet.WalletNetwork.syncToClient(player, wallet)
+            }
+        }
+
+        // Register Request PvP Player List Network Packet Receiver (Client -> Server)
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "request_pvp_player_list")
+        ) { _, context ->
+            val player = context.player
+            if (player is ServerPlayer) {
+                context.queue {
+                    val server = player.server ?: return@queue
+                    if (com.howlite.data.PvpPlayerTracker.registeredPlayers.isEmpty()) {
+                        com.howlite.data.PvpPlayerTracker.load(server)
+                    }
+                    val playersList = com.howlite.data.PvpPlayerTracker.registeredPlayers.toList()
+
+                    val buf = net.minecraft.network.RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(), player.registryAccess())
+                    buf.writeInt(playersList.size)
+                    for (profile in playersList) {
+                        buf.writeUtf(profile.uuid)
+                        buf.writeUtf(profile.name)
+                        val isOnline = server.playerList.getPlayer(java.util.UUID.fromString(profile.uuid)) != null
+                        buf.writeBoolean(isOnline)
+                    }
+                    NetworkManager.sendToPlayer(
+                        player,
+                        ResourceLocation.fromNamespaceAndPath(MOD_ID, "sync_pvp_player_list"),
+                        buf
+                    )
+                }
             }
         }
 
@@ -98,7 +137,16 @@ object CobblemonGymOdyssey {
                                 Component.translatable("cobblemongymodyssey.badge_case.title")
 
                             override fun createMenu(syncId: Int, inv: Inventory, p: Player): AbstractContainerMenu =
-                                BadgeCaseMenu(syncId, badges, levelCap, badgeTeams)
+                                BadgeCaseMenu(
+                                    syncId,
+                                    badges,
+                                    levelCap,
+                                    badgeTeams,
+                                    progress.pvpWins,
+                                    progress.pvpLosses,
+                                    progress.pvpRewardsClaimedToday,
+                                    progress.pvpFights
+                                )
                         }
                     ) { buffer ->
                         buffer.writeInt(levelCap)
@@ -112,6 +160,19 @@ object CobblemonGymOdyssey {
                                 b.writeBoolean(pokemon.isShiny)
                                 b.writeUtf(pokemon.displayName)
                             }
+                        }
+                        // Sync PvP stats to client
+                        println("[GymOdyssey] Server: Syncing PvP stats to ${player.scoreboardName} (${player.uuid}) client buffer. Wins: ${progress.pvpWins}, Losses: ${progress.pvpLosses}, Opponent fights: ${progress.pvpFights.size}")
+                        buffer.writeInt(progress.pvpWins)
+                        buffer.writeInt(progress.pvpLosses)
+                        buffer.writeInt(progress.pvpRewardsClaimedToday)
+                        buffer.writeInt(progress.pvpFights.size)
+                        progress.pvpFights.forEach { (opponentUuid, record) ->
+                            buffer.writeUtf(opponentUuid)
+                            buffer.writeUtf(record.lastFightDate)
+                            buffer.writeInt(record.consecutiveDays)
+                            buffer.writeInt(record.wins)
+                            buffer.writeInt(record.losses)
                         }
                     }
                 }

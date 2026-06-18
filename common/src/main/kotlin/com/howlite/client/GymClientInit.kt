@@ -45,5 +45,28 @@ object GymClientInit {
                 }
             }
         }
+
+        // Register S2C packet to sync PvP player list and open FightScreen
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.S2C,
+            ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "sync_pvp_player_list")
+        ) { buf, context ->
+            val size = buf.readInt()
+            val players = mutableListOf<com.howlite.screen.FightScreen.PvpPlayerEntry>()
+            for (i in 0 until size) {
+                val uuid = java.util.UUID.fromString(buf.readUtf())
+                val name = buf.readUtf()
+                val isOnline = buf.readBoolean()
+                players.add(com.howlite.screen.FightScreen.PvpPlayerEntry(uuid, name, isOnline))
+            }
+            context.queue {
+                val mc = Minecraft.getInstance()
+                val screen = mc.screen
+                if (screen is com.howlite.screen.BadgeCaseScreen) {
+                    val parentMenu = screen.menu
+                    mc.setScreen(com.howlite.screen.FightScreen(parentMenu, players))
+                }
+            }
+        }
     }
 }
