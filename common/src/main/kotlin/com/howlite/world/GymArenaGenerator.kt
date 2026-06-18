@@ -26,14 +26,14 @@ object GymArenaGenerator {
         val server = player.server
         val progress = PlayerProgressApi.get(player)
 
-        // 1. Récupérer ou allouer un index d'arène unique pour le joueur
+        // 1. Allouer un nouvel index d'arène unique à chaque téléportation pour éviter les superpositions
         val saveData = GymDimensionSavedData.get(server)
-        if (progress.arenaIndex == null) {
-            progress.arenaIndex = saveData.nextArenaIndex++
-            saveData.setDirty()
-            PlayerProgressApi.markDirty(player)
-        }
-        val index = progress.arenaIndex!!
+        val index = saveData.nextArenaIndex++
+        saveData.setDirty()
+        
+        // Mettre à jour progress pour la cohérence (optionnel)
+        progress.arenaIndex = index
+        PlayerProgressApi.markDirty(player)
 
         // 2. Récupérer le monde de la dimension d'arènes
         val gymLevelKey = ResourceKey.create(
@@ -71,6 +71,7 @@ object GymArenaGenerator {
 
         // Déterminer le leader en fonction du badge
         val leaderId = when (badgeId) {
+            // Kanto
             "boulder_badge" -> "brock"
             "cascade_badge" -> "misty"
             "thunder_badge" -> "lt_surge"
@@ -79,6 +80,79 @@ object GymArenaGenerator {
             "marsh_badge" -> "sabrina"
             "volcano_badge" -> "blaine"
             "earth_badge" -> "giovanni"
+            // Johto
+            "zephyr_badge" -> "falkner"
+            "hive_badge" -> "bugsy"
+            "plain_badge" -> "whitney"
+            "fog_badge" -> "morty"
+            "storm_badge" -> "chuck"
+            "mineral_badge" -> "jasmine"
+            "glacier_badge" -> "pryce"
+            "rising_badge" -> "clair"
+            // Hoenn
+            "stone_badge" -> "roxanne"
+            "knuckle_badge" -> "brawly"
+            "dynamo_badge" -> "wattson"
+            "heat_badge" -> "flannery"
+            "balance_badge" -> "norman"
+            "feather_badge" -> "winona"
+            "mind_badge" -> "tate"
+            "rain_badge" -> "wallace"
+            // Sinnoh
+            "coal_badge" -> "roark"
+            "forest_badge" -> "gardenia"
+            "cobble_badge" -> "maylene"
+            "fen_badge" -> "crasher_wake"
+            "relic_badge" -> "fantina"
+            "mine_badge" -> "byron"
+            "icicle_badge" -> "candice"
+            "beacon_badge" -> "volkner"
+            // Unova
+            "trio_badge" -> "cilan"
+            "basic_badge" -> "cheren"
+            "toxic_badge" -> "roxie"
+            "insect_badge" -> "burgh"
+            "bolt_badge" -> "elesa"
+            "quake_badge" -> "clay"
+            "jet_badge" -> "skyla"
+            "freeze_badge" -> "brycen"
+            "legend_badge" -> "drayden"
+            "wave_badge" -> "marlon"
+            // Kalos
+            "bug_badge" -> "viola"
+            "cliff_badge" -> "grant"
+            "rumble_badge" -> "korrina"
+            "plant_badge" -> "ramos"
+            "voltage_badge" -> "clemont"
+            "kalos_fairy_badge" -> "valerie"
+            "psychic_badge" -> "olympia"
+            "iceberg_badge" -> "wulfric"
+            // Alola
+            "melemele_stamp" -> "hala"
+            "akala_stamp" -> "olivia"
+            "ulaula_stamp" -> "nanu"
+            "poni_stamp" -> "hapu"
+            // Galar
+            "grass_badge" -> "milo"
+            "water_badge" -> "nessa"
+            "fire_badge" -> "kabu"
+            "fighting_badge" -> "bea"
+            "ghost_badge" -> "allister"
+            "galar_fairy_badge" -> "opal"
+            "rock_badge" -> "gordie"
+            "ice_badge" -> "melony"
+            "dark_badge" -> "piers"
+            "dragon_badge" -> "raihan"
+            // Paldea
+            "cortondo_badge" -> "katy"
+            "artazon_badge" -> "brassius"
+            "levincia_badge" -> "iono"
+            "cascarrafa_badge" -> "kofu"
+            "medali_badge" -> "larry"
+            "montenevera_badge" -> "ryme"
+            "alfornada_badge" -> "tulip"
+            "glaseado_badge" -> "grusha"
+            
             else -> "brock"
         }
 
@@ -90,25 +164,40 @@ object GymArenaGenerator {
         generate(gymWorld, startX, startY, startZ, player, leaderId)
 
         // 6. Déterminer les coordonnées de spawn pour le joueur
-        val structureLoc = ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "gym_$leaderId")
-        val templateOpt = server.structureManager.get(structureLoc)
+        val (resolvedLoc, templateOpt) = resolveStructure(server, leaderId)
 
         val spawnX: Double
         val spawnY: Double
         val spawnZ: Double
+        val yaw: Float
         if (templateOpt.isPresent) {
-            spawnX = startX + 0.5
-            spawnY = startY.toDouble() + 1.0
-            spawnZ = startZ + 0.5
+            val template = templateOpt.get()
+            if (resolvedLoc.path == "gymleaderplaceholder") {
+                // Pour le placeholder, le joueur doit spawn en 10.5, 3.0, 45.5 par rapport à l'origine du build et facing le north
+                val originX = startX - template.size.x / 2.0
+                val originY = startY.toDouble()
+                val originZ = startZ - template.size.z / 2.0
+                spawnX = originX + 10.5
+                spawnY = originY + 3.0
+                spawnZ = originZ + 45.5
+                yaw = 180f // facing North
+            } else {
+                // Pour les arènes customs, spawn au centre par défaut
+                spawnX = startX + 0.5
+                spawnY = startY.toDouble() + 1.0
+                spawnZ = startZ + 0.5
+                yaw = 0f
+            }
         } else {
             // Dans le cas de l'arène de test (fallback), on téléporte devant le portail de retour (Z = -1.0) face au NPC (Sud, yaw = 0f)
             spawnX = startX + 0.5
             spawnY = startY.toDouble() + 1.0
             spawnZ = startZ - 1.0
+            yaw = 0f
         }
 
         // 7. Téléporter le joueur en toute sécurité sur le sol déjà généré
-        player.teleportTo(gymWorld, spawnX, spawnY, spawnZ, 0f, 0f)
+        player.teleportTo(gymWorld, spawnX, spawnY, spawnZ, yaw, 0f)
     }
 
     /**
@@ -116,9 +205,6 @@ object GymArenaGenerator {
      */
     fun generate(world: ServerLevel, startX: Int, startY: Int, startZ: Int, player: ServerPlayer, leaderId: String) {
         val server = world.server
-        val manager = server.structureManager
-        val structureLoc = ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "gym_$leaderId")
-        val templateOpt = manager.get(structureLoc)
 
         // 1. Nettoyer la zone (les entités non-joueurs)
         val box = AABB(
@@ -142,10 +228,12 @@ object GymArenaGenerator {
         // 3. Générer un bloc de bedrock sous les pieds par sécurité
         world.setBlock(BlockPos(startX, startY, startZ), Blocks.BEDROCK.defaultBlockState(), 2)
 
+        var npcX = startX.toDouble() + 0.5
         var npcY = startY.toDouble() + 1.0
         var npcZ = startZ.toDouble() + 2.5
 
         // 4. Placer la structure NBT
+        val (resolvedLoc, templateOpt) = resolveStructure(server, leaderId)
         if (templateOpt.isPresent) {
             val template = templateOpt.get()
             val settings = StructurePlaceSettings()
@@ -160,6 +248,30 @@ object GymArenaGenerator {
                 startZ - template.size.z / 2
             )
             template.placeInWorld(world, pos, pos, settings, world.random, 2)
+
+            if (resolvedLoc.path == "gymleaderplaceholder") {
+                // Pour le placeholder, le Gym Leader doit spawn en 10.5, 3.0, 11.5 par rapport à l'origine du build
+                val originX = startX - template.size.x / 2.0
+                val originY = startY.toDouble()
+                val originZ = startZ - template.size.z / 2.0
+                
+                npcX = originX + 10.5
+                npcY = originY + 3.0
+                npcZ = originZ + 11.5
+
+                // Placer un portail de retour 6 blocs derrière le Gym Leader (à Z = 5.5, donc bloc en Z = 5) sans limite de temps
+                val portalPos = BlockPos((originX + 10).toInt(), (originY + 3).toInt(), (originZ + 5).toInt())
+                val portalState = com.howlite.blocks.GymBlocks.GYM_LEADER_TELEPORTER.get().defaultBlockState()
+                    .setValue(com.howlite.blocks.GymLeaderTeleporterBlock.PORTAL_OPEN, true)
+                    .setValue(com.howlite.blocks.GymLeaderTeleporterBlock.FACING, net.minecraft.core.Direction.SOUTH)
+                world.setBlock(portalPos, portalState, 3)
+
+                val be = world.getBlockEntity(portalPos) as? com.howlite.blocks.GymLeaderTeleporterBlockEntity
+                if (be != null) {
+                    be.portalTicks = 99999999
+                    be.setChanged()
+                }
+            }
         } else {
             // Fallback si la structure NBT n'est pas présente
             player.sendSystemMessage(
@@ -202,15 +314,46 @@ object GymArenaGenerator {
         }
 
         // 5. Faire spawner le Gym Leader NPC à l'aide de la commande Cobblemon
-        val commandSource = server.createCommandSourceStack()
-            .withPosition(Vec3(startX.toDouble() + 0.5, npcY, npcZ))
-            .withPermission(4)
-            .withSuppressedOutput()
+        val shouldSpawnNpc = !templateOpt.isPresent || resolvedLoc.path == "gymleaderplaceholder"
+        if (shouldSpawnNpc) {
+            val commandSource = server.createCommandSourceStack()
+                .withLevel(world)
+                .withPosition(Vec3(npcX, npcY, npcZ))
+                .withPermission(4)
+                .withSuppressedOutput()
 
-        server.commands.performPrefixedCommand(
-            commandSource,
-            "cobblemon npc spawn cobblemongymodyssey:$leaderId"
-        )
+            server.commands.performPrefixedCommand(
+                commandSource,
+                "npcspawn cobblemongymodyssey:$leaderId"
+            )
+        }
+    }
+
+    /**
+     * Résout la structure à utiliser pour un Champion donné.
+     * Retourne une paire contenant la ResourceLocation résolue et le StructureTemplate optionnel.
+     */
+    private fun resolveStructure(server: net.minecraft.server.MinecraftServer, leaderId: String): Pair<ResourceLocation, java.util.Optional<net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate>> {
+        val manager = server.structureManager
+        
+        // 1. Essayer `${leaderId}gymleaderarea` (ex: brockgymleaderarea)
+        val customLoc = ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "${leaderId}gymleaderarea")
+        val customTemplate = manager.get(customLoc)
+        if (customTemplate.isPresent) {
+            return Pair(customLoc, customTemplate)
+        }
+
+        // 2. Essayer `gym_$leaderId` (ex: gym_brock)
+        val legacyLoc = ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "gym_$leaderId")
+        val legacyTemplate = manager.get(legacyLoc)
+        if (legacyTemplate.isPresent) {
+            return Pair(legacyLoc, legacyTemplate)
+        }
+
+        // 3. Fallback sur `gymleaderplaceholder`
+        val placeholderLoc = ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "gymleaderplaceholder")
+        val placeholderTemplate = manager.get(placeholderLoc)
+        return Pair(placeholderLoc, placeholderTemplate)
     }
 
     private fun formatName(name: String): String =
