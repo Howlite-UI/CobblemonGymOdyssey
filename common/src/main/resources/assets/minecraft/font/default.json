@@ -1,0 +1,508 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/indigo/boulder_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE000"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/indigo/cascade_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE001"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/indigo/thunder_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE002"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/indigo/rainbow_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE003"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/indigo/soul_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE004"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/indigo/marsh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE005"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/indigo/volcano_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE006"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/indigo/earth_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE007"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/johto/johto_zephyr_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE008"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/johto/johto_hive_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE009"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/johto/johto_plain_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE00A"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/johto/johto_fog_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE00B"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/johto/johto_storm_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE00C"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/johto/johto_mineral_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE00D"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/johto/johto_glacier_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE00E"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/johto/johto_rising_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE00F"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/stone_hoenn_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE010"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/knuckle_hoenn_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE011"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/dynamo_hoenn_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE012"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/heat_hoenn_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE013"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/balance_hoenn_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE014"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/feather_hoenn_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE015"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/mind_hoenn_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE016"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/rain_hoenn_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE017"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/coal_sinnoh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE018"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/forest_sinnoh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE019"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/cobble_sinnoh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE01A"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/fen_sinnoh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE01B"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/relic_sinnoh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE01C"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/mine_sinnoh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE01D"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/icicle_sinnoh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE01E"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/beacon_sinnoh_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE01F"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/trio_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE020"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/basic_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE021"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/toxic_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE022"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/insect_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE023"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/bolt_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE024"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/quake_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE025"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/jet_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE026"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/freeze_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE027"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/legend_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE028"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/wave_unova_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE029"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/bug_kalos_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE02A"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/cliff_kalos_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE02B"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/rumble_kalos_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE02C"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/plant_kalos_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE02D"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/voltage_kalos_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE02E"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/fairy_kalos_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE02F"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/psychic_kalos_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE030"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/iceberg_kalos_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE031"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/gym_ticket_placeholder.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE032"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/gym_ticket_placeholder.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE033"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/gym_ticket_placeholder.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE034"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/gym_ticket_placeholder.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE035"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/grass_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE036"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/water_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE037"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/fire_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE038"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/fighting_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE039"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/ghost_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE03A"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/fairy_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE03B"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/rock_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE03C"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/ice_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE03D"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/dark_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE03E"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/dragon_galar_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE03F"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/bug_paldea_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE040"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/grass_paldea_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE041"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/electric_paldea_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE042"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/water_paldea_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE043"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/normal_paldea_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE044"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/ghost_paldea_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE045"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/psychic_paldea_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE046"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cobblemongymodyssey:item/badge_placeholder/ice_paldea_badge.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE047"]
+    }
+  ]
+}
