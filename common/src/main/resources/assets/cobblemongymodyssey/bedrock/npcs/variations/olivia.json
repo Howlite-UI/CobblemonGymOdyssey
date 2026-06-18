@@ -3,7 +3,7 @@
     "variations":  [
                        {
                            "poser":  "cobblemon:standard",
-                           "texture":  "cobblemongymodyssey:textures/npc/olivia.png",
+                           "texture": "variable",
                            "aspects":  [
 
                                        ],

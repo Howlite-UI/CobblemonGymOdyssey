@@ -1,5 +1,6 @@
 package com.howlite.world
 
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.howlite.api.PlayerProgressApi
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
@@ -326,6 +327,19 @@ object GymArenaGenerator {
                 commandSource,
                 "npcspawn cobblemongymodyssey:$leaderId"
             )
+        }
+
+        // 6. Appliquer le skin du joueur correspondant au pseudo du Champion
+        val scanBox = AABB(
+            startX - 25.0, startY - 10.0, startZ - 25.0,
+            startX + 25.0, startY + 25.0, startZ + 25.0
+        )
+        val npcs = world.getEntitiesOfClass(NPCEntity::class.java, scanBox)
+        for (npc in npcs) {
+            val npcId = npc.npc.id
+            if (npcId.namespace == "cobblemongymodyssey" && npcId.path == leaderId) {
+                npc.loadTextureFromGameProfileName(leaderId)
+            }
         }
     }
 

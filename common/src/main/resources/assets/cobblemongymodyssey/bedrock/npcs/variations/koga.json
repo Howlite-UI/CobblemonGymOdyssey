@@ -6,7 +6,7 @@
       "aspects": [],
       "poser": "cobblemon:standard",
       "model": "cobblemon:steve.geo",
-      "texture": "cobblemongymodyssey:textures/npc/koga.png",
+      "texture": "variable",
       "layers": []
     }
   ]

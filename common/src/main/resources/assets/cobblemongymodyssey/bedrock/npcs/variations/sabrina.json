@@ -6,7 +6,7 @@
       "aspects": [],
       "poser": "cobblemon:standard",
       "model": "cobblemon:steve.geo",
-      "texture": "cobblemongymodyssey:textures/npc/sabrina.png",
+      "texture": "variable",
       "layers": []
     }
   ]

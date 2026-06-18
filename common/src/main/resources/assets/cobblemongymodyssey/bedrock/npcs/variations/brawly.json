@@ -3,7 +3,7 @@
     "variations":  [
                        {
                            "poser":  "cobblemon:standard",
-                           "texture":  "cobblemongymodyssey:textures/npc/brawly.png",
+                           "texture": "variable",
                            "aspects":  [
 
                                        ],

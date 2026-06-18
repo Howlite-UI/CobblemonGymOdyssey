@@ -6,7 +6,7 @@
       "aspects": [],
       "poser": "cobblemon:standard",
       "model": "cobblemon:alex.geo",
-      "texture": "cobblemongymodyssey:textures/npc/brock.png",
+      "texture": "variable",
       "layers": []
     }
   ]
