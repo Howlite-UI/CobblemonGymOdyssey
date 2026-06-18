@@ -1,0 +1,609 @@
+{
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-06-13 01:33:56 +0200"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:plains": "2026-06-13 01:33:56 +0200"
+    },
+    "done": false
+  },
+  "minecraft:adventure/root": {
+    "criteria": {
+      "killed_something": "2026-06-13 01:55:28 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/brewing/cauldron": {
+    "criteria": {
+      "has_water_bucket": "2026-06-13 02:38:54 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/transportation/apricorn_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/cherry_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/bamboo_raft": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/transportation/saccharine_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/spruce_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/birch_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/oak_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/mangrove_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/acacia_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/jungle_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/dark_oak_boat": {
+    "criteria": {
+      "in_water": "2026-06-13 02:38:57 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:root": {
+    "criteria": {
+      "picked_starter": "2026-06-15 02:49:03 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/emerald_block": {
+    "criteria": {
+      "has_emerald": "2026-06-15 03:29:24 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/misc/master_rod": {
+    "criteria": {
+      "has_ball": "2026-06-15 03:29:29 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:craft_all_balls": {
+    "criteria": {
+      "roseate_ball": "2026-06-15 03:51:21 +0200",
+      "poke_ball": "2026-06-17 04:28:38 +0200",
+      "safari_ball": "2026-06-15 03:40:18 +0200",
+      "master_ball": "2026-06-15 03:29:29 +0200",
+      "love_ball": "2026-06-15 03:52:14 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:craft_poke_ball": {
+    "criteria": {
+      "requirement": "2026-06-15 03:29:29 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:first_catch": {
+    "criteria": {
+      "catch": "2026-06-15 03:29:48 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/misc/safari_rod": {
+    "criteria": {
+      "has_ball": "2026-06-15 03:40:18 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:full_party": {
+    "criteria": {
+      "full_party": "2026-06-15 03:41:55 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/light_gray_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/pink_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/red_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/brown_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/light_blue_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/glass": {
+    "criteria": {
+      "has_smelts_to_glass": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/green_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/blue_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/white_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/lime_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/orange_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/magenta_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/yellow_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/sandstone": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/gray_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/black_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/purple_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/cyan_concrete_powder": {
+    "criteria": {
+      "has_sand": "2026-06-15 03:49:21 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/thunder_stone_block": {
+    "criteria": {
+      "has_thunder_stone": "2026-06-15 03:50:15 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/held/assault_vest": {
+    "criteria": {
+      "has_protector": "2026-06-15 03:50:17 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:craft_base_balls": {
+    "criteria": {
+      "roseate_ball": "2026-06-15 03:51:21 +0200",
+      "poke_ball": "2026-06-17 04:28:38 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:recipes/misc/roseate_rod": {
+    "criteria": {
+      "has_ball": "2026-06-15 03:51:21 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:recipes/blocks/pasture": {
+    "criteria": {
+      "has_pc": "2026-06-15 03:51:27 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:craft_apricorn_balls": {
+    "criteria": {
+      "love_ball": "2026-06-15 03:52:14 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:recipes/misc/love_rod": {
+    "criteria": {
+      "has_ball": "2026-06-15 03:52:14 +0200"
+    },
+    "done": false
+  },
+  "cobblemonraiddens:join_raid": {
+    "criteria": {
+      "joined_raid": "2026-06-15 05:01:43 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/campfire_pot/exp_candy_xl": {
+    "criteria": {
+      "has_candy": "2026-06-15 14:22:04 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/fire_stone_block": {
+    "criteria": {
+      "has_fire_stone": "2026-06-15 19:58:40 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/held/heat_rock": {
+    "criteria": {
+      "has_stone": "2026-06-15 19:58:40 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/leaf_stone_block": {
+    "criteria": {
+      "has_leaf_stone": "2026-06-15 19:58:41 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/campfire_pot/candied_apple": {
+    "criteria": {
+      "has_apple": "2026-06-16 01:37:22 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/misc/charcoal": {
+    "criteria": {
+      "has_log": "2026-06-16 01:37:22 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/oak_planks": {
+    "criteria": {
+      "has_logs": "2026-06-16 01:37:22 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/oak_wood": {
+    "criteria": {
+      "has_log": "2026-06-16 01:37:22 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/chest": {
+    "criteria": {
+      "has_lots_of_items": "2026-06-16 03:36:12 +0200"
+    },
+    "done": true
+  },
+  "minecraft:adventure/trade": {
+    "criteria": {
+      "traded": "2026-06-16 03:36:12 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/misc/poke_rod": {
+    "criteria": {
+      "has_ball": "2026-06-17 04:28:38 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:brew_all": {
+    "criteria": {
+      "obtain_potion": "2026-06-17 04:55:35 +0200",
+      "obtain_super_potion": "2026-06-17 04:55:36 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:brew_potion": {
+    "criteria": {
+      "check_inv": "2026-06-17 04:55:35 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/redstone/target": {
+    "criteria": {
+      "has_hay_block": "2026-06-17 17:21:39 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/misc/wheat": {
+    "criteria": {
+      "has_hay_block": "2026-06-17 17:21:39 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:resurrect_pokemon": {
+    "criteria": {
+      "resurrected_pokemon": "2026-06-17 18:12:08 +0200"
+    },
+    "done": true
+  },
+  "jbt:recipes": {
+    "criteria": {
+      "requirement": "2026-06-17 18:55:03 +0200"
+    },
+    "done": true
+  },
+  "jbt:visible/root": {
+    "criteria": {
+      "tick": "2026-06-17 18:55:03 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/spruce_planks": {
+    "criteria": {
+      "has_logs": "2026-06-17 18:55:33 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/jungle_planks": {
+    "criteria": {
+      "has_logs": "2026-06-17 18:55:34 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/painting": {
+    "criteria": {
+      "has_wool": "2026-06-17 18:57:54 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/white_carpet": {
+    "criteria": {
+      "has_white_wool": "2026-06-17 18:57:54 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/white_banner": {
+    "criteria": {
+      "has_white_wool": "2026-06-17 18:57:54 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/white_bed": {
+    "criteria": {
+      "has_white_wool": "2026-06-17 18:57:54 +0200"
+    },
+    "done": true
+  },
+  "create:root": {
+    "criteria": {
+      "0": "2026-06-17 19:18:26 +0200"
+    },
+    "done": true
+  },
+  "create:recipes/misc/crafting/schematics/schematicannon": {
+    "criteria": {
+      "has_item": "2026-06-17 19:18:27 +0200"
+    },
+    "done": true
+  },
+  "create:recipes/misc/crafting/schematics/schematic_table": {
+    "criteria": {
+      "has_item": "2026-06-17 19:18:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/stone_bricks": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/stone_bricks_from_stone_stonecutting": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/stone_slab": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/stone_stairs_from_stone_stonecutting": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/redstone/stone_button": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/redstone/stone_pressure_plate": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/stone_stairs": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/stonecutter": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/smooth_stone": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/stone_brick_walls_from_stone_stonecutting": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/stone_brick_slab_from_stone_stonecutting": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/stone_brick_stairs_from_stone_stonecutting": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/stone_slab_from_stone_stonecutting": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/chiseled_stone_bricks_stone_from_stonecutting": {
+    "criteria": {
+      "has_stone": "2026-06-17 20:02:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/smooth_quartz_slab": {
+    "criteria": {
+      "has_smooth_quartz": "2026-06-17 20:06:35 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/smooth_quartz_stairs": {
+    "criteria": {
+      "has_smooth_quartz": "2026-06-17 20:06:35 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/smooth_quartz_slab_from_smooth_quartz_stonecutting": {
+    "criteria": {
+      "has_smooth_quartz": "2026-06-17 20:06:35 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/smooth_quartz_stairs_from_smooth_quartz_stonecutting": {
+    "criteria": {
+      "has_smooth_quartz": "2026-06-17 20:06:35 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:use_candy": {
+    "criteria": {
+      "use_xl_candy": "2026-06-18 01:55:42 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:first_evolution": {
+    "criteria": {
+      "evolve": "2026-06-18 01:56:38 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/misc/mojang_banner_pattern": {
+    "criteria": {
+      "has_enchanted_golden_apple": "2026-06-18 03:38:05 +0200"
+    },
+    "done": true
+  },
+  "minecraft:husbandry/root": {
+    "criteria": {
+      "consumed_item": "2026-06-18 04:12:52 +0200"
+    },
+    "done": true
+  },
+  "minecraft:husbandry/balanced_diet": {
+    "criteria": {
+      "enchanted_golden_apple": "2026-06-18 04:12:52 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:first_battle_victory": {
+    "criteria": {
+      "win": "2026-06-18 17:57:49 +0200"
+    },
+    "done": true
+  },
+  "DataVersion": 3955
+}

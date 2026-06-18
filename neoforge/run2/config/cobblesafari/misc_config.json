@@ -1,0 +1,8 @@
+{
+  "balloonSpawnMultiplier": 1.0,
+  "balloonCheckIntervalTicks": 200,
+  "balloonSpawnRadius": 32,
+  "balloonHeightAboveGround": 32,
+  "balloonLifetimeTicks": 6000,
+  "balloonEnabled": true
+}

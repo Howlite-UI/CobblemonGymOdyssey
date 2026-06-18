@@ -1,0 +1,57 @@
+{
+  "create:root": {
+    "criteria": {
+      "0": "2026-06-18 17:58:27 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-06-18 17:56:02 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/chest": {
+    "criteria": {
+      "has_lots_of_items": "2026-06-18 17:58:28 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:root": {
+    "criteria": {
+      "picked_starter": "2026-06-18 17:56:37 +0200"
+    },
+    "done": true
+  },
+  "jbt:recipes": {
+    "criteria": {
+      "requirement": "2026-06-18 17:56:02 +0200"
+    },
+    "done": true
+  },
+  "jbt:visible/root": {
+    "criteria": {
+      "tick": "2026-06-18 17:56:02 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:first_battle_victory": {
+    "criteria": {
+      "win": "2026-06-18 17:59:39 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:healing_machine": {
+    "criteria": {
+      "use_healing_machine": "2026-06-18 17:59:23 +0200"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:plains": "2026-06-18 17:56:02 +0200"
+    },
+    "done": false
+  },
+  "DataVersion": 3955
+}

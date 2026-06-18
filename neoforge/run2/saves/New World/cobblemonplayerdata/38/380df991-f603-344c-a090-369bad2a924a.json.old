@@ -1,0 +1,93 @@
+{
+  "uuid": "380df991-f603-344c-a090-369bad2a924a",
+  "starterPrompted": true,
+  "starterLocked": false,
+  "starterSelected": true,
+  "starterUUID": "36b31149-6ad5-4a8b-be80-f1724d3bf67f",
+  "keyItems": [],
+  "battleTheme": "cobblemon:battle.pvp.default",
+  "extraData": {},
+  "advancementData": {
+    "totalCaptureCount": 19,
+    "totalEggsCollected": 0,
+    "totalEggsHatched": 0,
+    "totalEvolvedCount": 11,
+    "totalBattleVictoryCount": 7,
+    "totalPvPBattleVictoryCount": 0,
+    "totalPvWBattleVictoryCount": 1,
+    "totalPvNBattleVictoryCount": 6,
+    "totalShinyCaptureCount": 0,
+    "totalTradedCount": 0,
+    "totalTypeCaptureCounts": {
+      "grass": 7,
+      "poison": 5,
+      "steel": 1,
+      "fairy": 2,
+      "normal": 9,
+      "electric": 1,
+      "flying": 2,
+      "bug": 1,
+      "dragon": 1,
+      "ground": 1
+    },
+    "totalDefeatedCounts": {
+      "cobblemon:magearna": 1
+    },
+    "aspectsCollected": {
+      "cobblemon:bulbasaur": [
+        "male",
+        "female"
+      ],
+      "cobblemon:ivysaur": [
+        "male",
+        "female"
+      ],
+      "cobblemon:venusaur": [
+        "male",
+        "female"
+      ],
+      "cobblemon:magearna": [
+        "genderless"
+      ],
+      "cobblemon:lechonk": [
+        "female"
+      ],
+      "cobblemon:cottonee": [
+        "female"
+      ],
+      "cobblemon:deerling": [
+        "male",
+        "spring"
+      ],
+      "cobblemon:electrike": [
+        "female"
+      ],
+      "cobblemon:taillow": [
+        "male"
+      ],
+      "cobblemon:zigzagoon": [
+        "female",
+        "male"
+      ],
+      "cobblemon:linoone": [
+        "male"
+      ],
+      "cobblemon:ledyba": [
+        "male"
+      ],
+      "cobblemon:sentret": [
+        "male"
+      ],
+      "cobblemon:dubwool": [
+        "female",
+        "color-none"
+      ],
+      "cobblemon:cyclizar": [
+        "female"
+      ],
+      "cobblemon:mudsdale": [
+        "male"
+      ]
+    }
+  }
+}

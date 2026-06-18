@@ -10,6 +10,7 @@ import com.howlite.events.CoinPickupHandler
 import com.howlite.events.GymBattleEventHandler
 import com.howlite.events.GymBattleReturnHandler
 import com.howlite.events.LevelCapEventHandler
+import com.howlite.events.PvpBattleEventHandler
 import com.howlite.items.CobbleCoins
 import com.howlite.items.GymBadgeItems
 import com.howlite.menu.BadgeCaseMenu
@@ -42,6 +43,7 @@ object CobblemonGymOdyssey {
         GymBattleReturnHandler.register()
         BattleLevelCapEventHandler.register()
         CoinPickupHandler.register()
+        PvpBattleEventHandler.register()
         GymTestCommand.register()
         GymTpCommand.register()
 

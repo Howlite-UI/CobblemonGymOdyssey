@@ -30,6 +30,16 @@ class PlayerProgressData {
     private val _badgeTeams: MutableMap<String, List<PokemonSnapshot>> = mutableMapOf()
     val badgeTeams: Map<String, List<PokemonSnapshot>> get() = _badgeTeams
 
+    private val _pvpFights: MutableMap<String, PvpFightRecord> = mutableMapOf()
+    val pvpFights: Map<String, PvpFightRecord> get() = _pvpFights
+
+    var lastPvpResetDate: String? = null
+    var pvpRewardsClaimedToday: Int = 0
+
+    fun recordPvpFight(opponentUuid: String, record: PvpFightRecord) {
+        _pvpFights[opponentUuid] = record
+    }
+
     var arenaIndex: Int? = null
     var returnDim: String? = null
     var returnX: Double? = null
@@ -92,6 +102,9 @@ class PlayerProgressData {
     fun reset() {
         _badges.clear()
         _badgeTeams.clear()
+        _pvpFights.clear()
+        lastPvpResetDate = null
+        pvpRewardsClaimedToday = 0
         levelCap = INITIAL_LEVEL_CAP
     }
 
@@ -131,6 +144,16 @@ class PlayerProgressData {
         returnZ?.let { tag.putDouble("ReturnZ", it) }
         returnYaw?.let { tag.putFloat("ReturnYaw", it) }
         returnPitch?.let { tag.putFloat("ReturnPitch", it) }
+
+        val pvpFightsTag = CompoundTag()
+        _pvpFights.forEach { (opponentUuid, record) ->
+            val recordTag = CompoundTag()
+            PvpFightRecord.writeToNbt(record, recordTag)
+            pvpFightsTag.put(opponentUuid, recordTag)
+        }
+        tag.put(KEY_PVP_FIGHTS, pvpFightsTag)
+        lastPvpResetDate?.let { tag.putString(KEY_LAST_PVP_RESET, it) }
+        tag.putInt(KEY_PVP_REWARDS_CLAIMED, pvpRewardsClaimedToday)
     }
 
     fun readFromNbt(tag: CompoundTag) {
@@ -160,12 +183,25 @@ class PlayerProgressData {
         returnZ = if (tag.contains("ReturnZ")) tag.getDouble("ReturnZ") else null
         returnYaw = if (tag.contains("ReturnYaw")) tag.getFloat("ReturnYaw") else null
         returnPitch = if (tag.contains("ReturnPitch")) tag.getFloat("ReturnPitch") else null
+
+        _pvpFights.clear()
+        if (tag.contains(KEY_PVP_FIGHTS)) {
+            val pvpFightsTag = tag.getCompound(KEY_PVP_FIGHTS)
+            pvpFightsTag.allKeys.forEach { opponentUuid ->
+                _pvpFights[opponentUuid] = PvpFightRecord.fromNbt(pvpFightsTag.getCompound(opponentUuid))
+            }
+        }
+        lastPvpResetDate = if (tag.contains(KEY_LAST_PVP_RESET)) tag.getString(KEY_LAST_PVP_RESET) else null
+        pvpRewardsClaimedToday = if (tag.contains(KEY_PVP_REWARDS_CLAIMED)) tag.getInt(KEY_PVP_REWARDS_CLAIMED) else 0
     }
 
     companion object {
         private const val KEY_LEVEL_CAP = "LevelCap"
         private const val KEY_BADGES = "Badges"
         private const val KEY_BADGE_TEAMS = "BadgeTeams"
+        private const val KEY_PVP_FIGHTS = "PvpFights"
+        private const val KEY_LAST_PVP_RESET = "LastPvpResetDate"
+        private const val KEY_PVP_REWARDS_CLAIMED = "PvpRewardsClaimedToday"
         const val INITIAL_LEVEL_CAP = 10
 
         // -------------------------------------------------------------------------
@@ -191,8 +227,14 @@ class PlayerProgressData {
                 Codec.DOUBLE.optionalFieldOf("return_y").forGetter { Optional.ofNullable(it.returnY) },
                 Codec.DOUBLE.optionalFieldOf("return_z").forGetter { Optional.ofNullable(it.returnZ) },
                 Codec.FLOAT.optionalFieldOf("return_yaw").forGetter { Optional.ofNullable(it.returnYaw) },
-                Codec.FLOAT.optionalFieldOf("return_pitch").forGetter { Optional.ofNullable(it.returnPitch) }
-            ).apply(instance) { cap, badgeIds, teams, arenaIndexOpt, returnDimOpt, returnXOpt, returnYOpt, returnZOpt, returnYawOpt, returnPitchOpt ->
+                Codec.FLOAT.optionalFieldOf("return_pitch").forGetter { Optional.ofNullable(it.returnPitch) },
+                Codec.unboundedMap(Codec.STRING, PvpFightRecord.CODEC)
+                    .fieldOf("pvp_fights")
+                    .orElse(emptyMap())
+                    .forGetter { it.pvpFights },
+                Codec.STRING.optionalFieldOf("last_pvp_reset_date").forGetter { Optional.ofNullable(it.lastPvpResetDate) },
+                Codec.INT.fieldOf("pvp_rewards_claimed_today").orElse(0).forGetter { it.pvpRewardsClaimedToday }
+            ).apply(instance) { cap, badgeIds, teams, arenaIndexOpt, returnDimOpt, returnXOpt, returnYOpt, returnZOpt, returnYawOpt, returnPitchOpt, pvpFights, lastPvpResetDateOpt, pvpRewardsClaimedToday ->
                 PlayerProgressData().also { d ->
                     d.levelCap = cap
                     badgeIds.mapNotNull { GymBadge.fromId(it) }.forEach { d._badges.add(it) }
@@ -204,6 +246,9 @@ class PlayerProgressData {
                     d.returnZ = returnZOpt.orElse(null)
                     d.returnYaw = returnYawOpt.orElse(null)
                     d.returnPitch = returnPitchOpt.orElse(null)
+                    d._pvpFights.putAll(pvpFights)
+                    d.lastPvpResetDate = lastPvpResetDateOpt.orElse(null)
+                    d.pvpRewardsClaimedToday = pvpRewardsClaimedToday
                 }
             }
         }

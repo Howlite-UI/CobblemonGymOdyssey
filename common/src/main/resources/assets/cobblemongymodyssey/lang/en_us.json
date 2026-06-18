@@ -234,5 +234,9 @@
   "item.cobblemongymodyssey.unown_stone": "Unown Stone",
   "block.cobblemongymodyssey.unown_stone_activated": "Unown Stone (Activated)",
   "item.cobblemongymodyssey.unown_stone_activated": "Unown Stone (Activated)",
-  "itemGroup.cobblemongymodyssey.cobble_coins": "Cobble Coins"
+  "itemGroup.cobblemongymodyssey.cobble_coins": "Cobble Coins",
+  "cobblemongymodyssey.pvp.daily_limit_reached": "§cDaily PvP reward limit reached (%s/%s battles rewarded).",
+  "cobblemongymodyssey.pvp.already_fought_today": "§cYou already claimed a reward for defeating %s today.",
+  "cobblemongymodyssey.pvp.reward_received": "§aPvP Victory! You receive %s Silver Coins for defeating %s (%s/%s rewards today).",
+  "cobblemongymodyssey.pvp.no_reward_consecutive": "§eNo PvP reward for defeating %s (consecutive days limit exceeded)."
 }

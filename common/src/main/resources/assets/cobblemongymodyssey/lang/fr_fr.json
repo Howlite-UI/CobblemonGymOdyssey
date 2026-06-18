@@ -222,5 +222,9 @@
   "item.cobblemongymodyssey.unown_stone": "Pierre Zarbi",
   "block.cobblemongymodyssey.unown_stone_activated": "Pierre Zarbi (Activee)",
   "item.cobblemongymodyssey.unown_stone_activated": "Pierre Zarbi (Activee)",
-  "item.cobblemongymodyssey.gym_ticket_paldea_glaseado_badge": "\uE047 Ticket d'Arene de Glaseado"
+  "item.cobblemongymodyssey.gym_ticket_paldea_glaseado_badge": "\uE047 Ticket d'Arene de Glaseado",
+  "cobblemongymodyssey.pvp.daily_limit_reached": "§cLimite journalière PvP atteinte (%s/%s combats récompensés).",
+  "cobblemongymodyssey.pvp.already_fought_today": "§cVous avez déjà obtenu une récompense pour avoir battu %s aujourd'hui.",
+  "cobblemongymodyssey.pvp.reward_received": "§aVictoire PvP ! Vous recevez %s pièces Silver en battant %s (%s/%s récompenses aujourd'hui).",
+  "cobblemongymodyssey.pvp.no_reward_consecutive": "§ePas de récompense PvP pour avoir battu %s (jours consécutifs trop élevés)."
 }

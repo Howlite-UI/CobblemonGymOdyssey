@@ -1,0 +1,824 @@
+{
+  "shops": {
+    "KANTO": {
+      "items": [
+        {
+          "requiredBadge": "boulder_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 1,
+          "resultItem": "cobblemon:poke_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "boulder_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "cascade_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:great_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "cascade_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 3,
+          "resultItem": "cobblemon:super_potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "thunder_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:ultra_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "thunder_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:hyper_potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "rainbow_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:exp_candy_s",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "rainbow_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:exp_candy_m",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "soul_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 12,
+          "resultItem": "cobblemon:rare_candy",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "marsh_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:zinc",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "marsh_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:protein",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "volcano_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 20,
+          "resultItem": "cobblemon:ability_capsule",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "volcano_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 16,
+          "resultItem": "cobblemon:bottle_cap",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "earth_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:ability_patch",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "earth_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    },
+    "JOHTO": {
+      "items": [
+        {
+          "requiredBadge": "zephyr_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 1,
+          "resultItem": "cobblemon:poke_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "zephyr_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "hive_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:great_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "hive_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 3,
+          "resultItem": "cobblemon:super_potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "hive_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:full_heal",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:fire_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:water_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:thunder_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:leaf_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:moon_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:sun_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:ice_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:everstone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:exp_candy_s",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "fog_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:ultra_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "fog_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:hyper_potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "fog_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:dusk_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "fog_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:shiny_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "fog_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:dawn_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "fog_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 3,
+          "resultItem": "cobblemon:dusk_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "fog_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:quick_ball",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "fog_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:exp_candy_m",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "storm_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 12,
+          "resultItem": "cobblemon:rare_candy",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "storm_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:timer_ball",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "storm_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:destiny_knot",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "storm_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:exp_candy_l",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "mineral_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:zinc",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "mineral_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:protein",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "mineral_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:calcium",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "glacier_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 20,
+          "resultItem": "cobblemon:ability_capsule",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "glacier_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 16,
+          "resultItem": "cobblemon:bottle_cap",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "rising_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:ability_patch",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "rising_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    },
+    "HOENN": {
+      "items": [
+        {
+          "requiredBadge": "stone_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 1,
+          "resultItem": "cobblemon:poke_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "stone_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "knuckle_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:great_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "knuckle_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 3,
+          "resultItem": "cobblemon:super_potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "dynamo_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:quick_ball",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "heat_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:charcoal",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "balance_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 12,
+          "resultItem": "cobblemon:rare_candy",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "feather_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:carbos",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "mind_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 25,
+          "resultItem": "cobblemon:choice_band",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "mind_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 25,
+          "resultItem": "cobblemon:choice_specs",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "mind_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 25,
+          "resultItem": "cobblemon:choice_scarf",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "rain_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    },
+    "SINNOH": {
+      "items": [
+        {
+          "requiredBadge": "coal_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 1,
+          "resultItem": "cobblemon:poke_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "forest_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:leaf_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "cobble_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:rocky_helmet",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "fen_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:damp_rock",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "relic_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:spell_tag",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "mine_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 12,
+          "resultItem": "cobblemon:metal_coat",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "icicle_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:never_melt_ice",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "beacon_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    },
+    "UNOVA": {
+      "items": [
+        {
+          "requiredBadge": "toxic_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 1,
+          "resultItem": "cobblemon:poke_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "basic_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:potion",
+          "resultCount": 2
+        },
+        {
+          "requiredBadge": "insect_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:silver_powder",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "bolt_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:magnet",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "quake_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:soft_sand",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "jet_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:sharp_beak",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "legend_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:dragon_fang",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "wave_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    },
+    "KALOS": {
+      "items": [
+        {
+          "requiredBadge": "bug_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 1,
+          "resultItem": "cobblemon:poke_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "cliff_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:hard_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "rumble_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:power_weight",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "rumble_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:power_belt",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plant_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:power_lens",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "plant_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:power_band",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "voltage_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:power_anklet",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "voltage_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:power_bracer",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "kalos_fairy_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:destiny_knot",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "kalos_fairy_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:everstone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "psychic_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:luxury_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "iceberg_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    },
+    "ALOLA": {
+      "items": [
+        {
+          "requiredBadge": "melemele_stamp",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 1,
+          "resultItem": "cobblemon:poke_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "melemele_stamp",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 3,
+          "resultItem": "cobblemon:adrenaline_orb",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "akala_stamp",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "cobblemon:great_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "akala_stamp",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:float_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "ulaula_stamp",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:ultra_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "ulaula_stamp",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:leftovers",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "poni_stamp",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 30,
+          "resultItem": "cobblemon:gold_bottle_cap",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "poni_stamp",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    },
+    "GALAR": {
+      "items": [
+        {
+          "requiredBadge": "grass_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:miracle_seed",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "water_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:mystic_water",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "fire_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:charcoal",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "fighting_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:black_belt",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "galar_fairy_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 15,
+          "resultItem": "cobblemon:destiny_knot",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "rock_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:hard_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "dark_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:black_glasses",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "dragon_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    },
+    "PALDEA": {
+      "items": [
+        {
+          "requiredBadge": "cortondo_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 1,
+          "resultItem": "cobblemon:poke_ball",
+          "resultCount": 4
+        },
+        {
+          "requiredBadge": "artazon_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 8,
+          "resultItem": "cobblemon:leaf_stone",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "levincia_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 4,
+          "resultItem": "cobblemon:cell_battery",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "cascarrafa_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 2,
+          "resultItem": "minecraft:water_bucket",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "medali_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:leftovers",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "montenevera_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 10,
+          "resultItem": "cobblemon:spell_tag",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "alfornada_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 5,
+          "resultItem": "cobblemon:psychic_seed",
+          "resultCount": 1
+        },
+        {
+          "requiredBadge": "glaseado_badge",
+          "costItem": "cobblemongymodyssey:cobble_copper_coin",
+          "costCount": 64,
+          "resultItem": "cobblemon:master_ball",
+          "resultCount": 1
+        }
+      ]
+    }
+  }
+}

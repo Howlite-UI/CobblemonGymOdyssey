@@ -1,0 +1,158 @@
+{
+  "cobblemon:recipes/transportation/apricorn_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/misc/master_rod": {
+    "criteria": {
+      "has_ball": "2026-06-15 04:33:29 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:recipes/balls/ancient_leaden_ball": {
+    "criteria": {
+      "has_black_tumblestone": "2026-06-15 04:11:49 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-06-15 03:55:13 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:root": {
+    "criteria": {
+      "picked_starter": "2026-06-15 04:36:48 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/cherry_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/misc/safari_rod": {
+    "criteria": {
+      "has_ball": "2026-06-15 03:55:54 +0200"
+    },
+    "done": false
+  },
+  "minecraft:recipes/transportation/bamboo_raft": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/transportation/saccharine_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:obtain_tumblestone": {
+    "criteria": {
+      "check_inv": "2026-06-15 04:11:49 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/spruce_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/black_tumblestone_block": {
+    "criteria": {
+      "has_tumblestone": "2026-06-15 04:11:49 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/birch_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/oak_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/mangrove_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/balls/ancient_gigaton_ball": {
+    "criteria": {
+      "has_black_tumblestone": "2026-06-15 04:11:49 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/balls/ancient_heavy_ball": {
+    "criteria": {
+      "has_black_tumblestone": "2026-06-15 04:11:49 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/acacia_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:craft_all_balls": {
+    "criteria": {
+      "safari_ball": "2026-06-15 03:55:54 +0200",
+      "master_ball": "2026-06-15 04:33:29 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:craft_poke_ball": {
+    "criteria": {
+      "requirement": "2026-06-15 03:55:54 +0200"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:beach": "2026-06-15 03:56:04 +0200",
+      "minecraft:sparse_jungle": "2026-06-15 03:55:19 +0200",
+      "minecraft:river": "2026-06-15 04:38:17 +0200",
+      "minecraft:lukewarm_ocean": "2026-06-15 04:38:18 +0200",
+      "minecraft:bamboo_jungle": "2026-06-15 03:55:14 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:recipes/blocks/dawn_stone_block": {
+    "criteria": {
+      "has_dawn_stone": "2026-06-15 04:12:32 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:first_evolution": {
+    "criteria": {
+      "evolve": "2026-06-15 04:37:17 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/jungle_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/transportation/dark_oak_boat": {
+    "criteria": {
+      "in_water": "2026-06-15 04:13:12 +0200"
+    },
+    "done": true
+  },
+  "DataVersion": 3955
+}

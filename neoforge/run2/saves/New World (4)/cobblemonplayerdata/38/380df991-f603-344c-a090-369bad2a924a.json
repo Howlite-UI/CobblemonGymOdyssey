@@ -1,0 +1,55 @@
+{
+  "uuid": "380df991-f603-344c-a090-369bad2a924a",
+  "starterPrompted": true,
+  "starterLocked": false,
+  "starterSelected": true,
+  "starterUUID": "46ebc921-7f0c-4905-a40e-0e514f569911",
+  "keyItems": [],
+  "battleTheme": "cobblemon:battle.pvp.default",
+  "extraData": {},
+  "advancementData": {
+    "totalCaptureCount": 5,
+    "totalEggsCollected": 0,
+    "totalEggsHatched": 0,
+    "totalEvolvedCount": 2,
+    "totalBattleVictoryCount": 4,
+    "totalPvPBattleVictoryCount": 2,
+    "totalPvWBattleVictoryCount": 0,
+    "totalPvNBattleVictoryCount": 2,
+    "totalShinyCaptureCount": 0,
+    "totalTradedCount": 0,
+    "totalTypeCaptureCounts": {
+      "normal": 2,
+      "flying": 1,
+      "rock": 1,
+      "electric": 1,
+      "poison": 1,
+      "fairy": 1
+    },
+    "totalDefeatedCounts": {},
+    "aspectsCollected": {
+      "cobblemon:taillow": [
+        "female"
+      ],
+      "cobblemon:roggenrola": [
+        "female"
+      ],
+      "cobblemon:patrat": [
+        "female"
+      ],
+      "cobblemon:toxel": [
+        "female"
+      ],
+      "cobblemon:snubbull": [
+        "male"
+      ],
+      "cobblemon:boldore": [
+        "female"
+      ],
+      "cobblemon:toxtricity": [
+        "female",
+        "low_key-form"
+      ]
+    }
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-06-11 01:15:49 +0200"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:plains": "2026-06-11 01:15:54 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:root": {
+    "criteria": {
+      "picked_starter": "2026-06-11 01:50:42 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:use_candy": {
+    "criteria": {
+      "use_xl_candy": "2026-06-11 02:32:18 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:brew_all": {
+    "criteria": {
+      "obtain_full_heal": "2026-06-11 02:34:47 +0200",
+      "obtain_full_restore": "2026-06-11 02:34:57 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:brew_full_restore": {
+    "criteria": {
+      "check_inv": "2026-06-11 02:34:57 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/misc/master_rod": {
+    "criteria": {
+      "has_ball": "2026-06-11 02:35:26 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:craft_all_balls": {
+    "criteria": {
+      "master_ball": "2026-06-11 02:35:26 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:craft_poke_ball": {
+    "criteria": {
+      "requirement": "2026-06-11 02:35:26 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:healing_machine": {
+    "criteria": {
+      "use_healing_machine": "2026-06-11 02:35:48 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:first_catch": {
+    "criteria": {
+      "catch": "2026-06-11 02:36:11 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:full_party": {
+    "criteria": {
+      "full_party": "2026-06-11 02:36:22 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:first_evolution": {
+    "criteria": {
+      "evolve": "2026-06-11 02:36:35 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/pasture": {
+    "criteria": {
+      "has_pc": "2026-06-11 14:00:10 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/campfire_pot/exp_candy_xl": {
+    "criteria": {
+      "has_candy": "2026-06-11 15:57:03 +0200"
+    },
+    "done": true
+  },
+  "minecraft:adventure/root": {
+    "criteria": {
+      "killed_something": "2026-06-11 21:55:53 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/light_blue_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/green_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/brown_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/blue_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/orange_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/monitor": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/display_case": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/pink_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/black_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/gray_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/lime_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/restoration_tank": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/glass_pane": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/magenta_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/white_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/pc": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/red_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/blocks/fossil_analyzer": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/brewing/glass_bottle": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/light_gray_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/cyan_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:recipes/held/wise_glasses": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/purple_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/yellow_stained_glass": {
+    "criteria": {
+      "has_glass": "2026-06-12 20:09:45 +0200"
+    },
+    "done": true
+  },
+  "DataVersion": 3955
+}

@@ -1,0 +1,45 @@
+{
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-06-12 20:21:43 +0200"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:plains": "2026-06-12 20:21:44 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:recipes/misc/master_rod": {
+    "criteria": {
+      "has_ball": "2026-06-13 16:47:38 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:craft_all_balls": {
+    "criteria": {
+      "master_ball": "2026-06-13 16:47:38 +0200"
+    },
+    "done": false
+  },
+  "cobblemon:craft_poke_ball": {
+    "criteria": {
+      "requirement": "2026-06-13 16:47:38 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:first_catch": {
+    "criteria": {
+      "catch": "2026-06-13 16:47:48 +0200"
+    },
+    "done": true
+  },
+  "cobblemon:full_party": {
+    "criteria": {
+      "full_party": "2026-06-13 16:48:06 +0200"
+    },
+    "done": true
+  },
+  "DataVersion": 3955
+}

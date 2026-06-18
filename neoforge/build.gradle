@@ -86,3 +86,14 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
 }
+
+loom {
+    runs {
+        client2 {
+            client()
+            name "NeoForge Client 2"
+            runDir "run2"
+            programArgs "--username", "Dev2"
+        }
+    }
+}

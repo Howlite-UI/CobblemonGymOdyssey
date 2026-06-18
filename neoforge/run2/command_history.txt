@@ -1,0 +1,50 @@
+/gamemode creative
+/cobblesafari timer safari set Dev 1
+/difficulty peaceful
+/gamemode survival
+/cobblesafari timer safari set Dev 1
+/gamemode creative
+/setblock 19 -61 -11 cobblemongymodyssey:consumable_raid_block[raid_tier=tier_seven]
+/setblock 19 -61 -11 cobblemongymodyssey:consumable_raid_block[raid_tier=tier_seven,is_active=true,raid_type=dragon]
+/setblock 19 -61 -11 cobblemongymodyssey:consumable_raid_block[raid_tier=tier_seven,is_active=true,raid_type=dragon,can_reset=false,cycle_mode=all,is_natural=false]
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/expedition finish @a
+/expedition finish Dev
+/gymtest addbadge boulder_badge
+/gymtest addbadge earth_badge
+/gymtest addbadge rising_badge
+/gymtest addall
+/npcspawn cobblemongymodyssey:grusha
+/cobbledollars give Dev 10000000000
+/give Dev cobblemongymodyssey:CCC
+/gamemode survival
+/give @s cobblemongymodyssey:cobble_copper_coin 64
+/give @s cobblemongymodyssey:cobble_badge
+/give @s cobblemongymodyssey:cobble_platinum_coin_coin 64
+/give @s cobblemongymodyssey:cobble_platinum_coin 64
+/give @s cobblemongymodyssey:cobble_gold_coin 64
+/give @s cobblemongymodyssey:cobble_silver_coin_coin 64
+/give @s cobblemongymodyssey:cobble_silver_coin 64
+/give @s cobblemongymodyssey:cobble_gold_coin 64
+/give @s cobblemongymodyssey:cobble_copper_coin 64
+/give @s cobblemongymodyssey:cobble_platinum_coin 999
+/gamemode creative
+/give @s cobblemongymodyssey:cobble_platinum_coin 999
+/gamemode creative
+/gamemode survival
+/gymtest reset
+/gymtest addall
+/gamemode survival
+/gamemode spectator
+/gymtp back
+/kill
+/gymtp back
+/kill
+/gymtp back
+/gacha give @s wish_ticket 10
+/gacha open @s standard
+/gacha listbanners
+/gacha status
+/gacha give Dev wish_ticket_ten
