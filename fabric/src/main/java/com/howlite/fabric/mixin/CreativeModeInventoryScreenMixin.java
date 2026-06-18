@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CreativeModeInventoryScreen.class)
-public abstract class CreativeModeInventoryScreenMixin extends net.minecraft.client.gui.screens.inventory.AbstractContainerScreen {
+public abstract class CreativeModeInventoryScreenMixin extends net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<CreativeModeInventoryScreen.ItemPickerMenu> {
 
-    protected CreativeModeInventoryScreenMixin(net.minecraft.world.inventory.AbstractContainerMenu menu,
+    protected CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu menu,
                                                net.minecraft.world.entity.player.Inventory inv,
                                                net.minecraft.network.chat.Component title) {
         super(menu, inv, title);

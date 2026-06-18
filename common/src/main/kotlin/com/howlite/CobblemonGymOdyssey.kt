@@ -29,6 +29,7 @@ object CobblemonGymOdyssey {
     const val MOD_ID = "cobblemongymodyssey"
 
     @JvmStatic
+    @Suppress("DEPRECATION")
     fun init() {
         println("[GymOdyssey] CobblemonGymOdyssey.init() common initialization running!")
         GymSounds.register()

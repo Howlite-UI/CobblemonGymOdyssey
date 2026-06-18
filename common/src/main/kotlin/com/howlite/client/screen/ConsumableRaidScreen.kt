@@ -28,6 +28,7 @@ import com.mojang.blaze3d.systems.RenderSystem
  * Refactored to match the premium standards of BadgeCaseScreen (juice, sounds, typewriter LCD, particles).
  * Restored the 2.0x crisp scale layout inside a pushed/popped pose stack to avoid blurriness.
  */
+@Suppress("DEPRECATION")
 class ConsumableRaidScreen(
     private val pos: BlockPos,
     private val blockEntity: ConsumableRaidBlockEntity,

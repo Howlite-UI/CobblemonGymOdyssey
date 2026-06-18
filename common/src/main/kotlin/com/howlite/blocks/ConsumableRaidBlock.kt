@@ -137,6 +137,7 @@ class ConsumableRaidBlock(val tier: RaidTier, properties: Properties) : RaidCrys
         )
     }
 
+    @Suppress("DEPRECATION")
     override fun useWithoutItem(
         state: BlockState,
         level: Level,

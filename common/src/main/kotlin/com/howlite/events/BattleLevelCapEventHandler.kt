@@ -30,7 +30,7 @@ object BattleLevelCapEventHandler {
                 // On ne vérifie que les joueurs humains
                 if (actor !is PlayerBattleActor) continue
 
-                val player = actor.entity as? ServerPlayer ?: continue
+                val player = actor.entity ?: continue
                 val levelCap = PlayerProgressApi.get(player).levelCap
 
                 // Cherche le premier Pokémon qui dépasse le Level Cap

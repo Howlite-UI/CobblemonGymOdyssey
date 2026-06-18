@@ -20,6 +20,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent
  * [dev.architectury.registry.menu.MenuRegistry] qui peut présenter des
  * problèmes de timing sur NeoForge 1.21.x.
  */
+@Suppress("DEPRECATION")
 @EventBusSubscriber(
     modid = CobblemonGymOdyssey.MOD_ID,
     bus   = EventBusSubscriber.Bus.MOD,

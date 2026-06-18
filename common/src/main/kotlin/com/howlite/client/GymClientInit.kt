@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.resources.ResourceLocation
 
 object GymClientInit {
+    @Suppress("DEPRECATION")
     fun init() {
         BlockEntityRendererRegistry.register(GymBlocks.GYM_LEADER_TELEPORTER_ENTITY.get()) { context ->
             GymLeaderTeleporterRenderer(context)

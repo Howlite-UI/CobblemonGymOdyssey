@@ -18,6 +18,7 @@ import net.neoforged.neoforge.client.event.ScreenEvent
  * Implémente toutes les interactions de l'inventaire en Kotlin (bouton, overlay, clics, Shift-Clics)
  * pour éviter les limitations d'ordre de compilation Java/Kotlin.
  */
+@Suppress("DEPRECATION")
 @EventBusSubscriber(
     modid = CobblemonGymOdyssey.MOD_ID,
     bus   = EventBusSubscriber.Bus.GAME,

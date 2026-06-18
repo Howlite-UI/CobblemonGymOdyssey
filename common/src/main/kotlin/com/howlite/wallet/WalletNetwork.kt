@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer
  *  - S2C [WALLET_SYNC_ID]   : serveur → client, synchronise l'état complet du wallet.
  *  - C2S [WALLET_TOGGLE_ID] : client → serveur, bascule autoCollect ou hudEnabled.
  */
+@Suppress("DEPRECATION")
 object WalletNetwork {
 
     val WALLET_SYNC_ID: ResourceLocation =
