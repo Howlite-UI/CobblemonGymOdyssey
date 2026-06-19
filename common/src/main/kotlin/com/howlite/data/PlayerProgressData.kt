@@ -50,6 +50,12 @@ class PlayerProgressData {
     var returnYaw: Float? = null
     var returnPitch: Float? = null
 
+    /** Mise active sur l'Autel des Sacrifices (en CCC). 0 = pas de défi actif. */
+    var activeAltarBet: Long = 0L
+
+    /** Difficulté active de l'Autel (1 = Easy, 2 = Medium, 3 = Hard). */
+    var activeAltarDifficulty: Int = 0
+
     fun saveReturnPosition(dim: String, x: Double, y: Double, z: Double, yaw: Float, pitch: Float) {
         this.returnDim = dim
         this.returnX = x
@@ -148,6 +154,8 @@ class PlayerProgressData {
         returnZ?.let { tag.putDouble("ReturnZ", it) }
         returnYaw?.let { tag.putFloat("ReturnYaw", it) }
         returnPitch?.let { tag.putFloat("ReturnPitch", it) }
+        tag.putLong("AltarBet", activeAltarBet)
+        tag.putInt("AltarDifficulty", activeAltarDifficulty)
 
         val pvpFightsTag = CompoundTag()
         _pvpFights.forEach { (opponentUuid, record) ->
@@ -189,6 +197,8 @@ class PlayerProgressData {
         returnZ = if (tag.contains("ReturnZ")) tag.getDouble("ReturnZ") else null
         returnYaw = if (tag.contains("ReturnYaw")) tag.getFloat("ReturnYaw") else null
         returnPitch = if (tag.contains("ReturnPitch")) tag.getFloat("ReturnPitch") else null
+        activeAltarBet = if (tag.contains("AltarBet")) tag.getLong("AltarBet") else 0L
+        activeAltarDifficulty = if (tag.contains("AltarDifficulty")) tag.getInt("AltarDifficulty") else 0
 
         _pvpFights.clear()
         if (tag.contains(KEY_PVP_FIGHTS)) {
@@ -261,6 +271,8 @@ class PlayerProgressData {
                     d.pvpRewardsClaimedToday = pvpRewardsClaimedToday
                     d.pvpWins = pvpWins
                     d.pvpLosses = pvpLosses
+                    // Note: activeAltarBet and activeAltarDifficulty are NBT-only
+                    // (transient battle state; resets safely on server restart)
                 }
             }
         }

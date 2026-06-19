@@ -257,5 +257,7 @@
   "cobblemongymodyssey.fight.next_win_reward": "Win Reward: %s Silver",
   "cobblemongymodyssey.fight.next_win_reward_label": "Win Reward:",
   "cobblemongymodyssey.fight.next_win_reward_value": "%s Silver",
-  "cobblemongymodyssey.fight.no_players": "No other players"
+  "cobblemongymodyssey.fight.no_players": "No other players",
+  "cobblemongymodyssey.altar.tooltip.title": "✦ Altar of Sacrifices",
+  "cobblemongymodyssey.altar.tooltip.desc": "Bet coins to challenge a Corrupted Boss!"
 }

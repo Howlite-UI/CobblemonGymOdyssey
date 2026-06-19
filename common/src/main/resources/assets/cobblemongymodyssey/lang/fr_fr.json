@@ -245,5 +245,7 @@
   "cobblemongymodyssey.fight.next_win_reward": "Gain/Victoire : %s Argent",
   "cobblemongymodyssey.fight.next_win_reward_label": "Gain victoire:",
   "cobblemongymodyssey.fight.next_win_reward_value": "%s Argent",
-  "cobblemongymodyssey.fight.no_players": "Aucun autre joueur"
+  "cobblemongymodyssey.fight.no_players": "Aucun autre joueur",
+  "cobblemongymodyssey.altar.tooltip.title": "✦ Autel des Sacrifices",
+  "cobblemongymodyssey.altar.tooltip.desc": "Misez des pièces pour affronter un Boss Corrompu !"
 }

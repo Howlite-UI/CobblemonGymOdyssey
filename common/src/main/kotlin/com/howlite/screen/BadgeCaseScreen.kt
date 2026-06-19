@@ -69,6 +69,10 @@ class BadgeCaseScreen(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/fight_button.png"
         )
+        val ALTAR_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/altar_button.png"
+        )
         val RIGHT_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/right_button.png"
@@ -372,6 +376,9 @@ class BadgeCaseScreen(
             renderCenterPokeBallAndRibbon(graphics, x, y, partialTick)
             renderShopButton(graphics, x, y, mouseX, mouseY)
             renderFightButton(graphics, x, y, mouseX, mouseY)
+            if (activeRegion == Region.UNOVA || activeRegion == Region.ALOLA || activeRegion == Region.PALDEA) {
+                renderAltarButton(graphics, x, y, mouseX, mouseY)
+            }
         }
 
         // 5. Dessiner la grille des badges (TOUJOURS visible !)
@@ -474,6 +481,25 @@ class BadgeCaseScreen(
         val textW = font.width(text)
         val textColor = if (isHovered) 0xFFFFA800.toInt() else 0xFFFFFF
         graphics.drawString(font, text, fightX + 3 + (31 - textW) / 2, fightY + 3, textColor, false)
+    }
+
+    private fun renderAltarButton(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        val altarX = x - 53
+        val altarY = y + 64
+        val isHovered = mouseX >= altarX && mouseX < altarX + 53 && mouseY >= altarY && mouseY < altarY + 14
+        val buttonV = if (isHovered) 14f else 0f
+
+        // Pulsing dark-red glow effect behind the button
+        val pulse = (180 + (kotlin.math.sin(clientTicks * 0.12) * 75)).toInt().coerceIn(0, 255)
+        val glowColor = (pulse shl 24) or 0x550011
+        graphics.fill(altarX - 1, altarY - 1, altarX + 54, altarY + 15, glowColor)
+
+        graphics.blit(ALTAR_BUTTON_TEXTURE, altarX, altarY, 0f, buttonV, 53, 14, 53, 28)
+
+        val text = "AUTEL"
+        val textW = font.width(text)
+        val textColor = if (isHovered) 0xFFFF4444.toInt() else 0xFFCC2222.toInt()
+        graphics.drawString(font, text, altarX + 3 + (31 - textW) / 2, altarY + 3, textColor, false)
     }
 
     private fun renderWinningTeam(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -755,6 +781,19 @@ class BadgeCaseScreen(
                 graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
                 return
             }
+
+            // Altar button tooltip (only for UNOVA/ALOLA/PALDEA)
+            if (activeRegion == Region.UNOVA || activeRegion == Region.ALOLA || activeRegion == Region.PALDEA) {
+                val altarX = x - 53
+                val altarY = y + 64
+                if (mouseX >= altarX && mouseX < altarX + 53 && mouseY >= altarY && mouseY < altarY + 14) {
+                    val lines = mutableListOf<Component>()
+                    lines += Component.translatable("cobblemongymodyssey.altar.tooltip.title")
+                    lines += Component.translatable("cobblemongymodyssey.altar.tooltip.desc")
+                    graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
+                    return
+                }
+            }
         }
 
         if (viewedBadgeTeam != null) {
@@ -899,6 +938,19 @@ class BadgeCaseScreen(
                     buf
                 )
                 return true
+            }
+
+            // Altar button click (UNOVA / ALOLA / PALDEA only)
+            if (activeRegion == Region.UNOVA || activeRegion == Region.ALOLA || activeRegion == Region.PALDEA) {
+                val altarX = x - 53
+                val altarY = y + 64
+                if (mouseX >= altarX && mouseX < altarX + 53 && mouseY >= altarY && mouseY < altarY + 14) {
+                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f))
+                    minecraft?.setScreen(
+                        com.howlite.client.screen.AltarScreen(activeRegion)
+                    )
+                    return true
+                }
             }
         }
 

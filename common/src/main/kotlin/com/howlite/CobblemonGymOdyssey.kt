@@ -11,6 +11,7 @@ import com.howlite.events.GymBattleEventHandler
 import com.howlite.events.GymBattleReturnHandler
 import com.howlite.events.LevelCapEventHandler
 import com.howlite.events.PvpBattleEventHandler
+import com.howlite.events.AltarBattleEventHandler
 import com.howlite.items.CobbleCoins
 import com.howlite.items.GymBadgeItems
 import com.howlite.menu.BadgeCaseMenu
@@ -46,6 +47,7 @@ object CobblemonGymOdyssey {
         PvpBattleEventHandler.register()
         GymTestCommand.register()
         GymTpCommand.register()
+        AltarBattleEventHandler.register()
 
         // Synchroniser le wallet lors de la connexion du joueur et l'enregistrer dans le tracker PvP
         dev.architectury.event.events.common.PlayerEvent.PLAYER_JOIN.register { player ->
@@ -60,6 +62,33 @@ object CobblemonGymOdyssey {
 
                 val wallet = com.howlite.wallet.WalletManager.get(player)
                 com.howlite.wallet.WalletNetwork.syncToClient(player, wallet)
+
+                // Safety return for Altar battles: if the player was in a battle arena, teleport them back
+                val progress = com.howlite.api.PlayerProgressApi.get(player)
+                if (progress.activeAltarBet > 0L && progress.returnDim != null) {
+                    val returnDim = progress.returnDim!!
+                    val returnX = progress.returnX ?: 0.0
+                    val returnY = progress.returnY ?: 64.0
+                    val returnZ = progress.returnZ ?: 0.0
+                    val returnYaw = progress.returnYaw ?: 0f
+                    val returnPitch = progress.returnPitch ?: 0f
+
+                    // Lose the bet (disconnected = forfeit)
+                    progress.activeAltarBet = 0L
+                    progress.activeAltarDifficulty = 0
+                    progress.clearReturnPosition()
+                    com.howlite.api.PlayerProgressApi.markDirty(player)
+
+                    val returnLevelKey = net.minecraft.resources.ResourceKey.create(
+                        net.minecraft.core.registries.Registries.DIMENSION,
+                        net.minecraft.resources.ResourceLocation.parse(returnDim)
+                    )
+                    val targetWorld = player.server.getLevel(returnLevelKey) ?: player.server.overworld()
+                    player.teleportTo(targetWorld, returnX, returnY, returnZ, returnYaw, returnPitch)
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("§c[Autel] Vous avez été renvoyé — votre mise est perdue suite à la déconnexion.")
+                    )
+                }
             }
         }
 
@@ -176,6 +205,94 @@ object CobblemonGymOdyssey {
                         }
                     }
                 }
+            }
+        }
+
+        // Register Request Altar Challenge Network Packet Receiver (Client -> Server)
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "request_altar_challenge")
+        ) { buf, context ->
+            val betCCC = buf.readLong()
+            val difficulty = buf.readInt()
+            val regionName = buf.readUtf()
+
+            context.queue {
+                val player = context.player
+                if (player !is ServerPlayer) return@queue
+
+                val progress = com.howlite.api.PlayerProgressApi.get(player)
+
+                // --- Server-side validations ---
+                val wallet = com.howlite.wallet.WalletManager.get(player)
+
+                // 1. Bet > 0
+                if (betCCC <= 0L) {
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("§c[Autel] Mise invalide.")
+                    )
+                    return@queue
+                }
+
+                // 2. Balance sufficient
+                if (wallet.balanceCCC < betCCC) {
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("§c[Autel] Solde insuffisant.")
+                    )
+                    return@queue
+                }
+
+                // 3. Not already in a battle
+                if (progress.activeAltarBet > 0L) {
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("§c[Autel] Vous avez déjà un défi en cours !")
+                    )
+                    return@queue
+                }
+
+                // 4. Team size check
+                val maxPokemon = when (difficulty) {
+                    1 -> 3; 2 -> 2; 3 -> 1; else -> 3
+                }
+                val party = com.cobblemon.mod.common.Cobblemon.storage.getParty(player)
+                val teamSize = party.filterNotNull().count()
+                if (teamSize > maxPokemon) {
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal(
+                            "§c[Autel] Votre équipe dépasse la limite de $maxPokemon Pokémon pour cette difficulté !"
+                        )
+                    )
+                    return@queue
+                }
+                if (teamSize == 0) {
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("§c[Autel] Vous n'avez pas de Pokémon dans votre équipe !")
+                    )
+                    return@queue
+                }
+
+                // --- Deduct bet ---
+                val success = com.howlite.wallet.WalletManager.removeAndSync(player, betCCC)
+                if (!success) {
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("§c[Autel] Échec du retrait — solde insuffisant.")
+                    )
+                    return@queue
+                }
+
+                // --- Save return position ---
+                val currentDim = player.level().dimension().location().toString()
+                progress.saveReturnPosition(
+                    currentDim,
+                    player.x, player.y, player.z,
+                    player.yRot, player.xRot
+                )
+                progress.activeAltarBet = betCCC
+                progress.activeAltarDifficulty = difficulty
+                com.howlite.api.PlayerProgressApi.markDirty(player)
+
+                // --- Spawn the boss wild battle ---
+                com.howlite.events.AltarBossSpawner.startAltarBattle(player, regionName, difficulty)
             }
         }
     }
