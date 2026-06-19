@@ -77,6 +77,7 @@ class BadgeCaseScreen(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/right_button.png"
         )
+        var lastOpenedRegion: Region = Region.KANTO
     }
 
     enum class Region(
@@ -244,7 +245,7 @@ class BadgeCaseScreen(
         }
     }
 
-    private var activeRegion: Region = Region.KANTO
+    private var activeRegion: Region = lastOpenedRegion
     private var scrollOffset: Int = 0
 
     private var viewedBadgeTeam: GymBadge? = null
@@ -489,16 +490,11 @@ class BadgeCaseScreen(
         val isHovered = mouseX >= altarX && mouseX < altarX + 53 && mouseY >= altarY && mouseY < altarY + 14
         val buttonV = if (isHovered) 14f else 0f
 
-        // Pulsing dark-red glow effect behind the button
-        val pulse = (180 + (kotlin.math.sin(clientTicks * 0.12) * 75)).toInt().coerceIn(0, 255)
-        val glowColor = (pulse shl 24) or 0x550011
-        graphics.fill(altarX - 1, altarY - 1, altarX + 54, altarY + 15, glowColor)
-
         graphics.blit(ALTAR_BUTTON_TEXTURE, altarX, altarY, 0f, buttonV, 53, 14, 53, 28)
 
-        val text = "AUTEL"
+        val text = Component.translatable("cobblemongymodyssey.badge_case.altar_button").string
         val textW = font.width(text)
-        val textColor = if (isHovered) 0xFFFF4444.toInt() else 0xFFCC2222.toInt()
+        val textColor = if (isHovered) 0xFFFFA800.toInt() else 0xFFFFFF
         graphics.drawString(font, text, altarX + 3 + (31 - textW) / 2, altarY + 3, textColor, false)
     }
 
@@ -960,6 +956,7 @@ class BadgeCaseScreen(
         if (mouseX >= leftX && mouseX < leftX + 26 && mouseY >= leftY && mouseY < leftY + 14) {
             if (activeRegion.ordinal > 0) {
                 activeRegion = Region.entries[activeRegion.ordinal - 1]
+                lastOpenedRegion = activeRegion
                 updateScrollOffset()
                 minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
                 return true
@@ -972,6 +969,7 @@ class BadgeCaseScreen(
         if (mouseX >= rightX && mouseX < rightX + 26 && mouseY >= rightY && mouseY < rightY + 14) {
             if (activeRegion.ordinal < Region.entries.size - 1) {
                 activeRegion = Region.entries[activeRegion.ordinal + 1]
+                lastOpenedRegion = activeRegion
                 updateScrollOffset()
                 minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
                 return true
@@ -989,6 +987,7 @@ class BadgeCaseScreen(
                 val region = Region.entries[regIdx]
                 if (region != activeRegion) {
                     activeRegion = region
+                    lastOpenedRegion = activeRegion
                     updateScrollOffset()
                     minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
                     return true

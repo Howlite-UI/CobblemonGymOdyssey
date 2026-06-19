@@ -82,7 +82,12 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
     private var betGold: Long = 0L       // Gold coins (CGC) in bet (max 99)
     private var betSilver: Long = 0L     // Silver coins (CSC) in bet (max 99)
     private var betCopper: Long = 0L     // Copper coins (CCC) in bet (max 99)
-    private var selectedDifficulty: Int = 1  // 1=Easy, 2=Medium, 3=Hard
+    private var selectedDifficulty: Int = when (region) {
+        Region.UNOVA -> 1
+        Region.ALOLA -> 2
+        Region.PALDEA -> 3
+        else -> 1
+    }
 
     private var clientTicks = 0
     private val random = java.util.Random()
@@ -250,18 +255,18 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
         graphics.blit(BG_TEXTURE, gx, gy, 0f, 0f, GUI_WIDTH, GUI_HEIGHT, 184, 97)
 
         // ── 4. Title ──
-        val title = "✦ L'AUTEL DES SACRIFICES ✦"
+        val title = Component.translatable("cobblemongymodyssey.altar.title").string
         val titleW = font.width(title)
         graphics.drawString(font, title, gx + (GUI_WIDTH - titleW) / 2, gy + 6, 0xFFCC2222.toInt(), true)
 
         // ── 5. Region / limit info ──
         val maxGold = getMaxBetCCC(region) / CoinType.GOLD.valueCCC
-        val limitText = "Limite: ${maxGold}CGC  •  Région: ${region.name}"
+        val limitText = Component.translatable("cobblemongymodyssey.altar.limit", maxGold, region.name).string
         val limitW = font.width(limitText)
         graphics.drawString(font, limitText, gx + (GUI_WIDTH - limitW) / 2, gy + 18, 0xFF886644.toInt(), false)
 
         // ── 6. Balance display ──
-        val balText = "Solde: ${formatBalance()}"
+        val balText = Component.translatable("cobblemongymodyssey.altar.balance", formatBalance()).string
         val balW = font.width(balText)
         graphics.drawString(font, balText, gx + (GUI_WIDTH - balW) / 2, gy + 28, 0xFFFFCC44.toInt(), false)
 
@@ -271,12 +276,23 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
         renderCoinRow(graphics, gx, gy, mouseX, mouseY, "CCC", betCopper, 2, 71)
 
         // ── 8. Total bet display ──
-        val betLabel = "Mise totale: ${formatBet()}"
+        val betLabel = Component.translatable("cobblemongymodyssey.altar.total_bet", formatBet()).string
         val betLabelW = font.width(betLabel)
         graphics.drawString(font, betLabel, gx + (GUI_WIDTH - betLabelW) / 2, gy + 85, 0xFFFFFFFF.toInt(), false)
 
-        // ── 9. Difficulty selection ──
-        renderDifficultyButtons(graphics, gx, gy, mouseX, mouseY)
+        // ── 9. Locked Region difficulty info ──
+        val diffNameKey = when (selectedDifficulty) {
+            1 -> "cobblemongymodyssey.altar.easy"
+            2 -> "cobblemongymodyssey.altar.medium"
+            3 -> "cobblemongymodyssey.altar.hard"
+            else -> "cobblemongymodyssey.altar.easy"
+        }
+        val diffName = Component.translatable(diffNameKey).string
+        val mult = getMultiplier(selectedDifficulty)
+        val maxPkm = getMaxPokemon(selectedDifficulty)
+        val diffText = Component.translatable("cobblemongymodyssey.altar.difficulty_text", diffName, mult, maxPkm).string
+        val diffTextW = font.width(diffText)
+        graphics.drawString(font, diffText, gx + (GUI_WIDTH - diffTextW) / 2, gy + 98, 0xFFFFAA22.toInt(), false)
 
         // ── 10. Feedback message ──
         if (feedbackTicks > 0 && feedbackMsg != null) {
@@ -308,8 +324,8 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
         val rV = if (isRefuseH) 17f else 0f
         graphics.blit(REFUSE_TEXTURE, refuseX, refuseY, 0f, rV, 73, 17, 73, 34)
 
-        val acceptLabel = "DÉFIER"
-        val refuseLabel = "RETOUR"
+        val acceptLabel = Component.translatable("cobblemongymodyssey.altar.defier").string
+        val refuseLabel = Component.translatable("cobblemongymodyssey.altar.back").string
         val acColor = if (isAcceptH) 0xFFFF6666.toInt() else 0xFFFF2222.toInt()
         val refColor = if (isRefuseH) 0xFFCCCCCC.toInt() else 0xFFAAAAAA.toInt()
         graphics.drawString(font, acceptLabel, acceptX + (73 - font.width(acceptLabel)) / 2, acceptY + 4, acColor, true)
@@ -366,49 +382,7 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
         graphics.blit(PLUS_TEXTURE, plusX, plusY, 0f, plusV, 11, 12, 11, 24)
     }
 
-    private fun renderDifficultyButtons(
-        graphics: GuiGraphics,
-        gx: Int, gy: Int,
-        mouseX: Int, mouseY: Int
-    ) {
-        val labels = listOf("Easy ×1.5", "Medium ×2", "Hard ×3")
-        val colors = listOf(0xFF44CC44.toInt(), 0xFFFFAA22.toInt(), 0xFFCC2222.toInt())
-        val btnW = 48; val btnH = 12
-        val totalW = labels.size * btnW + (labels.size - 1) * 4
-        var bx = gx + (GUI_WIDTH - totalW) / 2
-
-        graphics.drawString(font, "Difficulté:", gx + 8, gy + 96, 0xFF888888.toInt(), false)
-
-        labels.forEachIndexed { i, lbl ->
-            val by = gy + 105
-            val isSelected = (i + 1) == selectedDifficulty
-            val isHovered  = mouseX in bx until bx + btnW && mouseY in by until by + btnH
-
-            // Button bg
-            val bgAlpha = if (isSelected) 0xCC else if (isHovered) 0x88 else 0x44
-            val bgColor = (bgAlpha shl 24) or (colors[i] and 0x00FFFFFF)
-            graphics.fill(bx, by, bx + btnW, by + btnH, bgColor)
-
-            // Border if selected
-            if (isSelected) {
-                graphics.fill(bx, by, bx + btnW, by + 1, colors[i])
-                graphics.fill(bx, by + btnH - 1, bx + btnW, by + btnH, colors[i])
-                graphics.fill(bx, by, bx + 1, by + btnH, colors[i])
-                graphics.fill(bx + btnW - 1, by, bx + btnW, by + btnH, colors[i])
-            }
-
-            val textColor = if (isSelected || isHovered) 0xFFFFFF else 0xAAAAAA
-            val tw = font.width(lbl)
-            graphics.drawString(font, lbl, bx + (btnW - tw) / 2, by + 2, textColor, false)
-
-            // Max pokemon hint
-            val hint = "${getMaxPokemon(i + 1)} Pkm max"
-            val hw = font.width(hint)
-            graphics.drawString(font, hint, bx + (btnW - hw) / 2, by + btnH + 2, 0xFF666666.toInt(), false)
-
-            bx += btnW + 4
-        }
-    }
+    // Difficulty buttons rendering removed because settings are region-locked
 
     // -------------------------------------------------------------------------
     // Input
@@ -443,20 +417,7 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
             }
         }
 
-        // ── Difficulty buttons ──
-        val diffLabels = listOf("Easy ×1.5", "Medium ×2", "Hard ×3")
-        val btnW = 48; val btnH = 12
-        val totalW = diffLabels.size * btnW + (diffLabels.size - 1) * 4
-        var bx = gx + (GUI_WIDTH - totalW) / 2
-        val by = gy + 105
-        for (i in 0..2) {
-            if (mouseX.toInt() in bx until bx + btnW && mouseY.toInt() in by until by + btnH) {
-                selectedDifficulty = i + 1
-                minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
-                return true
-            }
-            bx += btnW + 4
-        }
+        // Difficulty click handlers removed because settings are region-locked
 
         // ── Accept (DÉFIER) ──
         val acceptX = gx + 8
@@ -483,18 +444,18 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
 
         // ── Validations ──
         if (bet <= 0L) {
-            showFeedback("Mise invalide : entrez un montant > 0 !")
+            showFeedback(Component.translatable("cobblemongymodyssey.altar.msg.invalid_bet").string)
             minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
             return
         }
         if (bet > ClientWalletCache.balance) {
-            showFeedback("Solde insuffisant !")
+            showFeedback(Component.translatable("cobblemongymodyssey.altar.msg.insufficient_balance").string)
             minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
             return
         }
         val maxBet = getMaxBetCCC(region)
         if (bet > maxBet) {
-            showFeedback("Mise dépasse la limite de cette région !")
+            showFeedback(Component.translatable("cobblemongymodyssey.altar.msg.exceed_limit").string)
             minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
             return
         }
@@ -505,7 +466,7 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
         val buf = RegistryFriendlyByteBuf(
             Unpooled.buffer(),
             minecraft?.level?.registryAccess() ?: run {
-                showFeedback("Erreur interne — veuillez réessayer.")
+                showFeedback(Component.translatable("cobblemongymodyssey.altar.msg.internal_error").string)
                 return
             }
         )

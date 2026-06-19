@@ -63,12 +63,12 @@ object AltarBattleEventHandler {
 
                 val payoutFormatted = formatCCC(payout)
                 player.sendSystemMessage(
-                    Component.literal("§a✦ L'Autel des Sacrifices §— Victoire ! §fVous gagnez §e${payoutFormatted}§f !")
+                    Component.translatable("cobblemongymodyssey.altar.msg.victory", payoutFormatted)
                 )
             } else {
                 // Player lost — bet was already deducted at challenge start
                 player.sendSystemMessage(
-                    Component.literal("§c✦ L'Autel des Sacrifices §— Défaite. Votre mise de §e${formatCCC(bet)}§c est perdue.")
+                    Component.translatable("cobblemongymodyssey.altar.msg.defeat", formatCCC(bet))
                 )
             }
 
@@ -96,7 +96,7 @@ object AltarBattleEventHandler {
                     val targetWorld = server.getLevel(returnLevelKey) ?: server.overworld()
                     player.teleportTo(targetWorld, returnX, returnY, returnZ, returnYaw, returnPitch)
                     player.sendSystemMessage(
-                        Component.translatable("cobblemongymodyssey.gym_battle.returned")
+                        Component.translatable("cobblemongymodyssey.altar.msg.returned")
                     )
                 }
             }

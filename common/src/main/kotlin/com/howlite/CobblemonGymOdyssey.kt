@@ -86,7 +86,7 @@ object CobblemonGymOdyssey {
                     val targetWorld = player.server.getLevel(returnLevelKey) ?: player.server.overworld()
                     player.teleportTo(targetWorld, returnX, returnY, returnZ, returnYaw, returnPitch)
                     player.sendSystemMessage(
-                        net.minecraft.network.chat.Component.literal("§c[Autel] Vous avez été renvoyé — votre mise est perdue suite à la déconnexion.")
+                        net.minecraft.network.chat.Component.translatable("cobblemongymodyssey.altar.msg.returned_disconnected")
                     )
                 }
             }
@@ -229,7 +229,7 @@ object CobblemonGymOdyssey {
                 // 1. Bet > 0
                 if (betCCC <= 0L) {
                     player.sendSystemMessage(
-                        net.minecraft.network.chat.Component.literal("§c[Autel] Mise invalide.")
+                        net.minecraft.network.chat.Component.translatable("cobblemongymodyssey.altar.msg.invalid_bet")
                     )
                     return@queue
                 }
@@ -237,7 +237,7 @@ object CobblemonGymOdyssey {
                 // 2. Balance sufficient
                 if (wallet.balanceCCC < betCCC) {
                     player.sendSystemMessage(
-                        net.minecraft.network.chat.Component.literal("§c[Autel] Solde insuffisant.")
+                        net.minecraft.network.chat.Component.translatable("cobblemongymodyssey.altar.msg.insufficient_balance")
                     )
                     return@queue
                 }
@@ -245,7 +245,7 @@ object CobblemonGymOdyssey {
                 // 3. Not already in a battle
                 if (progress.activeAltarBet > 0L) {
                     player.sendSystemMessage(
-                        net.minecraft.network.chat.Component.literal("§c[Autel] Vous avez déjà un défi en cours !")
+                        net.minecraft.network.chat.Component.translatable("cobblemongymodyssey.altar.msg.already_active")
                     )
                     return@queue
                 }
@@ -258,15 +258,16 @@ object CobblemonGymOdyssey {
                 val teamSize = party.filterNotNull().count()
                 if (teamSize > maxPokemon) {
                     player.sendSystemMessage(
-                        net.minecraft.network.chat.Component.literal(
-                            "§c[Autel] Votre équipe dépasse la limite de $maxPokemon Pokémon pour cette difficulté !"
+                        net.minecraft.network.chat.Component.translatable(
+                            "cobblemongymodyssey.altar.msg.exceed_team_limit",
+                            maxPokemon
                         )
                     )
                     return@queue
                 }
                 if (teamSize == 0) {
                     player.sendSystemMessage(
-                        net.minecraft.network.chat.Component.literal("§c[Autel] Vous n'avez pas de Pokémon dans votre équipe !")
+                        net.minecraft.network.chat.Component.translatable("cobblemongymodyssey.altar.msg.no_pkm_team")
                     )
                     return@queue
                 }
@@ -275,7 +276,7 @@ object CobblemonGymOdyssey {
                 val success = com.howlite.wallet.WalletManager.removeAndSync(player, betCCC)
                 if (!success) {
                     player.sendSystemMessage(
-                        net.minecraft.network.chat.Component.literal("§c[Autel] Échec du retrait — solde insuffisant.")
+                        net.minecraft.network.chat.Component.translatable("cobblemongymodyssey.altar.msg.insufficient_balance")
                     )
                     return@queue
                 }
