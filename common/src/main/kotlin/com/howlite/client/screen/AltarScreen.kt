@@ -288,9 +288,15 @@ class AltarScreen(private val region: Region) : Screen(Component.literal("L'Aute
             else -> "cobblemongymodyssey.altar.easy"
         }
         val diffName = Component.translatable(diffNameKey).string
+        val bossLevel = when (selectedDifficulty) {
+            1 -> 120
+            2 -> 160
+            3 -> 200
+            else -> 120
+        }
         val mult = getMultiplier(selectedDifficulty)
         val maxPkm = getMaxPokemon(selectedDifficulty)
-        val diffText = Component.translatable("cobblemongymodyssey.altar.difficulty_text", diffName, mult, maxPkm).string
+        val diffText = Component.translatable("cobblemongymodyssey.altar.difficulty_text", diffName, bossLevel, mult, maxPkm).string
         val diffTextW = font.width(diffText)
         graphics.drawString(font, diffText, gx + (GUI_WIDTH - diffTextW) / 2, gy + 98, 0xFFFFAA22.toInt(), false)
 

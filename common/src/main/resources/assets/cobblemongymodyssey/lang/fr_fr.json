@@ -258,7 +258,7 @@
   "cobblemongymodyssey.altar.hard": "Difficile",
   "cobblemongymodyssey.altar.defier": "DÉFIER",
   "cobblemongymodyssey.altar.back": "RETOUR",
-  "cobblemongymodyssey.altar.difficulty_text": "Difficulté : %s (x%s)  •  %s Pkm max",
+  "cobblemongymodyssey.altar.difficulty_text": "Difficulté : %s (Niv %s, x%s)  •  %s Pkm max",
   "cobblemongymodyssey.altar.msg.invalid_bet": "Mise invalide : entrez un montant > 0 !",
   "cobblemongymodyssey.altar.msg.insufficient_balance": "Solde insuffisant !",
   "cobblemongymodyssey.altar.msg.exceed_limit": "Mise dépasse la limite de cette région !",

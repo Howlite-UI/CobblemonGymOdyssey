@@ -487,14 +487,27 @@ class BadgeCaseScreen(
     private fun renderAltarButton(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         val altarX = x - 53
         val altarY = y + 64
+        val hasAnyBadge = activeRegion.badges.any { it in menu.unlockedBadges }
         val isHovered = mouseX >= altarX && mouseX < altarX + 53 && mouseY >= altarY && mouseY < altarY + 14
-        val buttonV = if (isHovered) 14f else 0f
+        val buttonV = if (hasAnyBadge && isHovered) 14f else 0f
 
+        if (!hasAnyBadge) {
+            RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1.0f)
+        }
         graphics.blit(ALTAR_BUTTON_TEXTURE, altarX, altarY, 0f, buttonV, 53, 14, 53, 28)
+        if (!hasAnyBadge) {
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        }
 
         val text = Component.translatable("cobblemongymodyssey.badge_case.altar_button").string
         val textW = font.width(text)
-        val textColor = if (isHovered) 0xFFFFA800.toInt() else 0xFFFFFF
+        val textColor = if (!hasAnyBadge) {
+            0x8E8E93
+        } else if (isHovered) {
+            0xFFFFA800.toInt()
+        } else {
+            0xFFFFFF
+        }
         graphics.drawString(font, text, altarX + 3 + (31 - textW) / 2, altarY + 3, textColor, false)
     }
 
@@ -941,10 +954,15 @@ class BadgeCaseScreen(
                 val altarX = x - 53
                 val altarY = y + 64
                 if (mouseX >= altarX && mouseX < altarX + 53 && mouseY >= altarY && mouseY < altarY + 14) {
-                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f))
-                    minecraft?.setScreen(
-                        com.howlite.client.screen.AltarScreen(activeRegion)
-                    )
+                    val hasAnyBadge = activeRegion.badges.any { it in menu.unlockedBadges }
+                    if (hasAnyBadge) {
+                        minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f))
+                        minecraft?.setScreen(
+                            com.howlite.client.screen.AltarScreen(activeRegion)
+                        )
+                    } else {
+                        minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
+                    }
                     return true
                 }
             }

@@ -270,7 +270,7 @@
   "cobblemongymodyssey.altar.hard": "Hard",
   "cobblemongymodyssey.altar.defier": "CHALLENGE",
   "cobblemongymodyssey.altar.back": "RETURN",
-  "cobblemongymodyssey.altar.difficulty_text": "Difficulty: %s (x%s)  •  %s Pkm max",
+  "cobblemongymodyssey.altar.difficulty_text": "Difficulty: %s (Lvl %s, x%s)  •  %s Pkm max",
   "cobblemongymodyssey.altar.msg.invalid_bet": "Invalid bet: enter an amount > 0!",
   "cobblemongymodyssey.altar.msg.insufficient_balance": "Insufficient balance!",
   "cobblemongymodyssey.altar.msg.exceed_limit": "Bet exceeds the limit for this region!",

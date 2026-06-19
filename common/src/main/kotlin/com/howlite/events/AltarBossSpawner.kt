@@ -15,6 +15,10 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.core.registries.BuiltInRegistries
+
 
 /**
  * Utility to start an Altar of Sacrifices boss challenge.
@@ -114,10 +118,10 @@ object AltarBossSpawner {
 
             // 3. Boss level based on difficulty/region
             val bossLevel = when (difficulty) {
-                1 -> 100
-                2 -> 110
-                3 -> 120
-                else -> 100
+                1 -> 120
+                2 -> 160
+                3 -> 200
+                else -> 120
             }
 
             // 4. Build the boss Pokémon with competitive stats (EVs, nature, IVs)
@@ -125,7 +129,16 @@ object AltarBossSpawner {
             val bossProps = PokemonProperties.parse(
                 "$bossSpecies level=$bossLevel nature=$nature"
             )
-            val bossPokemon: Pokemon = bossProps.create()
+            val tempPokemon = bossProps.create()
+
+            val hpMultiplier = when (difficulty) {
+                1 -> 1.5
+                2 -> 2.0
+                3 -> 2.5
+                else -> 1.5
+            }
+            val bossPokemon = BossPokemon(hpMultiplier)
+            bossPokemon.copyFrom(tempPokemon)
 
             // Set max IVs (31)
             for (stat in com.cobblemon.mod.common.api.pokemon.stats.Stats.entries) {
@@ -141,6 +154,28 @@ object AltarBossSpawner {
                 bossPokemon.setEV(com.cobblemon.mod.common.api.pokemon.stats.Stats.SPECIAL_ATTACK, 252)
                 bossPokemon.setEV(com.cobblemon.mod.common.api.pokemon.stats.Stats.SPEED, 252)
                 bossPokemon.setEV(com.cobblemon.mod.common.api.pokemon.stats.Stats.HP, 6)
+            }
+
+            // Heal the boss to full HP after stats are set
+            bossPokemon.currentHealth = bossPokemon.maxHealth
+
+            // Give held item to make battle more competitive
+            val heldItemName = when (difficulty) {
+                1 -> "cobblemon:leftovers"
+                2 -> "cobblemon:life_orb"
+                3 -> "cobblemon:focus_sash"
+                else -> null
+            }
+            if (heldItemName != null) {
+                try {
+                    val itemLoc = ResourceLocation.parse(heldItemName)
+                    val item = BuiltInRegistries.ITEM.get(itemLoc)
+                    if (item != Items.AIR) {
+                        bossPokemon.swapHeldItem(ItemStack(item))
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
             val speciesDisplay = bossSpecies.replaceFirstChar { it.uppercaseChar() }
@@ -254,5 +289,15 @@ object AltarBossSpawner {
                 com.howlite.api.PlayerProgressApi.markDirty(player)
             }
         }
+    }
+}
+
+class BossPokemon(val hpMultiplier: Double) : Pokemon() {
+    override fun getStat(stat: com.cobblemon.mod.common.api.pokemon.stats.Stat): Int {
+        val baseValue = super.getStat(stat)
+        if (stat == com.cobblemon.mod.common.api.pokemon.stats.Stats.HP) {
+            return (baseValue * hpMultiplier).toInt()
+        }
+        return baseValue
     }
 }
