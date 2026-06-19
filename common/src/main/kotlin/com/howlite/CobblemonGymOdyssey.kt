@@ -49,6 +49,35 @@ object CobblemonGymOdyssey {
         GymTpCommand.register()
         AltarBattleEventHandler.register()
 
+        com.cobblemon.mod.common.Cobblemon.statProvider = AltarStatProvider(com.cobblemon.mod.common.Cobblemon.statProvider)
+
+        try {
+            com.cobblemon.mod.common.Cobblemon.config.maxPokemonLevel = 300
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // Bloquer le spawn naturel de Pokémon sauvages dans la dimension d'arènes
+        com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe { event ->
+            val level = event.entity.level()
+            if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
+                event.cancel()
+            }
+        }
+
+        // Bloquer le chargement de Pokémon sauvages ou de templates (qui n'ont pas le préfixe [Boss]) dans la dimension d'arènes
+        com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_ENTITY_LOAD.subscribe { event ->
+            val entity = event.pokemonEntity
+            val level = entity.level()
+            if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
+                val nick = entity.pokemon.nickname?.string ?: ""
+                if (!nick.startsWith("§c[Boss]")) {
+                    event.cancel()
+                }
+            }
+        }
+
+
         // Synchroniser le wallet lors de la connexion du joueur et l'enregistrer dans le tracker PvP
         dev.architectury.event.events.common.PlayerEvent.PLAYER_JOIN.register { player ->
             if (player is ServerPlayer) {
@@ -174,7 +203,12 @@ object CobblemonGymOdyssey {
                                     progress.pvpWins,
                                     progress.pvpLosses,
                                     progress.pvpRewardsClaimedToday,
-                                    progress.pvpFights
+                                    progress.pvpFights,
+                                    mapOf(
+                                        "UNOVA" to progress.getAltarFightsToday("UNOVA"),
+                                        "ALOLA" to progress.getAltarFightsToday("ALOLA"),
+                                        "PALDEA" to progress.getAltarFightsToday("PALDEA")
+                                    )
                                 )
                         }
                     ) { buffer ->
@@ -202,6 +236,12 @@ object CobblemonGymOdyssey {
                             buffer.writeInt(record.consecutiveDays)
                             buffer.writeInt(record.wins)
                             buffer.writeInt(record.losses)
+                        }
+                        // Sync Altar daily fights count
+                        buffer.writeInt(3)
+                        listOf("UNOVA", "ALOLA", "PALDEA").forEach { r ->
+                            buffer.writeUtf(r)
+                            buffer.writeInt(progress.getAltarFightsToday(r))
                         }
                     }
                 }
@@ -250,6 +290,15 @@ object CobblemonGymOdyssey {
                     return@queue
                 }
 
+                // 3.5. Daily limit check (5 fights per region per day)
+                val fightsToday = progress.getAltarFightsToday(regionName)
+                if (fightsToday >= 5) {
+                    player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.translatable("cobblemongymodyssey.altar.msg.limit_reached")
+                    )
+                    return@queue
+                }
+
                 // 4. Team size check
                 val maxPokemon = when (difficulty) {
                     1 -> 3; 2 -> 2; 3 -> 1; else -> 3
@@ -288,6 +337,7 @@ object CobblemonGymOdyssey {
                     player.x, player.y, player.z,
                     player.yRot, player.xRot
                 )
+                progress.incrementAltarFights(regionName)
                 progress.activeAltarBet = betCCC
                 progress.activeAltarDifficulty = difficulty
                 com.howlite.api.PlayerProgressApi.markDirty(player)
@@ -296,5 +346,23 @@ object CobblemonGymOdyssey {
                 com.howlite.events.AltarBossSpawner.startAltarBattle(player, regionName, difficulty)
             }
         }
+    }
+}
+
+class AltarStatProvider(val delegate: com.cobblemon.mod.common.api.pokemon.stats.StatProvider) : com.cobblemon.mod.common.api.pokemon.stats.StatProvider by delegate {
+    override fun getStatForPokemon(pokemon: com.cobblemon.mod.common.pokemon.Pokemon, stat: com.cobblemon.mod.common.api.pokemon.stats.Stat): Int {
+        val baseValue = delegate.getStatForPokemon(pokemon, stat)
+        val nick = pokemon.nickname?.string ?: ""
+        if (nick.startsWith("§c[Boss]")) {
+            if (stat == com.cobblemon.mod.common.api.pokemon.stats.Stats.HP) return baseValue
+            val multiplier = when (pokemon.level) {
+                150 -> 1.2
+                200 -> 1.6
+                300 -> 2.0
+                else -> 1.0
+            }
+            return (baseValue * multiplier).toInt()
+        }
+        return baseValue
     }
 }

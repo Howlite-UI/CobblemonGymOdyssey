@@ -101,8 +101,10 @@ object AltarBossSpawner {
         try {
             val server = player.server
 
-            // 1. Determine lead Pokémon type
+            // 1. Determine lead Pokémon type and heal the party to prevent soft-locks
             val party = Cobblemon.storage.getParty(player)
+            party.forEach { it?.heal() }
+
             val leadPokemon = party.firstOrNull() ?: run {
                 player.sendSystemMessage(
                     Component.translatable("cobblemongymodyssey.altar.msg.no_lead")
@@ -118,10 +120,17 @@ object AltarBossSpawner {
 
             // 3. Boss level based on difficulty/region
             val bossLevel = when (difficulty) {
-                1 -> 120
-                2 -> 160
-                3 -> 200
-                else -> 120
+                1 -> 150
+                2 -> 200
+                3 -> 300
+                else -> 150
+            }
+
+            // Ensure config max level is 300 so Cobblemon parser and instantiation allows level 150/200/300
+            try {
+                Cobblemon.config.maxPokemonLevel = 300
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
             // 4. Build the boss Pokémon with competitive stats (EVs, nature, IVs)
@@ -129,16 +138,11 @@ object AltarBossSpawner {
             val bossProps = PokemonProperties.parse(
                 "$bossSpecies level=$bossLevel nature=$nature"
             )
-            val tempPokemon = bossProps.create()
+            val bossPokemon: Pokemon = bossProps.create()
 
-            val hpMultiplier = when (difficulty) {
-                1 -> 1.5
-                2 -> 2.0
-                3 -> 2.5
-                else -> 1.5
-            }
-            val bossPokemon = BossPokemon(hpMultiplier)
-            bossPokemon.copyFrom(tempPokemon)
+            // Set nickname immediately so the AltarStatProvider calculates the scaled max HP!
+            val speciesDisplay = bossSpecies.replaceFirstChar { it.uppercaseChar() }
+            bossPokemon.nickname = Component.literal("§c[Boss] $speciesDisplay")
 
             // Set max IVs (31)
             for (stat in com.cobblemon.mod.common.api.pokemon.stats.Stats.entries) {
@@ -178,8 +182,6 @@ object AltarBossSpawner {
                 }
             }
 
-            val speciesDisplay = bossSpecies.replaceFirstChar { it.uppercaseChar() }
-            bossPokemon.nickname = Component.literal("§c[Boss] $speciesDisplay")
             com.cobblemon.mod.common.pokemon.properties.UncatchableProperty.uncatchable().apply(bossPokemon)
 
             // 5. Get gym_dimension level
@@ -289,15 +291,5 @@ object AltarBossSpawner {
                 com.howlite.api.PlayerProgressApi.markDirty(player)
             }
         }
-    }
-}
-
-class BossPokemon(val hpMultiplier: Double) : Pokemon() {
-    override fun getStat(stat: com.cobblemon.mod.common.api.pokemon.stats.Stat): Int {
-        val baseValue = super.getStat(stat)
-        if (stat == com.cobblemon.mod.common.api.pokemon.stats.Stats.HP) {
-            return (baseValue * hpMultiplier).toInt()
-        }
-        return baseValue
     }
 }

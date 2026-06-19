@@ -38,6 +38,30 @@ class PlayerProgressData {
     var pvpWins: Int = 0
     var pvpLosses: Int = 0
 
+    private val _altarFightsData: MutableMap<String, String> = mutableMapOf()
+    val altarFightsData: Map<String, String> get() = _altarFightsData
+
+    fun getAltarFightsToday(regionId: String): Int {
+        val todayStr = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
+        val savedDate = _altarFightsData["date"]
+        if (savedDate != todayStr) {
+            _altarFightsData.clear()
+            _altarFightsData["date"] = todayStr
+        }
+        return _altarFightsData[regionId]?.toIntOrNull() ?: 0
+    }
+
+    fun incrementAltarFights(regionId: String) {
+        val todayStr = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
+        val savedDate = _altarFightsData["date"]
+        if (savedDate != todayStr) {
+            _altarFightsData.clear()
+            _altarFightsData["date"] = todayStr
+        }
+        val current = _altarFightsData[regionId]?.toIntOrNull() ?: 0
+        _altarFightsData[regionId] = (current + 1).toString()
+    }
+
     fun recordPvpFight(opponentUuid: String, record: PvpFightRecord) {
         _pvpFights[opponentUuid] = record
     }
@@ -115,6 +139,7 @@ class PlayerProgressData {
         pvpRewardsClaimedToday = 0
         pvpWins = 0
         pvpLosses = 0
+        _altarFightsData.clear()
         levelCap = INITIAL_LEVEL_CAP
     }
 
@@ -168,6 +193,12 @@ class PlayerProgressData {
         tag.putInt(KEY_PVP_REWARDS_CLAIMED, pvpRewardsClaimedToday)
         tag.putInt("PvpWins", pvpWins)
         tag.putInt("PvpLosses", pvpLosses)
+
+        val altarFightsTag = CompoundTag()
+        _altarFightsData.forEach { (k, v) ->
+            altarFightsTag.putString(k, v)
+        }
+        tag.put("AltarFightsData", altarFightsTag)
     }
 
     fun readFromNbt(tag: CompoundTag) {
@@ -211,6 +242,14 @@ class PlayerProgressData {
         pvpRewardsClaimedToday = if (tag.contains(KEY_PVP_REWARDS_CLAIMED)) tag.getInt(KEY_PVP_REWARDS_CLAIMED) else 0
         pvpWins = if (tag.contains("PvpWins")) tag.getInt("PvpWins") else 0
         pvpLosses = if (tag.contains("PvpLosses")) tag.getInt("PvpLosses") else 0
+
+        _altarFightsData.clear()
+        if (tag.contains("AltarFightsData")) {
+            val altarFightsTag = tag.getCompound("AltarFightsData")
+            altarFightsTag.allKeys.forEach { k ->
+                _altarFightsData[k] = altarFightsTag.getString(k)
+            }
+        }
     }
 
     companion object {
@@ -253,8 +292,12 @@ class PlayerProgressData {
                 Codec.STRING.optionalFieldOf("last_pvp_reset_date").forGetter { Optional.ofNullable(it.lastPvpResetDate) },
                 Codec.INT.fieldOf("pvp_rewards_claimed_today").orElse(0).forGetter { it.pvpRewardsClaimedToday },
                 Codec.INT.fieldOf("pvp_wins").orElse(0).forGetter { it.pvpWins },
-                Codec.INT.fieldOf("pvp_losses").orElse(0).forGetter { it.pvpLosses }
-            ).apply(instance) { cap, badgeIds, teams, arenaIndexOpt, returnDimOpt, returnXOpt, returnYOpt, returnZOpt, returnYawOpt, returnPitchOpt, pvpFights, lastPvpResetDateOpt, pvpRewardsClaimedToday, pvpWins, pvpLosses ->
+                Codec.INT.fieldOf("pvp_losses").orElse(0).forGetter { it.pvpLosses },
+                Codec.unboundedMap(Codec.STRING, Codec.STRING)
+                    .fieldOf("altar_fights_data")
+                    .orElse(emptyMap())
+                    .forGetter { it._altarFightsData }
+            ).apply(instance) { cap, badgeIds, teams, arenaIndexOpt, returnDimOpt, returnXOpt, returnYOpt, returnZOpt, returnYawOpt, returnPitchOpt, pvpFights, lastPvpResetDateOpt, pvpRewardsClaimedToday, pvpWins, pvpLosses, altarFightsData ->
                 PlayerProgressData().also { d ->
                     d.levelCap = cap
                     badgeIds.mapNotNull { GymBadge.fromId(it) }.forEach { d._badges.add(it) }
@@ -271,6 +314,7 @@ class PlayerProgressData {
                     d.pvpRewardsClaimedToday = pvpRewardsClaimedToday
                     d.pvpWins = pvpWins
                     d.pvpLosses = pvpLosses
+                    d._altarFightsData.putAll(altarFightsData)
                     // Note: activeAltarBet and activeAltarDifficulty are NBT-only
                     // (transient battle state; resets safely on server restart)
                 }

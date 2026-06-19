@@ -37,7 +37,8 @@ class BadgeCaseMenu(
     val pvpWins: Int = 0,
     val pvpLosses: Int = 0,
     val pvpRewardsClaimedToday: Int = 0,
-    val pvpFights: Map<String, com.howlite.data.PvpFightRecord> = emptyMap()
+    val pvpFights: Map<String, com.howlite.data.PvpFightRecord> = emptyMap(),
+    val altarFightsToday: Map<String, Int> = emptyMap()
 ) : AbstractContainerMenu(BadgeCaseMenus.BADGE_CASE_MENU_TYPE.get(), syncId) {
 
     override fun clickMenuButton(player: Player, id: Int): Boolean {
@@ -62,7 +63,8 @@ class BadgeCaseMenu(
         val pvpWins: Int,
         val pvpLosses: Int,
         val pvpRewardsClaimedToday: Int,
-        val pvpFights: Map<String, com.howlite.data.PvpFightRecord>
+        val pvpFights: Map<String, com.howlite.data.PvpFightRecord>,
+        val altarFightsToday: Map<String, Int>
     )
 
     companion object {
@@ -113,7 +115,15 @@ class BadgeCaseMenu(
                 }
             }
 
-            return MenuData(levelCap, badges, badgeTeams, pvpWins, pvpLosses, pvpRewardsClaimedToday, pvpFights)
+            val altarFightsToday = mutableMapOf<String, Int>()
+            if (buf.readableBytes() > 0) {
+                val size = buf.readInt()
+                for (i in 0 until size) {
+                    altarFightsToday[buf.readUtf()] = buf.readInt()
+                }
+            }
+
+            return MenuData(levelCap, badges, badgeTeams, pvpWins, pvpLosses, pvpRewardsClaimedToday, pvpFights, altarFightsToday)
         }
     }
 
@@ -134,7 +144,8 @@ class BadgeCaseMenu(
         pvpWins = data.pvpWins,
         pvpLosses = data.pvpLosses,
         pvpRewardsClaimedToday = data.pvpRewardsClaimedToday,
-        pvpFights = data.pvpFights
+        pvpFights = data.pvpFights,
+        altarFightsToday = data.altarFightsToday
     )
 
     /** Pas de déplacement rapide d'items — menu en lecture seule. */

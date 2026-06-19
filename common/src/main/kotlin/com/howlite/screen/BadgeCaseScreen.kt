@@ -958,7 +958,7 @@ class BadgeCaseScreen(
                     if (hasAnyBadge) {
                         minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f))
                         minecraft?.setScreen(
-                            com.howlite.client.screen.AltarScreen(activeRegion)
+                            com.howlite.client.screen.AltarScreen(activeRegion, this)
                         )
                     } else {
                         minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
