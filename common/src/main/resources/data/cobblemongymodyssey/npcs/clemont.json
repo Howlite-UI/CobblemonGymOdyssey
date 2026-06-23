@@ -1,23 +1,34 @@
-﻿{
-    "battleConfiguration":  {
-                                "canChallenge":  true
-                            },
-    "hitbox":  "player",
-    "skill":  5,
-    "resourceIdentifier":  "cobblemongymodyssey:clemont",
-    "interaction":  {
-                        "type":  "dialogue",
-                        "dialogue":  "cobblemongymodyssey:clemont_dialogue"
-                    },
-    "names":  [
-                  "Clemont"
-              ],
-    "party":  {
-                  "pokemon":  [
-                                  "emolga level=35 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-                                  "heliolisk level=37 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-                              ],
-                  "type":  "simple"
-              },
-    "autoHealParty":  true
+{
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "hitbox": "player",
+    "skill": 5,
+    "resourceIdentifier": "cobblemongymodyssey:clemont",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:clemont_dialogue"
+    },
+    "names": [
+        "Clemont"
+    ],
+    "party": {
+        "isStatic": false,
+        "minPokemon": 6,
+        "pool": [
+            "raichu level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "electivire level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "magnezone level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "rotom level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "luxray level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "jolteon level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "regieleki level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "zapdos level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "raikou level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "pawmot level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers"
+        ],
+        "maxPokemon": 6,
+        "type": "pool"
+    },
+    "autoHealParty": true
 }

@@ -1,23 +1,34 @@
-﻿{
-    "battleConfiguration":  {
-                                "canChallenge":  true
-                            },
-    "hitbox":  "player",
-    "skill":  5,
-    "resourceIdentifier":  "cobblemongymodyssey:roxanne",
-    "interaction":  {
-                        "type":  "dialogue",
-                        "dialogue":  "cobblemongymodyssey:roxanne_dialogue"
-                    },
-    "names":  [
-                  "Roxanne"
-              ],
-    "party":  {
-                  "pokemon":  [
-                                  "geodude level=14 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-                                  "nosepass level=15 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-                              ],
-                  "type":  "simple"
-              },
-    "autoHealParty":  true
+{
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "hitbox": "player",
+    "skill": 5,
+    "resourceIdentifier": "cobblemongymodyssey:roxanne",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:roxanne_dialogue"
+    },
+    "names": [
+        "Roxanne"
+    ],
+    "party": {
+        "isStatic": false,
+        "minPokemon": 6,
+        "pool": [
+            "tyranitar level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "aerodactyl level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "gigalith level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "terrakion level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "garganacl level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "lycanroc level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "rampardos level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "rhyperior level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "kleavor level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "coalossal level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:focus_sash"
+        ],
+        "maxPokemon": 6,
+        "type": "pool"
+    },
+    "autoHealParty": true
 }

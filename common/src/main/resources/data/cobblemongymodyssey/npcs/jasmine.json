@@ -1,23 +1,34 @@
-﻿{
-    "battleConfiguration":  {
-                                "canChallenge":  true
-                            },
-    "hitbox":  "player",
-    "skill":  5,
-    "resourceIdentifier":  "cobblemongymodyssey:jasmine",
-    "interaction":  {
-                        "type":  "dialogue",
-                        "dialogue":  "cobblemongymodyssey:jasmine_dialogue"
-                    },
-    "names":  [
-                  "Jasmine"
-              ],
-    "party":  {
-                  "pokemon":  [
-                                  "magnemite level=30 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-                                  "steelix level=35 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-                              ],
-                  "type":  "simple"
-              },
-    "autoHealParty":  true
+{
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "hitbox": "player",
+    "skill": 5,
+    "resourceIdentifier": "cobblemongymodyssey:jasmine",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:jasmine_dialogue"
+    },
+    "names": [
+        "Jasmine"
+    ],
+    "party": {
+        "isStatic": false,
+        "minPokemon": 6,
+        "pool": [
+            "metagross level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "scizor level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "aegislash level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "corviknight level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "kingambit level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "gholdengo level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "tinkaton level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "copperajah level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "lucario level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "magnezone level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:focus_sash"
+        ],
+        "maxPokemon": 6,
+        "type": "pool"
+    },
+    "autoHealParty": true
 }

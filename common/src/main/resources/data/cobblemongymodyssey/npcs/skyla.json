@@ -1,23 +1,34 @@
-﻿{
-    "battleConfiguration":  {
-                                "canChallenge":  true
-                            },
-    "hitbox":  "player",
-    "skill":  5,
-    "resourceIdentifier":  "cobblemongymodyssey:skyla",
-    "interaction":  {
-                        "type":  "dialogue",
-                        "dialogue":  "cobblemongymodyssey:skyla_dialogue"
-                    },
-    "names":  [
-                  "Skyla"
-              ],
-    "party":  {
-                  "pokemon":  [
-                                  "swoobat level=33 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-                                  "swanna level=35 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-                              ],
-                  "type":  "simple"
-              },
-    "autoHealParty":  true
+{
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "hitbox": "player",
+    "skill": 5,
+    "resourceIdentifier": "cobblemongymodyssey:skyla",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:skyla_dialogue"
+    },
+    "names": [
+        "Skyla"
+    ],
+    "party": {
+        "isStatic": false,
+        "minPokemon": 6,
+        "pool": [
+            "corviknight level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "talonflame level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "staraptor level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "dragonite level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "salamence level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "gliscor level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "aerodactyl level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "gyarados level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "noivern level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "crobat level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs"
+        ],
+        "maxPokemon": 6,
+        "type": "pool"
+    },
+    "autoHealParty": true
 }

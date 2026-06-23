@@ -1,23 +1,34 @@
-﻿{
-    "battleConfiguration":  {
-                                "canChallenge":  true
-                            },
-    "hitbox":  "player",
-    "skill":  5,
-    "resourceIdentifier":  "cobblemongymodyssey:marnie",
-    "interaction":  {
-                        "type":  "dialogue",
-                        "dialogue":  "cobblemongymodyssey:marnie_dialogue"
-                    },
-    "names":  [
-                  "Marnie"
-              ],
-    "party":  {
-                  "pokemon":  [
-                                  "morpeko level=47 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-                                  "grimmsnarl level=49 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-                              ],
-                  "type":  "simple"
-              },
-    "autoHealParty":  true
+{
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "hitbox": "player",
+    "skill": 5,
+    "resourceIdentifier": "cobblemongymodyssey:marnie",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:marnie_dialogue"
+    },
+    "names": [
+        "Marnie"
+    ],
+    "party": {
+        "isStatic": false,
+        "minPokemon": 6,
+        "pool": [
+            "hydreigon level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "tyranitar level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "weavile level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:focus_sash",
+            "kingambit level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "meowscarada level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "grimmsnarl level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "krookodile level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "obstagoon level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:focus_sash",
+            "absol level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "honchkrow level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers"
+        ],
+        "maxPokemon": 6,
+        "type": "pool"
+    },
+    "autoHealParty": true
 }

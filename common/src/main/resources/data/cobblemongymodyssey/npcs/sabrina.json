@@ -1,25 +1,34 @@
 {
-  "hitbox": "player",
-  "names": [
-    "Sabrina"
-  ],
-  "resourceIdentifier": "cobblemongymodyssey:sabrina",
-  "interaction": {
-    "type": "dialogue",
-    "dialogue": "cobblemongymodyssey:sabrina_dialogue"
-  },
-  "battleConfiguration": {
-    "canChallenge": true
-  },
-  "autoHealParty": true,
-  "skill": 5,
-  "party": {
-    "type": "simple",
-    "pokemon": [
-      "kadabra level=64 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "mr-mime level=66 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "venomoth level=66 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "alakazam level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-    ]
-  }
+    "hitbox": "player",
+    "names": [
+        "Sabrina"
+    ],
+    "resourceIdentifier": "cobblemongymodyssey:sabrina",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:sabrina_dialogue"
+    },
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "autoHealParty": true,
+    "skill": 5,
+    "party": {
+        "isStatic": false,
+        "minPokemon": 5,
+        "pool": [
+            "alakazam level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "metagross level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "gardevoir level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "latios level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "latias level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "espeon level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "gallade level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "reuniclus level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "hatterene level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "delphox level=70 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet"
+        ],
+        "maxPokemon": 5,
+        "type": "pool"
+    }
 }

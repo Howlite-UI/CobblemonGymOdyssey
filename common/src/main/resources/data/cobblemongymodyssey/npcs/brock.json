@@ -1,23 +1,34 @@
 {
-  "hitbox": "player",
-  "names": [
-    "Brock"
-  ],
-  "resourceIdentifier": "cobblemongymodyssey:brock",
-  "interaction": {
-    "type": "dialogue",
-    "dialogue": "cobblemongymodyssey:brock_dialogue"
-  },
-  "battleConfiguration": {
-    "canChallenge": true
-  },
-  "autoHealParty": true,
-  "skill": 5,
-  "party": {
-    "type": "simple",
-    "pokemon": [
-      "geodude level=12 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "onix level=14 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-    ]
-  }
+    "hitbox": "player",
+    "names": [
+        "Brock"
+    ],
+    "resourceIdentifier": "cobblemongymodyssey:brock",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:brock_dialogue"
+    },
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "autoHealParty": true,
+    "skill": 5,
+    "party": {
+        "isStatic": false,
+        "minPokemon": 3,
+        "pool": [
+            "tyranitar level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "aerodactyl level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:focus_sash",
+            "gigalith level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "terrakion level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:focus_sash",
+            "garganacl level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "lycanroc level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "rampardos level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "rhyperior level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:assault_vest",
+            "kleavor level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "coalossal level=20 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet"
+        ],
+        "maxPokemon": 3,
+        "type": "pool"
+    }
 }

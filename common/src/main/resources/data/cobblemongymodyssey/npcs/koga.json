@@ -1,25 +1,34 @@
 {
-  "hitbox": "player",
-  "names": [
-    "Koga"
-  ],
-  "resourceIdentifier": "cobblemongymodyssey:koga",
-  "interaction": {
-    "type": "dialogue",
-    "dialogue": "cobblemongymodyssey:koga_dialogue"
-  },
-  "battleConfiguration": {
-    "canChallenge": true
-  },
-  "autoHealParty": true,
-  "skill": 5,
-  "party": {
-    "type": "simple",
-    "pokemon": [
-      "koffing level=53 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "muk level=56 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "koffing level=56 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "weezing level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-    ]
-  }
+    "hitbox": "player",
+    "names": [
+        "Koga"
+    ],
+    "resourceIdentifier": "cobblemongymodyssey:koga",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:koga_dialogue"
+    },
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "autoHealParty": true,
+    "skill": 5,
+    "party": {
+        "isStatic": false,
+        "minPokemon": 5,
+        "pool": [
+            "gengar level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:focus_sash",
+            "crobat level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "nidoking level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "nidoqueen level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "toxapex level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "salazzle level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "clodsire level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "amoonguss level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "drapion level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "toxtricity level=60 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band"
+        ],
+        "maxPokemon": 5,
+        "type": "pool"
+    }
 }

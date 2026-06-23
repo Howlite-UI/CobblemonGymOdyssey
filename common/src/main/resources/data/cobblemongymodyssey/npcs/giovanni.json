@@ -1,26 +1,34 @@
 {
-  "hitbox": "player",
-  "names": [
-    "Giovanni"
-  ],
-  "resourceIdentifier": "cobblemongymodyssey:giovanni",
-  "interaction": {
-    "type": "dialogue",
-    "dialogue": "cobblemongymodyssey:giovanni_dialogue"
-  },
-  "battleConfiguration": {
-    "canChallenge": true
-  },
-  "autoHealParty": true,
-  "skill": 5,
-  "party": {
-    "type": "simple",
-    "pokemon": [
-      "rhyhorn level=90 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "dugtrio level=91 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "nidoqueen level=93 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "nidoking level=95 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "rhyhorn level=97 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-    ]
-  }
+    "hitbox": "player",
+    "names": [
+        "Giovanni"
+    ],
+    "resourceIdentifier": "cobblemongymodyssey:giovanni",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:giovanni_dialogue"
+    },
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "autoHealParty": true,
+    "skill": 5,
+    "party": {
+        "isStatic": false,
+        "minPokemon": 6,
+        "pool": [
+            "garchomp level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "excadrill level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "rhyperior level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:focus_sash",
+            "gliscor level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "clodsire level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "krookodile level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "hippowdon level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_band",
+            "mamoswine level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "steelix level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "donphan level=100 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers"
+        ],
+        "maxPokemon": 6,
+        "type": "pool"
+    }
 }

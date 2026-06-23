@@ -1,24 +1,34 @@
 {
-  "hitbox": "player",
-  "names": [
-    "Lt. Surge"
-  ],
-  "resourceIdentifier": "cobblemongymodyssey:lt_surge",
-  "interaction": {
-    "type": "dialogue",
-    "dialogue": "cobblemongymodyssey:lt_surge_dialogue"
-  },
-  "battleConfiguration": {
-    "canChallenge": true
-  },
-  "autoHealParty": true,
-  "skill": 5,
-  "party": {
-    "type": "simple",
-    "pokemon": [
-      "voltorb level=35 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "pikachu level=38 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31",
-      "raichu level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31"
-    ]
-  }
+    "hitbox": "player",
+    "names": [
+        "Lt. Surge"
+    ],
+    "resourceIdentifier": "cobblemongymodyssey:lt_surge",
+    "interaction": {
+        "type": "dialogue",
+        "dialogue": "cobblemongymodyssey:lt_surge_dialogue"
+    },
+    "battleConfiguration": {
+        "canChallenge": true
+    },
+    "autoHealParty": true,
+    "skill": 5,
+    "party": {
+        "isStatic": false,
+        "minPokemon": 4,
+        "pool": [
+            "raichu level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "electivire level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:expert_belt",
+            "magnezone level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "rotom level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "luxray level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "jolteon level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:rocky_helmet",
+            "regieleki level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:choice_specs",
+            "zapdos level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb",
+            "raikou level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:leftovers",
+            "pawmot level=40 hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 helditem=cobblemon:life_orb"
+        ],
+        "maxPokemon": 4,
+        "type": "pool"
+    }
 }

@@ -13,6 +13,7 @@ import com.howlite.events.LevelCapEventHandler
 import com.howlite.events.PvpBattleEventHandler
 import com.howlite.events.AltarBattleEventHandler
 import com.howlite.events.EconomyEventHandler
+
 import com.howlite.items.CobbleCoins
 import com.howlite.items.GymBadgeItems
 import com.howlite.menu.BadgeCaseMenu
@@ -50,6 +51,7 @@ object CobblemonGymOdyssey {
         GymTpCommand.register()
         AltarBattleEventHandler.register()
         EconomyEventHandler.register()
+
 
         com.cobblemon.mod.common.Cobblemon.statProvider = AltarStatProvider(com.cobblemon.mod.common.Cobblemon.statProvider)
 
