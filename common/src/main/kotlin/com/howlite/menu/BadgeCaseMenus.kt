@@ -39,6 +39,13 @@ object BadgeCaseMenus {
             }
         }
 
+    val GYM_SHOP_EDIT_MENU_TYPE: RegistrySupplier<MenuType<GymShopEditMenu>> =
+        MENUS.register("gym_shop_edit") {
+            dev.architectury.registry.menu.MenuRegistry.ofExtended { syncId, inv, buf ->
+                GymShopEditMenu(syncId, inv, buf)
+            }
+        }
+
     /** Appelé depuis [com.howlite.CobblemonGymOdyssey.init]. */
     fun register() {
         MENUS.register()

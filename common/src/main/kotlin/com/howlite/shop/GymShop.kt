@@ -64,7 +64,7 @@ object GymShop {
         val shops: Map<String, RegionShopConfig> = emptyMap()
     )
 
-    private var loadedConfig: ShopsConfig = ShopsConfig()
+    var loadedConfig: ShopsConfig = ShopsConfig()
 
     init {
         loadConfig()

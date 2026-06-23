@@ -5,6 +5,7 @@ import com.howlite.blocks.ConsumableRaidBlock
 import com.howlite.blocks.ConsumableRaidBlockEntity
 import com.howlite.commands.GymTestCommand
 import com.howlite.commands.GymTpCommand
+import com.howlite.commands.GymShopCommand
 import com.howlite.events.BattleLevelCapEventHandler
 import com.howlite.events.CoinPickupHandler
 import com.howlite.events.GymBattleEventHandler
@@ -49,6 +50,7 @@ object CobblemonGymOdyssey {
         PvpBattleEventHandler.register()
         GymTestCommand.register()
         GymTpCommand.register()
+        GymShopCommand.register()
         AltarBattleEventHandler.register()
         EconomyEventHandler.register()
 
@@ -359,6 +361,44 @@ object CobblemonGymOdyssey {
                 }
 
                 com.howlite.items.BadgeCaseHelper.openMenu(player)
+            }
+        }
+
+        // Register Save Shop Config Network Packet Receiver (Client -> Server)
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "save_shop_config")
+        ) { buf, context ->
+            val json = buf.readUtf()
+            context.queue {
+                val player = context.player
+                if (player is ServerPlayer && player.hasPermissions(2)) {
+                    try {
+                        // 1. Validate JSON syntax
+                        val gson = com.google.gson.GsonBuilder().setPrettyPrinting().create()
+                        val parsed = gson.fromJson(json, com.howlite.shop.GymShop.ShopsConfig::class.java)
+
+                        // 2. Write to config file
+                        val configFile = java.io.File("config/cobblemongymodyssey_shops.json")
+                        configFile.writeText(gson.toJson(parsed), Charsets.UTF_8)
+
+                        // 3. Hot-reload
+                        com.howlite.shop.GymShop.loadConfig()
+
+                        player.sendSystemMessage(
+                            Component.literal("§aShop configuration saved and reloaded successfully!")
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        player.sendSystemMessage(
+                            Component.literal("§cError saving shop configuration: ${e.message}")
+                        )
+                    }
+                } else {
+                    player.sendSystemMessage(
+                        Component.literal("§cYou do not have permission to perform this action.")
+                    )
+                }
             }
         }
 
