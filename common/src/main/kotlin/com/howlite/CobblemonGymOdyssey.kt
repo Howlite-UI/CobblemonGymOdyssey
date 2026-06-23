@@ -61,9 +61,15 @@ object CobblemonGymOdyssey {
 
         // Bloquer le spawn naturel de Pokémon sauvages dans la dimension d'arènes
         com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe { event ->
-            val level = event.entity.level()
+            val entity = event.entity
+            val level = entity.level()
             if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
-                event.cancel()
+                val nick = entity.pokemon.nickname?.string ?: ""
+                val isBoss = nick.startsWith("§c[Boss]")
+                val isPlayerOwned = entity.pokemon.getOwnerUUID() != null
+                if (!isBoss && !isPlayerOwned) {
+                    event.cancel()
+                }
             }
         }
 
@@ -73,11 +79,14 @@ object CobblemonGymOdyssey {
             val level = entity.level()
             if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
                 val nick = entity.pokemon.nickname?.string ?: ""
-                if (!nick.startsWith("§c[Boss]")) {
+                val isBoss = nick.startsWith("§c[Boss]")
+                val isPlayerOwned = entity.pokemon.getOwnerUUID() != null
+                if (!isBoss && !isPlayerOwned) {
                     event.cancel()
                 }
             }
         }
+
 
         // Bloquer tout autre spawn ou ajout de Pokémon sauvage (non-boss et non-possédé par un joueur) dans la dimension d'arènes
         dev.architectury.event.events.common.EntityEvent.ADD.register { entity, level ->
@@ -93,7 +102,47 @@ object CobblemonGymOdyssey {
             dev.architectury.event.EventResult.pass()
         }
 
+        // Bloquer la casse de blocs dans la dimension d'arènes pour les joueurs en survie/aventure
+        dev.architectury.event.events.common.BlockEvent.BREAK.register { level, pos, state, player, xp ->
+            if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
+                if (player != null && !player.isCreative()) {
+                    return@register dev.architectury.event.EventResult.interruptFalse()
+                }
+            }
+            dev.architectury.event.EventResult.pass()
+        }
 
+        // Bloquer la pose de blocs dans la dimension d'arènes pour les joueurs en survie/aventure
+        dev.architectury.event.events.common.BlockEvent.PLACE.register { level, pos, state, entity ->
+            if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
+                if (entity is net.minecraft.world.entity.player.Player && !entity.isCreative()) {
+                    return@register dev.architectury.event.EventResult.interruptFalse()
+                }
+            }
+            dev.architectury.event.EventResult.pass()
+        }
+
+        // Bloquer les interactions indésirables avec des blocs (seaux, briquet, etc.) dans la dimension d'arènes
+        dev.architectury.event.events.common.InteractionEvent.RIGHT_CLICK_BLOCK.register { player, hand, pos, direction ->
+            if (player.level().dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
+                if (!player.isCreative()) {
+                    val stack = player.getItemInHand(hand)
+                    val item = stack.item
+                    if (item is net.minecraft.world.item.BucketItem ||
+                        item is net.minecraft.world.item.BlockItem ||
+                        item is net.minecraft.world.item.FlintAndSteelItem ||
+                        item is net.minecraft.world.item.FireChargeItem ||
+                        item is net.minecraft.world.item.SpawnEggItem ||
+                        item is net.minecraft.world.item.HoeItem ||
+                        item is net.minecraft.world.item.ShovelItem ||
+                        item is net.minecraft.world.item.AxeItem
+                    ) {
+                        return@register dev.architectury.event.EventResult.interruptFalse()
+                    }
+                }
+            }
+            dev.architectury.event.EventResult.pass()
+        }
         // Synchroniser le wallet lors de la connexion du joueur et l'enregistrer dans le tracker PvP
         dev.architectury.event.events.common.PlayerEvent.PLAYER_JOIN.register { player ->
             if (player is ServerPlayer) {
@@ -227,9 +276,18 @@ object CobblemonGymOdyssey {
                 val region = com.howlite.screen.BadgeCaseScreen.Region.entries.find { it.name == regionName }
                 if (region == null) return@queue
 
+                // Server-side validation: must have completed the region (beaten all gym leaders)
+                val isCompleted = region.badges.isNotEmpty() && region.badges.all { progress.hasBadge(it) }
+                if (!isCompleted) {
+                    player.sendSystemMessage(
+                        Component.translatable("cobblemongymodyssey.daily.msg.not_completed")
+                    )
+                    return@queue
+                }
+
                 val unlockedInRegion = region.badges.count { progress.hasBadge(it) }
-                val base = (region.ordinal + 1) * 10_000L
-                val bonus = unlockedInRegion * (region.ordinal + 1) * 5_000L
+                val base = (region.ordinal + 1) * 2_000L
+                val bonus = unlockedInRegion * (region.ordinal + 1) * 500L
                 val total = base + bonus
 
                 progress.claimDailyAllowance(regionName, todayStr)
@@ -264,10 +322,11 @@ object CobblemonGymOdyssey {
                 var claimedAny = false
 
                 com.howlite.screen.BadgeCaseScreen.Region.entries.forEach { region ->
-                    if (progress.dailyAllowanceClaims[region.name] != todayStr) {
+                    val isCompleted = region.badges.isNotEmpty() && region.badges.all { progress.hasBadge(it) }
+                    if (isCompleted && progress.dailyAllowanceClaims[region.name] != todayStr) {
                         val unlockedInRegion = region.badges.count { progress.hasBadge(it) }
-                        val base = (region.ordinal + 1) * 10_000L
-                        val bonus = unlockedInRegion * (region.ordinal + 1) * 5_000L
+                        val base = (region.ordinal + 1) * 2_000L
+                        val bonus = unlockedInRegion * (region.ordinal + 1) * 500L
                         val total = base + bonus
 
                         progress.claimDailyAllowance(region.name, todayStr)

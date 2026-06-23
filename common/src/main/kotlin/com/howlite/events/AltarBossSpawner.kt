@@ -224,30 +224,32 @@ object AltarBossSpawner {
                 }
             }
 
-            // 9. Generate Altar of Sacrifices platform (Obsidian floor with Crying Obsidian core and Red Concrete trim)
-            for (dx in -7..7) {
-                for (dz in -7..7) {
-                    val pos = BlockPos(startX + dx, startY, startZ + dz)
-                    val blockState = if (kotlin.math.abs(dx) == 7 || kotlin.math.abs(dz) == 7) {
-                        Blocks.RED_CONCRETE.defaultBlockState()
-                    } else if (dx == 0 && dz == 0) {
-                        Blocks.CRYING_OBSIDIAN.defaultBlockState()
-                    } else {
-                        Blocks.OBSIDIAN.defaultBlockState()
-                    }
-                    gymWorld.setBlock(pos, blockState, 2)
-                }
-            }
+            // 9. Generate Altar of Sacrifices dome (flat floor of unown stone with rare activated unown stone, dome of void blocks)
+            val unownStone = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "unown_stone")).defaultBlockState()
+            val unownStoneActivated = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("cobblemongymodyssey", "unown_stone_activated")).defaultBlockState()
+            val voidBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("cobblesafari", "void_block")).defaultBlockState()
 
-            // Red stained glass walls (3 blocks high)
-            for (dy in 1..3) {
-                for (dx in -7..7) {
-                    gymWorld.setBlock(BlockPos(startX + dx, startY + dy, startZ - 7), Blocks.RED_STAINED_GLASS.defaultBlockState(), 2)
-                    gymWorld.setBlock(BlockPos(startX + dx, startY + dy, startZ + 7), Blocks.RED_STAINED_GLASS.defaultBlockState(), 2)
-                }
-                for (dz in -6..6) {
-                    gymWorld.setBlock(BlockPos(startX - 7, startY + dy, startZ + dz), Blocks.RED_STAINED_GLASS.defaultBlockState(), 2)
-                    gymWorld.setBlock(BlockPos(startX + 7, startY + dy, startZ + dz), Blocks.RED_STAINED_GLASS.defaultBlockState(), 2)
+            val R = 12
+            val random = java.util.Random()
+
+            for (dy in 0..R) {
+                for (dx in -R..R) {
+                    for (dz in -R..R) {
+                        val distSq = dx * dx + dy * dy + dz * dz
+                        val pos = BlockPos(startX + dx, startY + dy, startZ + dz)
+                        if (dy == 0) {
+                            if (distSq <= R * R) {
+                                // Floor: unown_stone, randomly very few unown_stone_activated (e.g. 5% chance)
+                                val state = if (random.nextFloat() < 0.05f) unownStoneActivated else unownStone
+                                gymWorld.setBlock(pos, state, 2)
+                            }
+                        } else {
+                            // Dome shell: void_block
+                            if (distSq <= R * R && distSq > (R - 1) * (R - 1)) {
+                                gymWorld.setBlock(pos, voidBlock, 2)
+                            }
+                        }
+                    }
                 }
             }
 

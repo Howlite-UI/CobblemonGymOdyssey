@@ -296,5 +296,7 @@
   "cobblemongymodyssey.daily.claimed": "RECUPERE",
   "cobblemongymodyssey.daily.msg.already_claimed": "Vous avez déjà récupéré le bonus de cette région aujourd'hui !",
   "cobblemongymodyssey.daily.claim_all": "TOUT RECUP.",
-  "cobblemongymodyssey.daily.claimed_all": "TOUT FAIT"
+  "cobblemongymodyssey.daily.claimed_all": "TOUT FAIT",
+  "cobblemongymodyssey.daily.tooltip.locked": "Battez tous les Champions d'arène de cette région pour débloquer !",
+  "cobblemongymodyssey.daily.msg.not_completed": "§cVous devez vaincre tous les Champions de cette région pour récupérer cette allocation !"
 }

@@ -308,5 +308,7 @@
   "cobblemongymodyssey.daily.claimed": "CLAIMED",
   "cobblemongymodyssey.daily.msg.already_claimed": "You have already claimed this region's bonus today!",
   "cobblemongymodyssey.daily.claim_all": "CLAIM ALL",
-  "cobblemongymodyssey.daily.claimed_all": "ALL CLAIMED"
+  "cobblemongymodyssey.daily.claimed_all": "ALL CLAIMED",
+  "cobblemongymodyssey.daily.tooltip.locked": "Defeat all Gym Leaders of this region to unlock daily rewards!",
+  "cobblemongymodyssey.daily.msg.not_completed": "§cYou must defeat all Gym Leaders of this region to claim this allowance!"
 }

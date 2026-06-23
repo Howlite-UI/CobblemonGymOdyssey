@@ -521,23 +521,25 @@ class BadgeCaseScreen(
         val dailyX = x - 53
         val dailyY = if (hasAltar) y + 80 else y + 64
 
+        val isCompleted = activeRegion.badges.isNotEmpty() && activeRegion.badges.all { it in menu.unlockedBadges }
         val todayStr = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
         val alreadyClaimed = menu.dailyAllowanceClaims[activeRegion.name] == todayStr
 
         val isHovered = mouseX >= dailyX && mouseX < dailyX + 53 && mouseY >= dailyY && mouseY < dailyY + 14
-        val buttonV = if (isHovered && !alreadyClaimed) 14f else 0f
+        val buttonV = if (isHovered && isCompleted && !alreadyClaimed) 14f else 0f
 
-        if (alreadyClaimed) {
+        val showDisabled = !isCompleted || alreadyClaimed
+        if (showDisabled) {
             RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1.0f)
         }
         graphics.blit(DAILY_BUTTON_TEXTURE, dailyX, dailyY, 0f, buttonV, 53, 14, 53, 28)
-        if (alreadyClaimed) {
+        if (showDisabled) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         }
 
         val text = Component.translatable("cobblemongymodyssey.badge_case.daily_button").string
         val textW = font.width(text)
-        val textColor = if (alreadyClaimed) {
+        val textColor = if (showDisabled) {
             0x8E8E93
         } else if (isHovered) {
             0xFFFFA800.toInt()
@@ -845,9 +847,14 @@ class BadgeCaseScreen(
             val dailyX = x - 53
             val dailyY = if (hasAltar) y + 80 else y + 64
             if (mouseX >= dailyX && mouseX < dailyX + 53 && mouseY >= dailyY && mouseY < dailyY + 14) {
+                val isCompleted = activeRegion.badges.isNotEmpty() && activeRegion.badges.all { it in unlockedBadges }
                 val lines = mutableListOf<Component>()
                 lines += Component.translatable("cobblemongymodyssey.daily.tooltip.title")
-                lines += Component.translatable("cobblemongymodyssey.daily.tooltip.desc")
+                if (isCompleted) {
+                    lines += Component.translatable("cobblemongymodyssey.daily.tooltip.desc")
+                } else {
+                    lines += Component.translatable("cobblemongymodyssey.daily.tooltip.locked")
+                }
                 graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
                 return
             }
@@ -1020,10 +1027,15 @@ class BadgeCaseScreen(
             val dailyX = x - 53
             val dailyY = if (hasAltar) y + 80 else y + 64
             if (mouseX >= dailyX && mouseX < dailyX + 53 && mouseY >= dailyY && mouseY < dailyY + 14) {
-                minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
-                minecraft?.setScreen(
-                    com.howlite.client.screen.DailyScreen(activeRegion, this)
-                )
+                val isCompleted = activeRegion.badges.isNotEmpty() && activeRegion.badges.all { it in menu.unlockedBadges }
+                if (isCompleted) {
+                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
+                    minecraft?.setScreen(
+                        com.howlite.client.screen.DailyScreen(activeRegion, this)
+                    )
+                } else {
+                    minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
+                }
                 return true
             }
         }

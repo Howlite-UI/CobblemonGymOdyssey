@@ -77,13 +77,15 @@ class DailyScreen(
         super.tick()
         clientTicks++
 
-        // Emit gold sparkle particles if there is any unclaimed allowance
+        // Emit gold sparkle particles if there is any unclaimed completed allowance
         val gx = (width - GUI_WIDTH) / 2
         val gy = (height - GUI_HEIGHT) / 2
         val todayStr = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
-        val allClaimed = Region.entries.all { r -> parentScreen.menu.dailyAllowanceClaims[r.name] == todayStr }
+        
+        val completedRegions = Region.entries.filter { r -> r.badges.isNotEmpty() && r.badges.all { b -> b in parentScreen.menu.unlockedBadges } }
+        val anyUnclaimed = completedRegions.any { r -> parentScreen.menu.dailyAllowanceClaims[r.name] != todayStr }
 
-        if (!allClaimed && clientTicks % 3 == 0) {
+        if (anyUnclaimed && clientTicks % 3 == 0) {
             val px = (gx + 10 + random.nextInt(GUI_WIDTH - 20)).toFloat()
             val py = (gy + GUI_HEIGHT - 6).toFloat()
             particles.add(SparkleParticle(px, py, 0xFFFFA800.toInt(), 20 + random.nextInt(15)))
@@ -113,17 +115,19 @@ class DailyScreen(
         val titleW = font.width(title)
         graphics.drawString(font, title, gx + (GUI_WIDTH - titleW) / 2, gy + 7, 0xFFFFFFFF.toInt(), true)
 
-        // 3. Stats calculation (progressive rewards based on region index)
+        // 3. Stats calculation (progressive rewards based on region index, balanced)
         val unlockedInRegion = region.badges.count { it in parentScreen.menu.unlockedBadges }
         val totalBadgesInRegion = region.badges.size
 
-        val baseVal = (region.ordinal + 1) * 10_000L
-        val bonusVal = unlockedInRegion * (region.ordinal + 1) * 5_000L
+        val baseVal = (region.ordinal + 1) * 2_000L
+        val bonusVal = unlockedInRegion * (region.ordinal + 1) * 500L
         val totalVal = baseVal + bonusVal
 
         val todayStr = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
         val alreadyClaimed = parentScreen.menu.dailyAllowanceClaims[region.name] == todayStr
-        val allClaimed = Region.entries.all { r -> parentScreen.menu.dailyAllowanceClaims[r.name] == todayStr }
+        
+        val completedRegions = Region.entries.filter { r -> r.badges.isNotEmpty() && r.badges.all { b -> b in parentScreen.menu.unlockedBadges } }
+        val allClaimed = completedRegions.all { r -> parentScreen.menu.dailyAllowanceClaims[r.name] == todayStr }
 
         // Display labels inside the central body area
         val labelBase = Component.translatable("cobblemongymodyssey.daily.base_reward", WalletManager.formatCCC(baseVal)).string
@@ -233,7 +237,8 @@ class DailyScreen(
         // Click on CLAIM ALL
         val claimAllX = gx + 99
         if (mouseX >= claimAllX && mouseX < claimAllX + 73 && mouseY >= acceptY && mouseY < acceptY + 17) {
-            val allClaimed = Region.entries.all { r -> parentScreen.menu.dailyAllowanceClaims[r.name] == todayStr }
+            val completedRegions = Region.entries.filter { r -> r.badges.isNotEmpty() && r.badges.all { b -> b in parentScreen.menu.unlockedBadges } }
+            val allClaimed = completedRegions.all { r -> parentScreen.menu.dailyAllowanceClaims[r.name] == todayStr }
 
             if (allClaimed) {
                 minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.DISPENSER_FAIL, 1.0f))
