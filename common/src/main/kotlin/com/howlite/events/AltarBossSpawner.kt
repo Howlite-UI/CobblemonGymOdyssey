@@ -265,6 +265,7 @@ object AltarBossSpawner {
             val bossEntity = PokemonEntity(gymWorld, bossPokemon, CobblemonEntities.POKEMON)
             bossEntity.isInvulnerable = true
             bossEntity.setNoAi(true)
+            bossEntity.setPersistenceRequired()
             bossEntity.setPos(bossX, bossY, bossZ)
             bossEntity.pokemon = bossPokemon
             gymWorld.addFreshEntity(bossEntity)

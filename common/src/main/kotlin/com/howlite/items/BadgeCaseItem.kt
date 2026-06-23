@@ -61,7 +61,12 @@ class BadgeCaseItem(properties: Properties) : Item(properties) {
                             progress.pvpWins,
                             progress.pvpLosses,
                             progress.pvpRewardsClaimedToday,
-                            progress.pvpFights
+                            progress.pvpFights,
+                            mapOf(
+                                "UNOVA" to progress.getAltarFightsToday("UNOVA"),
+                                "ALOLA" to progress.getAltarFightsToday("ALOLA"),
+                                "PALDEA" to progress.getAltarFightsToday("PALDEA")
+                            )
                         )
                 }
             ) { buf: FriendlyByteBuf ->
@@ -91,6 +96,13 @@ class BadgeCaseItem(properties: Properties) : Item(properties) {
                     buf.writeInt(record.consecutiveDays)
                     buf.writeInt(record.wins)
                     buf.writeInt(record.losses)
+                }
+
+                // Sync Altar daily fights count
+                buf.writeInt(3)
+                listOf("UNOVA", "ALOLA", "PALDEA").forEach { r ->
+                    buf.writeUtf(r)
+                    buf.writeInt(progress.getAltarFightsToday(r))
                 }
             }
         }

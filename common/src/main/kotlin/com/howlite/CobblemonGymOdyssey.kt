@@ -77,6 +77,20 @@ object CobblemonGymOdyssey {
             }
         }
 
+        // Bloquer tout autre spawn ou ajout de Pokémon sauvage (non-boss et non-possédé par un joueur) dans la dimension d'arènes
+        dev.architectury.event.events.common.EntityEvent.ADD.register { entity, level ->
+            if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
+                if (entity is com.cobblemon.mod.common.entity.pokemon.PokemonEntity) {
+                    val isBoss = entity.pokemon.nickname?.string?.startsWith("§c[Boss]") == true
+                    val isPlayerOwned = entity.pokemon.getOwnerUUID() != null
+                    if (!isBoss && !isPlayerOwned) {
+                        return@register dev.architectury.event.EventResult.interruptFalse()
+                    }
+                }
+            }
+            dev.architectury.event.EventResult.pass()
+        }
+
 
         // Synchroniser le wallet lors de la connexion du joueur et l'enregistrer dans le tracker PvP
         dev.architectury.event.events.common.PlayerEvent.PLAYER_JOIN.register { player ->

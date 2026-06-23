@@ -265,60 +265,9 @@ class PlayerProgressData {
         // Codec (utilisé par NeoForge Data Attachments)
         // -------------------------------------------------------------------------
 
-        val CODEC: Codec<PlayerProgressData> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                Codec.INT.fieldOf(KEY_LEVEL_CAP)
-                    .orElse(INITIAL_LEVEL_CAP)
-                    .forGetter { it.levelCap },
-                Codec.STRING.listOf()
-                    .fieldOf(KEY_BADGES)
-                    .orElse(emptyList())
-                    .forGetter { data -> data._badges.map { it.id } },
-                Codec.unboundedMap(Codec.STRING, PokemonSnapshot.CODEC.listOf())
-                    .fieldOf(KEY_BADGE_TEAMS)
-                    .orElse(emptyMap())
-                    .forGetter { it._badgeTeams },
-                Codec.INT.optionalFieldOf("arena_index").forGetter { Optional.ofNullable(it.arenaIndex) },
-                Codec.STRING.optionalFieldOf("return_dim").forGetter { Optional.ofNullable(it.returnDim) },
-                Codec.DOUBLE.optionalFieldOf("return_x").forGetter { Optional.ofNullable(it.returnX) },
-                Codec.DOUBLE.optionalFieldOf("return_y").forGetter { Optional.ofNullable(it.returnY) },
-                Codec.DOUBLE.optionalFieldOf("return_z").forGetter { Optional.ofNullable(it.returnZ) },
-                Codec.FLOAT.optionalFieldOf("return_yaw").forGetter { Optional.ofNullable(it.returnYaw) },
-                Codec.FLOAT.optionalFieldOf("return_pitch").forGetter { Optional.ofNullable(it.returnPitch) },
-                Codec.unboundedMap(Codec.STRING, PvpFightRecord.CODEC)
-                    .fieldOf("pvp_fights")
-                    .orElse(emptyMap())
-                    .forGetter { it.pvpFights },
-                Codec.STRING.optionalFieldOf("last_pvp_reset_date").forGetter { Optional.ofNullable(it.lastPvpResetDate) },
-                Codec.INT.fieldOf("pvp_rewards_claimed_today").orElse(0).forGetter { it.pvpRewardsClaimedToday },
-                Codec.INT.fieldOf("pvp_wins").orElse(0).forGetter { it.pvpWins },
-                Codec.INT.fieldOf("pvp_losses").orElse(0).forGetter { it.pvpLosses },
-                Codec.unboundedMap(Codec.STRING, Codec.STRING)
-                    .fieldOf("altar_fights_data")
-                    .orElse(emptyMap())
-                    .forGetter { it._altarFightsData }
-            ).apply(instance) { cap, badgeIds, teams, arenaIndexOpt, returnDimOpt, returnXOpt, returnYOpt, returnZOpt, returnYawOpt, returnPitchOpt, pvpFights, lastPvpResetDateOpt, pvpRewardsClaimedToday, pvpWins, pvpLosses, altarFightsData ->
-                PlayerProgressData().also { d ->
-                    d.levelCap = cap
-                    badgeIds.mapNotNull { GymBadge.fromId(it) }.forEach { d._badges.add(it) }
-                    d._badgeTeams.putAll(teams)
-                    d.arenaIndex = arenaIndexOpt.orElse(null)
-                    d.returnDim = returnDimOpt.orElse(null)
-                    d.returnX = returnXOpt.orElse(null)
-                    d.returnY = returnYOpt.orElse(null)
-                    d.returnZ = returnZOpt.orElse(null)
-                    d.returnYaw = returnYawOpt.orElse(null)
-                    d.returnPitch = returnPitchOpt.orElse(null)
-                    d._pvpFights.putAll(pvpFights)
-                    d.lastPvpResetDate = lastPvpResetDateOpt.orElse(null)
-                    d.pvpRewardsClaimedToday = pvpRewardsClaimedToday
-                    d.pvpWins = pvpWins
-                    d.pvpLosses = pvpLosses
-                    d._altarFightsData.putAll(altarFightsData)
-                    // Note: activeAltarBet and activeAltarDifficulty are NBT-only
-                    // (transient battle state; resets safely on server restart)
-                }
-            }
-        }
+        val CODEC: Codec<PlayerProgressData> = CompoundTag.CODEC.xmap(
+            { nbt -> PlayerProgressData().also { it.readFromNbt(nbt) } },
+            { data -> CompoundTag().also { data.writeToNbt(it) } }
+        )
     }
 }
