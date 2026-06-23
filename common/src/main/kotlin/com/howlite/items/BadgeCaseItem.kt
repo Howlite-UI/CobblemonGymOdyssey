@@ -41,72 +41,87 @@ class BadgeCaseItem(properties: Properties) : Item(properties) {
 
         // Ouvrir le menu uniquement côté serveur
         if (!level.isClientSide && player is ServerPlayer) {
-            val progress = PlayerProgressApi.get(player)
-            val badges = progress.badges
-            val levelCap = progress.levelCap
-            val badgeTeams = progress.badgeTeams
-
-            MenuRegistry.openExtendedMenu(
-                player,
-                object : MenuProvider {
-                    override fun getDisplayName(): Component =
-                        Component.translatable("cobblemongymodyssey.badge_case.title")
-
-                    override fun createMenu(syncId: Int, inv: Inventory, p: Player): AbstractContainerMenu =
-                        BadgeCaseMenu(
-                            syncId,
-                            badges,
-                            levelCap,
-                            badgeTeams,
-                            progress.pvpWins,
-                            progress.pvpLosses,
-                            progress.pvpRewardsClaimedToday,
-                            progress.pvpFights,
-                            mapOf(
-                                "UNOVA" to progress.getAltarFightsToday("UNOVA"),
-                                "ALOLA" to progress.getAltarFightsToday("ALOLA"),
-                                "PALDEA" to progress.getAltarFightsToday("PALDEA")
-                            )
-                        )
-                }
-            ) { buf: FriendlyByteBuf ->
-                buf.writeInt(levelCap)
-                buf.writeCollection(badges) { b, badge -> b.writeUtf(badge.id) }
-                
-                // Écrire les équipes gagnantes
-                buf.writeInt(badgeTeams.size)
-                badgeTeams.forEach { (badgeId, team) ->
-                    buf.writeUtf(badgeId)
-                    buf.writeCollection(team) { b, pokemon ->
-                        b.writeUtf(pokemon.species)
-                        b.writeInt(pokemon.level)
-                        b.writeBoolean(pokemon.isShiny)
-                        b.writeUtf(pokemon.displayName)
-                    }
-                }
-
-                // Sync PvP stats to client
-                buf.writeInt(progress.pvpWins)
-                buf.writeInt(progress.pvpLosses)
-                buf.writeInt(progress.pvpRewardsClaimedToday)
-                buf.writeInt(progress.pvpFights.size)
-                progress.pvpFights.forEach { (opponentUuid, record) ->
-                    buf.writeUtf(opponentUuid)
-                    buf.writeUtf(record.lastFightDate)
-                    buf.writeInt(record.consecutiveDays)
-                    buf.writeInt(record.wins)
-                    buf.writeInt(record.losses)
-                }
-
-                // Sync Altar daily fights count
-                buf.writeInt(3)
-                listOf("UNOVA", "ALOLA", "PALDEA").forEach { r ->
-                    buf.writeUtf(r)
-                    buf.writeInt(progress.getAltarFightsToday(r))
-                }
-            }
+            BadgeCaseHelper.openMenu(player)
         }
 
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide)
     }
 }
+
+object BadgeCaseHelper {
+    fun openMenu(player: ServerPlayer) {
+        val progress = PlayerProgressApi.get(player)
+        val badges = progress.badges
+        val levelCap = progress.levelCap
+        val badgeTeams = progress.badgeTeams
+
+        MenuRegistry.openExtendedMenu(
+            player,
+            object : MenuProvider {
+                override fun getDisplayName(): Component =
+                    Component.translatable("cobblemongymodyssey.badge_case.title")
+
+                override fun createMenu(syncId: Int, inv: Inventory, p: Player): AbstractContainerMenu =
+                    BadgeCaseMenu(
+                        syncId,
+                        badges,
+                        levelCap,
+                        badgeTeams,
+                        progress.pvpWins,
+                        progress.pvpLosses,
+                        progress.pvpRewardsClaimedToday,
+                        progress.pvpFights,
+                        mapOf(
+                            "UNOVA" to progress.getAltarFightsToday("UNOVA"),
+                            "ALOLA" to progress.getAltarFightsToday("ALOLA"),
+                            "PALDEA" to progress.getAltarFightsToday("PALDEA")
+                        ),
+                        progress.dailyAllowanceClaims
+                    )
+            }
+        ) { buf: FriendlyByteBuf ->
+            buf.writeInt(levelCap)
+            buf.writeCollection(badges) { b, badge -> b.writeUtf(badge.id) }
+            
+            // Écrire les équipes gagnantes
+            buf.writeInt(badgeTeams.size)
+            badgeTeams.forEach { (badgeId, team) ->
+                buf.writeUtf(badgeId)
+                buf.writeCollection(team) { b, pokemon ->
+                    b.writeUtf(pokemon.species)
+                    b.writeInt(pokemon.level)
+                    b.writeBoolean(pokemon.isShiny)
+                    b.writeUtf(pokemon.displayName)
+                }
+            }
+
+            // Sync PvP stats to client
+            buf.writeInt(progress.pvpWins)
+            buf.writeInt(progress.pvpLosses)
+            buf.writeInt(progress.pvpRewardsClaimedToday)
+            buf.writeInt(progress.pvpFights.size)
+            progress.pvpFights.forEach { (opponentUuid, record) ->
+                buf.writeUtf(opponentUuid)
+                buf.writeUtf(record.lastFightDate)
+                buf.writeInt(record.consecutiveDays)
+                buf.writeInt(record.wins)
+                buf.writeInt(record.losses)
+            }
+
+            // Sync Altar daily fights count
+            buf.writeInt(3)
+            listOf("UNOVA", "ALOLA", "PALDEA").forEach { r ->
+                buf.writeUtf(r)
+                buf.writeInt(progress.getAltarFightsToday(r))
+            }
+
+            // Sync Daily Allowance claims count
+            buf.writeInt(progress.dailyAllowanceClaims.size)
+            progress.dailyAllowanceClaims.forEach { (k, v) ->
+                buf.writeUtf(k)
+                buf.writeUtf(v)
+            }
+        }
+    }
+}
+

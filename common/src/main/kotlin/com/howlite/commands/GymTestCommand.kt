@@ -78,6 +78,22 @@ object GymTestCommand {
                         )
                 )
                 .then(
+                    Commands.literal("resetaltarfights")
+                        .executes { context -> resetAltarFights(context, context.source.playerOrException) }
+                        .then(
+                            Commands.argument("player", EntityArgument.player())
+                                .executes { context -> resetAltarFights(context, EntityArgument.getPlayer(context, "player")) }
+                        )
+                )
+                .then(
+                    Commands.literal("resetdaily")
+                        .executes { context -> resetDailyAllowance(context, context.source.playerOrException) }
+                        .then(
+                            Commands.argument("player", EntityArgument.player())
+                                .executes { context -> resetDailyAllowance(context, EntityArgument.getPlayer(context, "player")) }
+                        )
+                )
+                .then(
                     Commands.literal("setlevelcap")
                         .then(
                             Commands.argument("level", IntegerArgumentType.integer(1, 100))
@@ -289,6 +305,28 @@ object GymTestCommand {
             context.source.sendFailure(Component.literal("${player.scoreboardName} possède déjà tous les badges."))
             return 0
         }
+        return 1
+    }
+
+    private fun resetAltarFights(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
+        val data = PlayerProgressApi.get(player)
+        data.resetAltarFights()
+        PlayerProgressApi.markDirty(player)
+        context.source.sendSuccess(
+            { Component.literal("Combat(s) d'autel réinitialisé(s) pour ${player.scoreboardName}.") },
+            true
+        )
+        return 1
+    }
+
+    private fun resetDailyAllowance(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
+        val data = PlayerProgressApi.get(player)
+        data.resetDailyAllowanceClaims()
+        PlayerProgressApi.markDirty(player)
+        context.source.sendSuccess(
+            { Component.literal("Bonus journaliers réinitialisés pour ${player.scoreboardName}.") },
+            true
+        )
         return 1
     }
 }

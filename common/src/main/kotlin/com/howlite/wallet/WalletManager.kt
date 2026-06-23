@@ -58,6 +58,25 @@ object WalletManager {
         wallet.hudEnabled = hudEnabled
         WalletNetwork.syncToClient(player, wallet)
     }
+
+    /**
+     * Formate un montant en CCC sous forme de chaîne de caractères décomposée (CPC, CGC, CSC, CCC).
+     */
+    fun formatCCC(ccc: Long): String {
+        val p = ccc / CoinType.PLATINUM.valueCCC
+        val remP = ccc % CoinType.PLATINUM.valueCCC
+        val g = remP / CoinType.GOLD.valueCCC
+        val remG = remP % CoinType.GOLD.valueCCC
+        val s = remG / CoinType.SILVER.valueCCC
+        val cu = remG % CoinType.SILVER.valueCCC
+        
+        val parts = mutableListOf<String>()
+        if (p > 0) parts += "${p}CPC"
+        if (g > 0) parts += "${g}CGC"
+        if (s > 0) parts += "${s}CSC"
+        if (cu > 0) parts += "${cu}CCC"
+        return if (parts.isEmpty()) "0 CCC" else parts.joinToString(" ")
+    }
 }
 
 /**

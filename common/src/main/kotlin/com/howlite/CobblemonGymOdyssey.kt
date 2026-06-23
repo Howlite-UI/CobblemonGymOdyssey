@@ -12,6 +12,7 @@ import com.howlite.events.GymBattleReturnHandler
 import com.howlite.events.LevelCapEventHandler
 import com.howlite.events.PvpBattleEventHandler
 import com.howlite.events.AltarBattleEventHandler
+import com.howlite.events.EconomyEventHandler
 import com.howlite.items.CobbleCoins
 import com.howlite.items.GymBadgeItems
 import com.howlite.menu.BadgeCaseMenu
@@ -48,6 +49,7 @@ object CobblemonGymOdyssey {
         GymTestCommand.register()
         GymTpCommand.register()
         AltarBattleEventHandler.register()
+        EconomyEventHandler.register()
 
         com.cobblemon.mod.common.Cobblemon.statProvider = AltarStatProvider(com.cobblemon.mod.common.Cobblemon.statProvider)
 
@@ -197,70 +199,104 @@ object CobblemonGymOdyssey {
             val player = context.player
             if (player is ServerPlayer) {
                 context.queue {
-                    val progress = com.howlite.api.PlayerProgressApi.get(player)
-                    val badges = progress.badges
-                    val levelCap = progress.levelCap
-                    val badgeTeams = progress.badgeTeams
-
-                    MenuRegistry.openExtendedMenu(
-                        player,
-                        object : MenuProvider {
-                            override fun getDisplayName(): Component =
-                                Component.translatable("cobblemongymodyssey.badge_case.title")
-
-                            override fun createMenu(syncId: Int, inv: Inventory, p: Player): AbstractContainerMenu =
-                                BadgeCaseMenu(
-                                    syncId,
-                                    badges,
-                                    levelCap,
-                                    badgeTeams,
-                                    progress.pvpWins,
-                                    progress.pvpLosses,
-                                    progress.pvpRewardsClaimedToday,
-                                    progress.pvpFights,
-                                    mapOf(
-                                        "UNOVA" to progress.getAltarFightsToday("UNOVA"),
-                                        "ALOLA" to progress.getAltarFightsToday("ALOLA"),
-                                        "PALDEA" to progress.getAltarFightsToday("PALDEA")
-                                    )
-                                )
-                        }
-                    ) { buffer ->
-                        buffer.writeInt(levelCap)
-                        buffer.writeCollection(badges) { b, badge -> b.writeUtf(badge.id) }
-                        buffer.writeInt(badgeTeams.size)
-                        badgeTeams.forEach { (badgeId, team) ->
-                            buffer.writeUtf(badgeId)
-                            buffer.writeCollection(team) { b, pokemon ->
-                                b.writeUtf(pokemon.species)
-                                b.writeInt(pokemon.level)
-                                b.writeBoolean(pokemon.isShiny)
-                                b.writeUtf(pokemon.displayName)
-                            }
-                        }
-                        // Sync PvP stats to client
-                        println("[GymOdyssey] Server: Syncing PvP stats to ${player.scoreboardName} (${player.uuid}) client buffer. Wins: ${progress.pvpWins}, Losses: ${progress.pvpLosses}, Opponent fights: ${progress.pvpFights.size}")
-                        buffer.writeInt(progress.pvpWins)
-                        buffer.writeInt(progress.pvpLosses)
-                        buffer.writeInt(progress.pvpRewardsClaimedToday)
-                        buffer.writeInt(progress.pvpFights.size)
-                        progress.pvpFights.forEach { (opponentUuid, record) ->
-                            buffer.writeUtf(opponentUuid)
-                            buffer.writeUtf(record.lastFightDate)
-                            buffer.writeInt(record.consecutiveDays)
-                            buffer.writeInt(record.wins)
-                            buffer.writeInt(record.losses)
-                        }
-                        // Sync Altar daily fights count
-                        buffer.writeInt(3)
-                        listOf("UNOVA", "ALOLA", "PALDEA").forEach { r ->
-                            buffer.writeUtf(r)
-                            buffer.writeInt(progress.getAltarFightsToday(r))
-                        }
-                    }
+                    com.howlite.items.BadgeCaseHelper.openMenu(player)
                 }
             }
         }
+
+        // Register Claim Daily Allowance Network Packet Receiver (Client -> Server)
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "claim_daily_allowance")
+        ) { buf, context ->
+            val regionName = buf.readUtf()
+            context.queue {
+                val player = context.player
+                if (player !is ServerPlayer) return@queue
+
+                val progress = com.howlite.api.PlayerProgressApi.get(player)
+                val todayStr = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
+
+                if (progress.dailyAllowanceClaims[regionName] == todayStr) {
+                    player.sendSystemMessage(
+                        Component.translatable("cobblemongymodyssey.daily.msg.already_claimed")
+                    )
+                    return@queue
+                }
+
+                val region = com.howlite.screen.BadgeCaseScreen.Region.entries.find { it.name == regionName }
+                if (region == null) return@queue
+
+                val unlockedInRegion = region.badges.count { progress.hasBadge(it) }
+                val base = (region.ordinal + 1) * 10_000L
+                val bonus = unlockedInRegion * (region.ordinal + 1) * 5_000L
+                val total = base + bonus
+
+                progress.claimDailyAllowance(regionName, todayStr)
+                com.howlite.api.PlayerProgressApi.markDirty(player)
+
+                val wallet = com.howlite.wallet.WalletManager.get(player)
+                wallet.balanceCCC += total
+                com.howlite.wallet.WalletNetwork.syncToClient(player, wallet)
+
+                val coinStr = com.howlite.wallet.WalletManager.formatCCC(total)
+                player.sendSystemMessage(
+                    Component.translatable("cobblemongymodyssey.economy.daily_allowance", coinStr)
+                )
+
+                com.howlite.items.BadgeCaseHelper.openMenu(player)
+            }
+        }
+
+        // Register Claim All Daily Allowances Network Packet Receiver (Client -> Server)
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "claim_all_daily_allowances")
+        ) { buf, context ->
+            context.queue {
+                val player = context.player
+                if (player !is ServerPlayer) return@queue
+
+                val progress = com.howlite.api.PlayerProgressApi.get(player)
+                val todayStr = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
+
+                var totalReward = 0L
+                var claimedAny = false
+
+                com.howlite.screen.BadgeCaseScreen.Region.entries.forEach { region ->
+                    if (progress.dailyAllowanceClaims[region.name] != todayStr) {
+                        val unlockedInRegion = region.badges.count { progress.hasBadge(it) }
+                        val base = (region.ordinal + 1) * 10_000L
+                        val bonus = unlockedInRegion * (region.ordinal + 1) * 5_000L
+                        val total = base + bonus
+
+                        progress.claimDailyAllowance(region.name, todayStr)
+                        totalReward += total
+                        claimedAny = true
+                    }
+                }
+
+                if (claimedAny) {
+                    com.howlite.api.PlayerProgressApi.markDirty(player)
+
+                    val wallet = com.howlite.wallet.WalletManager.get(player)
+                    wallet.balanceCCC += totalReward
+                    com.howlite.wallet.WalletNetwork.syncToClient(player, wallet)
+
+                    val coinStr = com.howlite.wallet.WalletManager.formatCCC(totalReward)
+                    player.sendSystemMessage(
+                        Component.translatable("cobblemongymodyssey.economy.daily_allowance", coinStr)
+                    )
+                } else {
+                    player.sendSystemMessage(
+                        Component.translatable("cobblemongymodyssey.daily.msg.already_claimed")
+                    )
+                }
+
+                com.howlite.items.BadgeCaseHelper.openMenu(player)
+            }
+        }
+
 
         // Register Request Altar Challenge Network Packet Receiver (Client -> Server)
         NetworkManager.registerReceiver(

@@ -73,6 +73,10 @@ class BadgeCaseScreen(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/altar_button.png"
         )
+        val DAILY_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/daily_button.png"
+        )
         val RIGHT_BUTTON_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/right_button.png"
@@ -380,6 +384,7 @@ class BadgeCaseScreen(
             if (activeRegion == Region.UNOVA || activeRegion == Region.ALOLA || activeRegion == Region.PALDEA) {
                 renderAltarButton(graphics, x, y, mouseX, mouseY)
             }
+            renderDailyButton(graphics, x, y, mouseX, mouseY)
         }
 
         // 5. Dessiner la grille des badges (TOUJOURS visible !)
@@ -509,6 +514,37 @@ class BadgeCaseScreen(
             0xFFFFFF
         }
         graphics.drawString(font, text, altarX + 3 + (31 - textW) / 2, altarY + 3, textColor, false)
+    }
+
+    private fun renderDailyButton(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        val hasAltar = activeRegion == Region.UNOVA || activeRegion == Region.ALOLA || activeRegion == Region.PALDEA
+        val dailyX = x - 53
+        val dailyY = if (hasAltar) y + 80 else y + 64
+
+        val todayStr = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
+        val alreadyClaimed = menu.dailyAllowanceClaims[activeRegion.name] == todayStr
+
+        val isHovered = mouseX >= dailyX && mouseX < dailyX + 53 && mouseY >= dailyY && mouseY < dailyY + 14
+        val buttonV = if (isHovered && !alreadyClaimed) 14f else 0f
+
+        if (alreadyClaimed) {
+            RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1.0f)
+        }
+        graphics.blit(DAILY_BUTTON_TEXTURE, dailyX, dailyY, 0f, buttonV, 53, 14, 53, 28)
+        if (alreadyClaimed) {
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        }
+
+        val text = Component.translatable("cobblemongymodyssey.badge_case.daily_button").string
+        val textW = font.width(text)
+        val textColor = if (alreadyClaimed) {
+            0x8E8E93
+        } else if (isHovered) {
+            0xFFFFA800.toInt()
+        } else {
+            0xFFFFFF
+        }
+        graphics.drawString(font, text, dailyX + 3 + (31 - textW) / 2, dailyY + 3, textColor, false)
     }
 
     private fun renderWinningTeam(graphics: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -803,6 +839,18 @@ class BadgeCaseScreen(
                     return
                 }
             }
+
+            // Daily button tooltip
+            val hasAltar = activeRegion == Region.UNOVA || activeRegion == Region.ALOLA || activeRegion == Region.PALDEA
+            val dailyX = x - 53
+            val dailyY = if (hasAltar) y + 80 else y + 64
+            if (mouseX >= dailyX && mouseX < dailyX + 53 && mouseY >= dailyY && mouseY < dailyY + 14) {
+                val lines = mutableListOf<Component>()
+                lines += Component.translatable("cobblemongymodyssey.daily.tooltip.title")
+                lines += Component.translatable("cobblemongymodyssey.daily.tooltip.desc")
+                graphics.renderComponentTooltip(font, lines, mouseX, mouseY)
+                return
+            }
         }
 
         if (viewedBadgeTeam != null) {
@@ -965,6 +1013,18 @@ class BadgeCaseScreen(
                     }
                     return true
                 }
+            }
+
+            // Daily button click
+            val hasAltar = activeRegion == Region.UNOVA || activeRegion == Region.ALOLA || activeRegion == Region.PALDEA
+            val dailyX = x - 53
+            val dailyY = if (hasAltar) y + 80 else y + 64
+            if (mouseX >= dailyX && mouseX < dailyX + 53 && mouseY >= dailyY && mouseY < dailyY + 14) {
+                minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
+                minecraft?.setScreen(
+                    com.howlite.client.screen.DailyScreen(activeRegion, this)
+                )
+                return true
             }
         }
 

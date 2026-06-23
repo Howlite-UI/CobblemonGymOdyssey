@@ -61,14 +61,14 @@ object AltarBattleEventHandler {
                 wallet.balanceCCC += payout
                 WalletNetwork.syncToClient(player, wallet)
 
-                val payoutFormatted = formatCCC(payout)
+                val payoutFormatted = WalletManager.formatCCC(payout)
                 player.sendSystemMessage(
                     Component.translatable("cobblemongymodyssey.altar.msg.victory", payoutFormatted)
                 )
             } else {
                 // Player lost — bet was already deducted at challenge start
                 player.sendSystemMessage(
-                    Component.translatable("cobblemongymodyssey.altar.msg.defeat", formatCCC(bet))
+                    Component.translatable("cobblemongymodyssey.altar.msg.defeat", WalletManager.formatCCC(bet))
                 )
             }
 
@@ -125,17 +125,5 @@ object AltarBattleEventHandler {
         2 -> 2.0
         3 -> 3.0
         else -> 1.5
-    }
-
-    private fun formatCCC(ccc: Long): String {
-        val g = ccc / CoinType.GOLD.valueCCC
-        val rem = ccc % CoinType.GOLD.valueCCC
-        val s = rem / CoinType.SILVER.valueCCC
-        val cu = rem % CoinType.SILVER.valueCCC
-        val parts = mutableListOf<String>()
-        if (g > 0) parts += "${g}CGC"
-        if (s > 0) parts += "${s}CSC"
-        if (cu > 0) parts += "${cu}CCC"
-        return if (parts.isEmpty()) "0 CCC" else parts.joinToString(" ")
     }
 }

@@ -37,6 +37,15 @@ class PlayerProgressData {
     var pvpRewardsClaimedToday: Int = 0
     var pvpWins: Int = 0
     var pvpLosses: Int = 0
+    var lastAllowanceClaimDate: String? = null
+
+    private val _dailyAllowanceClaims: MutableMap<String, String> = mutableMapOf()
+    val dailyAllowanceClaims: Map<String, String> get() = _dailyAllowanceClaims
+
+    fun claimDailyAllowance(regionId: String, dateStr: String) {
+        _dailyAllowanceClaims[regionId] = dateStr
+    }
+
 
     private val _altarFightsData: MutableMap<String, String> = mutableMapOf()
     val altarFightsData: Map<String, String> get() = _altarFightsData
@@ -60,6 +69,14 @@ class PlayerProgressData {
         }
         val current = _altarFightsData[regionId]?.toIntOrNull() ?: 0
         _altarFightsData[regionId] = (current + 1).toString()
+    }
+
+    fun resetAltarFights() {
+        _altarFightsData.clear()
+    }
+
+    fun resetDailyAllowanceClaims() {
+        _dailyAllowanceClaims.clear()
     }
 
     fun recordPvpFight(opponentUuid: String, record: PvpFightRecord) {
@@ -136,10 +153,12 @@ class PlayerProgressData {
         _badgeTeams.clear()
         _pvpFights.clear()
         lastPvpResetDate = null
+        lastAllowanceClaimDate = null
         pvpRewardsClaimedToday = 0
         pvpWins = 0
         pvpLosses = 0
         _altarFightsData.clear()
+        _dailyAllowanceClaims.clear()
         levelCap = INITIAL_LEVEL_CAP
     }
 
@@ -190,6 +209,7 @@ class PlayerProgressData {
         }
         tag.put(KEY_PVP_FIGHTS, pvpFightsTag)
         lastPvpResetDate?.let { tag.putString(KEY_LAST_PVP_RESET, it) }
+        lastAllowanceClaimDate?.let { tag.putString("LastAllowanceClaimDate", it) }
         tag.putInt(KEY_PVP_REWARDS_CLAIMED, pvpRewardsClaimedToday)
         tag.putInt("PvpWins", pvpWins)
         tag.putInt("PvpLosses", pvpLosses)
@@ -199,6 +219,12 @@ class PlayerProgressData {
             altarFightsTag.putString(k, v)
         }
         tag.put("AltarFightsData", altarFightsTag)
+
+        val dailyClaimsTag = CompoundTag()
+        _dailyAllowanceClaims.forEach { (k, v) ->
+            dailyClaimsTag.putString(k, v)
+        }
+        tag.put("DailyAllowanceClaims", dailyClaimsTag)
     }
 
     fun readFromNbt(tag: CompoundTag) {
@@ -239,6 +265,7 @@ class PlayerProgressData {
             }
         }
         lastPvpResetDate = if (tag.contains(KEY_LAST_PVP_RESET)) tag.getString(KEY_LAST_PVP_RESET) else null
+        lastAllowanceClaimDate = if (tag.contains("LastAllowanceClaimDate")) tag.getString("LastAllowanceClaimDate") else null
         pvpRewardsClaimedToday = if (tag.contains(KEY_PVP_REWARDS_CLAIMED)) tag.getInt(KEY_PVP_REWARDS_CLAIMED) else 0
         pvpWins = if (tag.contains("PvpWins")) tag.getInt("PvpWins") else 0
         pvpLosses = if (tag.contains("PvpLosses")) tag.getInt("PvpLosses") else 0
@@ -248,6 +275,14 @@ class PlayerProgressData {
             val altarFightsTag = tag.getCompound("AltarFightsData")
             altarFightsTag.allKeys.forEach { k ->
                 _altarFightsData[k] = altarFightsTag.getString(k)
+            }
+        }
+
+        _dailyAllowanceClaims.clear()
+        if (tag.contains("DailyAllowanceClaims")) {
+            val dailyClaimsTag = tag.getCompound("DailyAllowanceClaims")
+            dailyClaimsTag.allKeys.forEach { k ->
+                _dailyAllowanceClaims[k] = dailyClaimsTag.getString(k)
             }
         }
     }
