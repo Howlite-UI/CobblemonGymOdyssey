@@ -63,6 +63,7 @@ object CobblemonGymOdyssey {
         com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe { event ->
             val entity = event.entity
             val level = entity.level()
+            if (level.isClientSide) return@subscribe
             if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
                 val nick = entity.pokemon.nickname?.string ?: ""
                 val isBoss = nick.startsWith("§c[Boss]")
@@ -77,6 +78,7 @@ object CobblemonGymOdyssey {
         com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_ENTITY_LOAD.subscribe { event ->
             val entity = event.pokemonEntity
             val level = entity.level()
+            if (level.isClientSide) return@subscribe
             if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
                 val nick = entity.pokemon.nickname?.string ?: ""
                 val isBoss = nick.startsWith("§c[Boss]")
@@ -90,6 +92,7 @@ object CobblemonGymOdyssey {
 
         // Bloquer tout autre spawn ou ajout de Pokémon sauvage (non-boss et non-possédé par un joueur) dans la dimension d'arènes
         dev.architectury.event.events.common.EntityEvent.ADD.register { entity, level ->
+            if (level.isClientSide) return@register dev.architectury.event.EventResult.pass()
             if (level.dimension().location().toString() == "cobblemongymodyssey:gym_dimension") {
                 if (entity is com.cobblemon.mod.common.entity.pokemon.PokemonEntity) {
                     val isBoss = entity.pokemon.nickname?.string?.startsWith("§c[Boss]") == true
@@ -101,6 +104,7 @@ object CobblemonGymOdyssey {
             }
             dev.architectury.event.EventResult.pass()
         }
+
 
         // Bloquer la casse de blocs dans la dimension d'arènes pour les joueurs en survie/aventure
         dev.architectury.event.events.common.BlockEvent.BREAK.register { level, pos, state, player, xp ->

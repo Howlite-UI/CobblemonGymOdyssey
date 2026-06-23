@@ -269,8 +269,16 @@ object AltarBossSpawner {
             bossEntity.setNoAi(true)
             bossEntity.setPersistenceRequired()
             bossEntity.setPos(bossX, bossY, bossZ)
+            bossEntity.yRot = 180f
+            bossEntity.yRotO = 180f
+            bossEntity.xRot = 0f
+            bossEntity.xRotO = 0f
+            bossEntity.yBodyRot = 180f
+            bossEntity.yHeadRot = 180f
             bossEntity.pokemon = bossPokemon
             gymWorld.addFreshEntity(bossEntity)
+
+
 
             player.sendSystemMessage(
                 Component.translatable("cobblemongymodyssey.altar.msg.boss_appeared", speciesDisplay)
