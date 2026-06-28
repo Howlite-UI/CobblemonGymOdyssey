@@ -68,5 +68,21 @@ object GymClientInit {
                 }
             }
         }
+
+        // Register S2C packet to sync Player Shop stock count in real-time
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.S2C,
+            ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "player_shop_sync_stock")
+        ) { buf, context ->
+            val offerIdx = buf.readInt()
+            val newStock = buf.readInt()
+            context.queue {
+                val mc = Minecraft.getInstance()
+                val menu = mc.player?.containerMenu as? com.howlite.menu.PlayerShopMenu
+                if (menu != null && offerIdx in menu.offers.indices) {
+                    menu.offers[offerIdx].availableStock = newStock
+                }
+            }
+        }
     }
 }

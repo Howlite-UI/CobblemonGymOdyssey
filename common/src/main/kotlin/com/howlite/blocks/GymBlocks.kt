@@ -132,6 +132,21 @@ object GymBlocks {
             BlockEntityType.Builder.of(::UnownStoneActivatedBlockEntity, UNOWN_STONE_ACTIVATED.get()).build(null)
         }
 
+    // ── Player Shop ──────────────────────────────────────────
+    val PLAYER_SHOP: RegistrySupplier<Block> = BLOCKS.register("player_shop") {
+        PlayerShopBlock(BlockBehaviour.Properties.of().strength(3.0f).requiresCorrectToolForDrops())
+    }
+
+    val PLAYER_SHOP_ITEM: RegistrySupplier<Item> = ITEMS.register("player_shop") {
+        BlockItem(PLAYER_SHOP.get(), Item.Properties())
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    val PLAYER_SHOP_BLOCK_ENTITY: RegistrySupplier<BlockEntityType<PlayerShopBlockEntity>> =
+        BLOCK_ENTITY_TYPES.register("player_shop") {
+            BlockEntityType.Builder.of(::PlayerShopBlockEntity, PLAYER_SHOP.get()).build(null)
+        }
+
     fun register() {
         BLOCKS.register()
         BLOCK_ENTITY_TYPES.register()
@@ -149,7 +164,8 @@ object GymBlocks {
             UNOWN_STONE_ACTIVATED_ITEM,
             UNOWN_STONE_SLAB_ITEM,
             UNOWN_STONE_STAIRS_ITEM,
-            UNOWN_STONE_WALL_ITEM
+            UNOWN_STONE_WALL_ITEM,
+            PLAYER_SHOP_ITEM
         )
     }
 }

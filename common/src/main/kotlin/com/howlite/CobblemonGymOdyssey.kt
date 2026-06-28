@@ -503,6 +503,102 @@ object CobblemonGymOdyssey {
                 com.howlite.events.AltarBossSpawner.startAltarBattle(player, regionName, difficulty)
             }
         }
+
+
+        // ── Player Shop: save offer from owner ────────────────────────────
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "player_shop_save_offer")
+        ) { buf, context ->
+            val player = context.player as? ServerPlayer ?: return@registerReceiver
+            val regBuf = net.minecraft.network.RegistryFriendlyByteBuf(buf, player.registryAccess())
+            val pos       = regBuf.readBlockPos()
+            val offerIdx  = regBuf.readInt()   // -1 = new offer
+            val result    = net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC.decode(regBuf)
+            val priceCCC  = regBuf.readLong()
+            val costItem  = net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC.decode(regBuf)
+            val costCount = regBuf.readInt()
+            context.queue {
+                val be = player.serverLevel().getBlockEntity(pos) as? com.howlite.blocks.PlayerShopBlockEntity ?: return@queue
+                if (!be.isTrusted(player.uuid) && !player.hasPermissions(2)) return@queue
+                if (result.isEmpty) return@queue
+
+                val offer = com.howlite.blocks.PlayerShopOffer(result, priceCCC, costItem, costCount)
+                if (offerIdx < 0 || offerIdx >= be.offers.size) {
+                    if (be.offers.size < com.howlite.blocks.PlayerShopBlockEntity.MAX_OFFERS) {
+                        be.offers.add(offer)
+                    }
+                } else {
+                    be.offers[offerIdx] = offer
+                }
+                be.setChanged()
+            }
+        }
+
+        // ── Player Shop: delete offer ─────────────────────────────────────
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "player_shop_delete_offer")
+        ) { buf, context ->
+            val pos      = buf.readBlockPos()
+            val offerIdx = buf.readInt()
+            context.queue {
+                val player = context.player as? ServerPlayer ?: return@queue
+                val be = player.serverLevel().getBlockEntity(pos) as? com.howlite.blocks.PlayerShopBlockEntity ?: return@queue
+                if (!be.isTrusted(player.uuid) && !player.hasPermissions(2)) return@queue
+                if (offerIdx in be.offers.indices) {
+                    be.offers.removeAt(offerIdx)
+                    be.setChanged()
+                }
+            }
+        }
+
+        // ── Player Shop: rename shop ──────────────────────────────────────
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "player_shop_rename")
+        ) { buf, context ->
+            val pos  = buf.readBlockPos()
+            val name = buf.readUtf().take(64)
+            context.queue {
+                val player = context.player as? ServerPlayer ?: return@queue
+                val be = player.serverLevel().getBlockEntity(pos) as? com.howlite.blocks.PlayerShopBlockEntity ?: return@queue
+                if (!be.isTrusted(player.uuid) && !player.hasPermissions(2)) return@queue
+                be.shopName = name.ifBlank { "Player Shop" }
+                be.setChanged()
+            }
+        }
+
+        // ── Player Shop: whitelist add/remove ─────────────────────────────
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "player_shop_whitelist")
+        ) { buf, context ->
+            val pos       = buf.readBlockPos()
+            val targetName = buf.readUtf()
+            val add       = buf.readBoolean()
+            context.queue {
+                val player = context.player as? ServerPlayer ?: return@queue
+                val be = player.serverLevel().getBlockEntity(pos) as? com.howlite.blocks.PlayerShopBlockEntity ?: return@queue
+                if (!be.isOwner(player.uuid) && !player.hasPermissions(2)) return@queue
+
+                val server = player.server ?: return@queue
+                val targetProfile = server.profileCache?.get(targetName)?.orElse(null)
+                if (targetProfile == null) {
+                    player.sendSystemMessage(Component.translatable("cobblemongymodyssey.player_shop.msg.player_not_found", targetName))
+                    return@queue
+                }
+                val targetUUID = targetProfile.id
+                if (add) {
+                    if (!be.trustedPlayers.contains(targetUUID)) be.trustedPlayers.add(targetUUID)
+                    player.sendSystemMessage(Component.translatable("cobblemongymodyssey.player_shop.msg.trusted_added", targetName))
+                } else {
+                    be.trustedPlayers.remove(targetUUID)
+                    player.sendSystemMessage(Component.translatable("cobblemongymodyssey.player_shop.msg.trusted_removed", targetName))
+                }
+                be.setChanged()
+            }
+        }
     }
 }
 
