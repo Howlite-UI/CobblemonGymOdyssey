@@ -137,6 +137,14 @@ object GymShop {
             }
         }
 
+        // Trier les items disponibles dans l'ordre canonique des badges (ordinal de GymBadge).
+        // Les items sans badge reconnu (requiredBadge vide ou inconnu) vont à la fin.
+        availableItems.sortWith(Comparator { a, b ->
+            val ordA = GymBadge.entries.find { it.id == a.requiredBadge }?.ordinal ?: Int.MAX_VALUE
+            val ordB = GymBadge.entries.find { it.id == b.requiredBadge }?.ordinal ?: Int.MAX_VALUE
+            ordA.compareTo(ordB)
+        })
+
         if (availableItems.isEmpty()) return
 
         val regionLower = region.name.lowercase()
