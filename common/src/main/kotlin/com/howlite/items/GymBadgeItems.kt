@@ -294,7 +294,19 @@ object GymBadgeItems {
     val GYM_BADGES_TAB: RegistrySupplier<CreativeModeTab> = TABS.register("gym_badges") {
         CreativeTabRegistry.create(
             Component.translatable("itemGroup.cobblemongymodyssey.gym_badges")
-        ) { ItemStack(BOULDER_BADGE.get()) }
+        ) { ItemStack(BADGE_CASE.get()) }
+    }
+
+    val GYM_TICKETS_TAB: RegistrySupplier<CreativeModeTab> = TABS.register("gym_tickets") {
+        CreativeTabRegistry.create(
+            Component.translatable("itemGroup.cobblemongymodyssey.gym_tickets")
+        ) { ItemStack(TICKET_DISTORTION.get()) }
+    }
+
+    val GYM_BLOCKS_TAB: RegistrySupplier<CreativeModeTab> = TABS.register("gym_blocks") {
+        CreativeTabRegistry.create(
+            Component.translatable("itemGroup.cobblemongymodyssey.gym_blocks")
+        ) { ItemStack(com.howlite.blocks.GymBlocks.GYM_LEADER_TELEPORTER_ITEM.get()) }
     }
 
     /**
@@ -385,9 +397,10 @@ object GymBadgeItems {
         ITEMS.register()
         TABS.register()
 
-        // Ajouter les badges, la boîte et les tickets à l'onglet
+        // Tab 1: Badges & Cases (Badge Box first, then all 80 badges in region order)
         CreativeTabRegistry.append(
             GYM_BADGES_TAB,
+            BADGE_CASE,
             BOULDER_BADGE, CASCADE_BADGE, THUNDER_BADGE, RAINBOW_BADGE,
             SOUL_BADGE, MARSH_BADGE, VOLCANO_BADGE, EARTH_BADGE,
             ZEPHYR_BADGE, HIVE_BADGE, PLAIN_BADGE, FOG_BADGE,
@@ -405,8 +418,12 @@ object GymBadgeItems {
             FIRE_BADGE, FIGHTING_BADGE, GHOST_BADGE, GALAR_FAIRY_BADGE,
             ROCK_BADGE, ICE_BADGE, DARK_BADGE, DRAGON_BADGE,
             CORTONDO_BADGE, ARTAZON_BADGE, LEVINCIA_BADGE, CASCARRAFA_BADGE,
-            MEDALI_BADGE, MONTENEVERA_BADGE, ALFORNADA_BADGE, GLASEADO_BADGE,
-            BADGE_CASE,
+            MEDALI_BADGE, MONTENEVERA_BADGE, ALFORNADA_BADGE, GLASEADO_BADGE
+        )
+
+        // Tab 2: Gym Tickets (80 tickets + 2 custom tickets)
+        CreativeTabRegistry.append(
+            GYM_TICKETS_TAB,
             BOULDER_TICKET, CASCADE_TICKET, THUNDER_TICKET, RAINBOW_TICKET,
             SOUL_TICKET, MARSH_TICKET, VOLCANO_TICKET, EARTH_TICKET,
             ZEPHYR_TICKET, HIVE_TICKET, PLAIN_TICKET, FOG_TICKET,

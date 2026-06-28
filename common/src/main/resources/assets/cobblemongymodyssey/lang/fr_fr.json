@@ -1,4 +1,4 @@
-﻿{
+{
     "item.cobblemongymodyssey.boulder_badge":  " MÃ©daille Roc",
     "item.cobblemongymodyssey.cascade_badge":  " MÃ©daille Cascade",
     "block.cobblemongymodyssey.gym_leader_teleporter":  "TÃ©lÃ©porteur de Champion d\u0027ArÃ¨ne",
@@ -27,6 +27,8 @@
     "item.cobblemongymodyssey.volcano_badge":  " MÃ©daille Volcan",
     "item.cobblemongymodyssey.earth_badge":  " MÃ©daille Terre",
     "itemGroup.cobblemongymodyssey.gym_badges":  "Badges d\u0027ArÃ¨ne",
+    "itemGroup.cobblemongymodyssey.gym_tickets":  "Tickets d\u0027ArÃ¨ne",
+    "itemGroup.cobblemongymodyssey.gym_blocks":  "Blocs de Gym Odyssey",
     "cobblemongymodyssey.level_cap.battle_blocked":  "â›” Combat annulÃ© ! %s (niveau %s) dÃ©passe votre Level Cap de %s. Battez d\u0027autres Champions d\u0027ArÃ¨ne pour le relever !",
     "item.cobblemongymodyssey.badge_case":  "BoÃ®te Ã  Badges",
     "cobblemongymodyssey.badge_case.title":  "BoÃ®te Ã  Badges",

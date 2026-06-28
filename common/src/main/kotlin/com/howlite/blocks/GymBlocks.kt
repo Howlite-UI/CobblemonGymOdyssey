@@ -152,9 +152,9 @@ object GymBlocks {
         BLOCK_ENTITY_TYPES.register()
         ITEMS.register()
 
-        // Append item to the badges creative tab
+        // Append item to the blocks creative tab
         CreativeTabRegistry.append(
-            GymBadgeItems.GYM_BADGES_TAB,
+            GymBadgeItems.GYM_BLOCKS_TAB,
             GYM_LEADER_TELEPORTER_ITEM,
             SMALL_ROCK_ITEM,
             CONSUMABLE_RAID_BLOCK_ITEM,

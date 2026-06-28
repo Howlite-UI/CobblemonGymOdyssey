@@ -1,4 +1,4 @@
-﻿{
+{
     "cobblemongymodyssey.shop.buy":  "Buy",
     "item.cobblemongymodyssey.boulder_badge":  " Boulder Badge",
     "item.cobblemongymodyssey.cascade_badge":  " Cascade Badge",
@@ -28,6 +28,8 @@
     "item.cobblemongymodyssey.volcano_badge":  " Volcano Badge",
     "item.cobblemongymodyssey.earth_badge":  " Earth Badge",
     "itemGroup.cobblemongymodyssey.gym_badges":  "Gym Badges",
+    "itemGroup.cobblemongymodyssey.gym_tickets":  "Gym Tickets",
+    "itemGroup.cobblemongymodyssey.gym_blocks":  "Gym Odyssey Blocks",
     "cobblemongymodyssey.level_cap.battle_blocked":  "â›” Battle cancelled! %s (level %s) exceeds your Level Cap of %s. Defeat more Gym Leaders to raise it!",
     "item.cobblemongymodyssey.badge_case":  "Badge Case",
     "cobblemongymodyssey.badge_case.title":  "Badge Case",
