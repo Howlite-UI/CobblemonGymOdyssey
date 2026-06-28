@@ -134,7 +134,7 @@ object GymBlocks {
 
     // ── Player Shop ──────────────────────────────────────────
     val PLAYER_SHOP: RegistrySupplier<Block> = BLOCKS.register("player_shop") {
-        PlayerShopBlock(BlockBehaviour.Properties.of().strength(3.0f).requiresCorrectToolForDrops())
+        PlayerShopBlock(BlockBehaviour.Properties.of().strength(3.0f).requiresCorrectToolForDrops().noOcclusion())
     }
 
     val PLAYER_SHOP_ITEM: RegistrySupplier<Item> = ITEMS.register("player_shop") {

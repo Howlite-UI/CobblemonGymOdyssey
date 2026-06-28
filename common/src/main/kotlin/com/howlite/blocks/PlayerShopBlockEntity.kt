@@ -46,7 +46,7 @@ class PlayerShopBlockEntity(pos: BlockPos, state: BlockState) :
 
     companion object {
         const val MAX_OFFERS       = 16
-        const val STOCK_SLOT_COUNT = 27
+        const val STOCK_SLOT_COUNT = 36
     }
 
     var ownerUUID: UUID? = null
@@ -138,5 +138,19 @@ class PlayerShopBlockEntity(pos: BlockPos, state: BlockState) :
 
         for (i in stockItems.indices) stockItems[i] = ItemStack.EMPTY
         ContainerHelper.loadAllItems(tag, stockItems, registries)
+    }
+    override fun setChanged() {
+        super.setChanged()
+        level?.sendBlockUpdated(blockPos, blockState, blockState, 3)
+    }
+
+    override fun getUpdatePacket(): net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket? {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this)
+    }
+
+    override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag {
+        val tag = CompoundTag()
+        saveAdditional(tag, registries)
+        return tag
     }
 }

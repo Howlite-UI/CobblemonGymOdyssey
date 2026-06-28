@@ -21,18 +21,18 @@ class PlayerShopOwnerMenu(
     private val stockRef: net.minecraft.core.NonNullList<ItemStack>?
 ) : AbstractContainerMenu(BadgeCaseMenus.PLAYER_SHOP_OWNER_MENU_TYPE.get(), syncId) {
 
-    private val dummyStock = net.minecraft.core.NonNullList.withSize(27, ItemStack.EMPTY)
+    private val dummyStock = net.minecraft.core.NonNullList.withSize(36, ItemStack.EMPTY)
     private val stockSource = stockRef ?: dummyStock
 
     init {
-        val startX = 29
-        // Stock slots (3 rows of 9)
-        for (i in 0 until 27) {
+        val startX = 36
+        // Stock slots (4 rows of 9 = 36 slots)
+        for (i in 0 until 36) {
             val row = i / 9
             val col = i % 9
             addSlot(object : Slot(
                 net.minecraft.world.SimpleContainer(1), i,
-                startX + col * 18, 114 + row * 18
+                startX + col * 18, 111 + row * 18
             ) {
                 override fun getItem(): ItemStack = stockSource[i]
                 override fun set(stack: ItemStack) { stockSource[i] = stack; setChanged() }
@@ -54,10 +54,10 @@ class PlayerShopOwnerMenu(
 
         // Player inventory (3 rows of 9)
         for (row in 0..2) for (col in 0..8)
-            addSlot(Slot(playerInventory, col + row * 9 + 9, startX + col * 18, 176 + row * 18))
+            addSlot(Slot(playerInventory, col + row * 9 + 9, startX + col * 18, 202 + row * 18))
         // Hotbar (1 row of 9)
         for (col in 0..8)
-            addSlot(Slot(playerInventory, col, startX + col * 18, 234))
+            addSlot(Slot(playerInventory, col, startX + col * 18, 260))
     }
 
     constructor(syncId: Int, inv: Inventory, buf: FriendlyByteBuf) : this(
@@ -108,11 +108,11 @@ class PlayerShopOwnerMenu(
         result = stack.copy()
 
         when {
-            index < 27 -> {
-                if (!moveItemStackTo(stack, 27, 63, false)) return ItemStack.EMPTY
+            index < 36 -> {
+                if (!moveItemStackTo(stack, 36, 72, false)) return ItemStack.EMPTY
             }
             else -> {
-                if (!moveItemStackTo(stack, 0, 27, false)) return ItemStack.EMPTY
+                if (!moveItemStackTo(stack, 0, 36, false)) return ItemStack.EMPTY
             }
         }
         if (stack.isEmpty) slot.set(ItemStack.EMPTY) else slot.setChanged()

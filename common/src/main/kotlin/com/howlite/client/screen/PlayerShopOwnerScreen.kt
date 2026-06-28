@@ -22,9 +22,16 @@ class PlayerShopOwnerScreen(
     title: Component
 ) : AbstractContainerScreen<PlayerShopOwnerMenu>(menu, playerInventory, title) {
 
-    private val ITEM_BG   = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/shop/shop_item_background.png")
-    private val SCROLLER_BG  = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/shop/scroller_background.png")
-    private val SCROLLER     = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/shop/scroller.png")
+    private val BACKGROUND       = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_background.png")
+    private val ADD_OFFER_BTN    = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_addoffer_button.png")
+    private val CREATE_OFFER_BTN = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_createoffer_button.png")
+    private val PLUS_BTN         = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_plus_button.png")
+    private val MINUS_BTN        = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_minus_button.png")
+    private val OFFER_CARD       = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_offer_card.png")
+    private val SCROLLER_BG      = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_scrollbar.png")
+    private val SCROLLER         = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_scroller.png")
+    private val SLOT_BG          = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_slot.png")
+    private val TEXTZONE         = ResourceLocation.fromNamespaceAndPath(CobblemonGymOdyssey.MOD_ID, "textures/gui/playershop/playershop_editor_textzone.png")
 
     private var selectedOfferIdx = -1
     private var scroll = 0f
@@ -45,9 +52,9 @@ class PlayerShopOwnerScreen(
     enum class EditorMode { COIN, BARTER }
 
     init {
-        imageWidth  = 220
-        imageHeight = 256
-        inventoryLabelY = 166
+        imageWidth  = 232
+        imageHeight = 284
+        inventoryLabelY = 192
     }
 
     override fun init() {
@@ -55,191 +62,165 @@ class PlayerShopOwnerScreen(
 
         val x = leftPos; val y = topPos
 
-        // Shop name at the top
-        shopNameField = EditBox(font, x + 8, y + 2, 130, 11, Component.literal("Shop name"))
+        // Shop name text box in the top-left of the top bar
+        shopNameField = EditBox(font, x + 10, y + 3, 120, 9, Component.literal("Shop name"))
         shopNameField.setMaxLength(32)
         shopNameField.value = menu.shopName
         shopNameField.setBordered(false)
         addRenderableWidget(shopNameField)
 
-        // Price field in the editor (aligned next to result slot)
-        priceField = EditBox(font, x + 132, y + 33, 75, 12, Component.literal("Price CCC"))
+        // Price field (shifted 20px right): 137 + 20 = 157
+        priceField = EditBox(font, x + 157, y + 24, 52, 8, Component.literal("Price CCC"))
         priceField.setMaxLength(18)
         priceField.value = "0"
+        priceField.setBordered(false)
         priceField.setFilter { it.all { c -> c.isDigit() } }
         addRenderableWidget(priceField)
 
-        // Cost count in the editor (aligned next to barter cost slot)
-        costCountField = EditBox(font, x + 132, y + 65, 30, 12, Component.literal("Count"))
+        // Cost count (shifted 20px right): 137 + 20 = 157
+        costCountField = EditBox(font, x + 157, y + 59, 26, 8, Component.literal("Count"))
         costCountField.setMaxLength(4)
         costCountField.value = "1"
+        costCountField.setBordered(false)
         costCountField.setFilter { it.all { c -> c.isDigit() } }
         addRenderableWidget(costCountField)
 
-        // Whitelist field at the bottom of the editor panel
-        whitelistField = EditBox(font, x + 110, y + 98, 75, 12, Component.literal("Player name"))
+        // Whitelist field inside the custom textzone background
+        whitelistField = EditBox(font, x + 130, y + 89, 52, 8, Component.literal("Player name"))
         whitelistField.setMaxLength(16)
-        whitelistField.setHint(Component.literal("Trust Player"))
+        whitelistField.setBordered(false)
+        whitelistField.setHint(Component.literal("Trust"))
         addRenderableWidget(whitelistField)
     }
 
     override fun renderLabels(graphics: GuiGraphics, mouseX: Int, mouseY: Int) {
-        // Draw inventory and stock titles
-        graphics.drawString(font, playerInventoryTitle, 29, inventoryLabelY - 10, 0x404040, false)
-        graphics.drawString(font, Component.literal("Stock"), 29, 104, 0x404040, false)
-    }
-
-    private fun drawSlotBg(graphics: GuiGraphics, x: Int, y: Int) {
-        graphics.fill(x, y, x + 18, y + 18, 0xFF151515.toInt()) // center
-        graphics.fill(x, y, x + 18, y + 1, 0xFF0A0A0A.toInt())  // top border
-        graphics.fill(x, y, x + 1, y + 18, 0xFF0A0A0A.toInt())  // left border
-        graphics.fill(x + 17, y + 1, x + 18, y + 18, 0xFF3D3D3D.toInt()) // right border
-        graphics.fill(x + 1, y + 17, x + 18, y + 18, 0xFF3D3D3D.toInt()) // bottom border
+        // Suppressed as requested
     }
 
     override fun renderBg(graphics: GuiGraphics, pt: Float, mouseX: Int, mouseY: Int) {
         val x = leftPos; val y = topPos
 
-        // 1. Draw Main Modern Panel (Dark Translucent)
-        graphics.fill(x, y, x + imageWidth, y + imageHeight, 0xEE1A1A1A.toInt())
-        graphics.fill(x, y, x + imageWidth, y + 1, 0xFF444444.toInt())
-        graphics.fill(x, y + imageHeight - 1, x + imageWidth, y + imageHeight, 0xFF444444.toInt())
-        graphics.fill(x, y, x + 1, y + imageHeight, 0xFF444444.toInt())
-        graphics.fill(x + imageWidth - 1, y, x + imageWidth, y + imageHeight, 0xFF444444.toInt())
+        // Draw main custom background texture
+        graphics.blit(BACKGROUND, x, y, 0f, 0f, imageWidth, imageHeight, imageWidth, imageHeight)
 
-        // Section separators
-        graphics.fill(x + 1, y + 15, x + imageWidth - 1, y + 16, 0xFF333333.toInt()) // top bar separator
-        graphics.fill(x + 103, y + 16, x + 104, y + 112, 0xFF333333.toInt()) // vertical split
-        graphics.fill(x + 1, y + 112, x + imageWidth - 1, y + 113, 0xFF333333.toInt()) // middle separator
+        // Rename Button (Just render the text, no blue rectangle background)
+        val isRenameHover = isHover(mouseX, mouseY, x + 135, y + 2, 40, 11)
+        val renameColor = if (isRenameHover) 0xFFFFFF else 0xAAAAAA
+        graphics.drawString(font, "Rename", x + 135, y + 4, renameColor, false)
 
-        // Rename Button in Top Bar
-        val isRenameHover = isHover(mouseX, mouseY, x + 142, y + 2, 40, 11)
-        val renameColor = if (isRenameHover) 0xFF555577.toInt() else 0xFF333355.toInt()
-        graphics.fill(x + 142, y + 2, x + 182, y + 13, renameColor)
-        graphics.drawString(font, "Rename", x + 145, y + 4, 0xFFFFFF, false)
-
-        // ── Left Panel: Offers List ──
-        graphics.drawString(font, "Offers", x + 8, y + 18, 0x00FF99, false)
-
-        graphics.enableScissor(x + 8, y + 28, x + 90, y + 96)
-        val totalH = if (menu.offers.isEmpty()) 0 else menu.offers.size * 20 - 1
+        // ── Left Panel: Offers List (shifted 10px right) ──
+        // x + 14 + 10 = x + 24. Scissor ends at y + 88 to prevent overlap with the button at y + 88.
+        graphics.enableScissor(x + 24, y + 20, x + 86, y + 88)
+        val totalH = if (menu.offers.isEmpty()) 0 else menu.offers.size * 22 - 1
         val maxSY = (totalH - 68).coerceAtLeast(0)
         val scrollY = (scroll * maxSY).toInt()
 
         for (i in menu.offers.indices) {
             val offer = menu.offers[i]
-            val itemY = y + 28 + i * 20 - scrollY
+            val itemY = y + 20 + i * 22 - scrollY
             val isSelected = i == selectedOfferIdx
-            val isRowHover = isHover(mouseX, mouseY, x + 8, itemY, 82, 19)
+            val isRowHover = isHover(mouseX, mouseY, x + 24, itemY, 62, 20)
 
-            val rowColor = when {
-                isSelected -> 0x4400FF99.toInt()
-                isRowHover -> 0x22FFFFFF.toInt()
-                else -> 0x11FFFFFF.toInt()
+            // Draw offer card texture
+            graphics.blit(OFFER_CARD, x + 24, itemY, 0f, 0f, 62, 20, 62, 20)
+            if (isSelected) {
+                // Draw green selection border around the card
+                graphics.fill(x + 24, itemY, x + 86, itemY + 1, 0xFF00FF99.toInt())
+                graphics.fill(x + 24, itemY + 19, x + 86, itemY + 20, 0xFF00FF99.toInt())
+                graphics.fill(x + 24, itemY, x + 25, itemY + 20, 0xFF00FF99.toInt())
+                graphics.fill(x + 85, itemY, x + 86, itemY + 20, 0xFF00FF99.toInt())
+            } else if (isRowHover) {
+                // White highlight
+                graphics.fill(x + 24, itemY, x + 86, itemY + 20, 0x22FFFFFF)
             }
-            graphics.fill(x + 8, itemY, x + 90, itemY + 19, rowColor)
 
-            // Render result item
-            graphics.renderItem(offer.resultItem, x + 10, itemY + 1)
-            graphics.renderItemDecorations(font, offer.resultItem, x + 10, itemY + 1)
+            // Render offer result item
+            graphics.renderItem(offer.resultItem, x + 26, itemY + 2)
+            graphics.renderItemDecorations(font, offer.resultItem, x + 26, itemY + 2)
 
-            // Display price compact
+            // Display price compact on the card
             val priceStr = if (offer.isCoinOffer) WalletOverlay.formatCompact(offer.priceCCC) else "${offer.costCount}x"
-            graphics.drawString(font, priceStr, x + 30, itemY + 5, 0xFFFFFF, false)
+            graphics.drawString(font, priceStr, x + 46, itemY + 6, 0xFFFFFF, false)
         }
         graphics.disableScissor()
 
-        // Scroller for offers
-        graphics.blit(SCROLLER_BG, x + 92, y + 28, 0f, 0f, 6, 68, 6, 68)
-        val thumbY = y + 28 + (scroll * (68 - 8)).toInt()
-        graphics.blit(SCROLLER, x + 92, thumbY, 0f, 0f, 6, 8, 6, 8)
+        // Scrollbar (shifted 20px right, 13px down): 80 + 20 = 100, 20 + 13 = 33
+        graphics.blit(SCROLLER_BG, x + 100, y + 33, 0f, 0f, 6, 52, 6, 52)
+        val thumbY = y + 33 + (scroll * (52 - 11)).toInt()
+        graphics.blit(SCROLLER, x + 100, thumbY, 0f, 0f, 6, 11, 6, 11)
 
-        // "+ Add offer" button below list
-        val addY = y + 98
-        val isAddHover = isHover(mouseX, mouseY, x + 8, addY, 90, 12)
-        val addColor = if (isAddHover) 0xFF22AA22.toInt() else 0xFF118811.toInt()
-        graphics.fill(x + 8, addY, x + 98, addY + 12, addColor)
-        val addStr = "+ Add offer"
-        graphics.drawString(font, addStr, x + 8 + (90 - font.width(addStr)) / 2, addY + 2, 0xFFFFFF, false)
+        // "+ Add offer" button (shifted 10px right, 6px up): 14 + 10 = 24, 94 - 6 = 88
+        val isAddHover = isHover(mouseX, mouseY, x + 24, y + 88, 62, 10)
+        val addV = if (isAddHover) 10f else 0f
+        graphics.blit(ADD_OFFER_BTN, x + 24, y + 88, 0f, addV, 62, 10, 62, 20)
+        val addText = "+ Add Offer"
+        graphics.drawString(font, addText, x + 24 + (62 - font.width(addText)) / 2, y + 88 + 1, 0xFFFFFF, false)
 
-        // ── Right Panel: Offer Editor ──
-        val ex = x + 110
-        graphics.drawString(font, "§lOffer Editor", ex, y + 18, 0x00FF99, false)
+        // ── Right Panel: Offer Editor (shifted 20px right) ──
+        // ex = 108 + 20 = 128
+        val ex = x + 128
 
-        // 1. Result slot (virtual)
-        drawSlotBg(graphics, ex, y + 30)
+        // 1. Result slot
+        graphics.blit(SLOT_BG, ex, y + 23, 0f, 0f, 16, 16, 16, 16)
         if (!editResult.isEmpty) {
-            graphics.renderItem(editResult, ex + 1, y + 31)
-            graphics.renderItemDecorations(font, editResult, ex + 1, y + 31)
+            graphics.renderItem(editResult, ex, y + 23)
+            graphics.renderItemDecorations(font, editResult, ex, y + 23)
         }
 
-        // Toggle Mode
-        val modeStr = if (editorMode == EditorMode.COIN) "[§aCoin§r] Barter" else "Coin [§aBarter§r]"
-        val isModeHover = isHover(mouseX, mouseY, ex, y + 50, 100, 10)
-        val modeColor = if (isModeHover) 0xFFFFFF else 0xAAAAAA
-        graphics.drawString(font, modeStr, ex, y + 50, modeColor, false)
-
-        // 2. Barter/Price slots
+        // Price textzone background (shifted 20px right): 135 + 20 = 155
         if (editorMode == EditorMode.COIN) {
             priceField.visible = true
             costCountField.visible = false
-            graphics.drawString(font, "Price (CCC):", x + 132, y + 22, 0xAAAAAA, false)
+            graphics.blit(TEXTZONE, x + 155, y + 23, 0f, 0f, 56, 10, 56, 10)
+            graphics.drawString(font, "Price:", x + 155, y + 14, 0xAAAAAA, false)
         } else {
             priceField.visible = false
             costCountField.visible = true
 
-            // Cost slot (virtual)
-            drawSlotBg(graphics, ex, y + 62)
+            // Cost slot
+            graphics.blit(SLOT_BG, ex, y + 58, 0f, 0f, 16, 16, 16, 16)
             if (!editCostItem.isEmpty) {
-                graphics.renderItem(editCostItem, ex + 1, y + 63)
-                graphics.renderItemDecorations(font, editCostItem, ex + 1, y + 63)
+                graphics.renderItem(editCostItem, ex, y + 58)
+                graphics.renderItemDecorations(font, editCostItem, ex, y + 58)
             }
-            graphics.drawString(font, "Qty:", x + 132, y + 55, 0xAAAAAA, false)
+
+            // Qty textzone background (shifted 20px right): 135 + 20 = 155
+            graphics.blit(TEXTZONE, x + 155, y + 58, 0f, 0f, 56, 10, 56, 10)
+            graphics.drawString(font, "Qty:", x + 155, y + 49, 0xAAAAAA, false)
         }
 
-        // Save / Delete buttons
-        val saveStr = if (selectedOfferIdx < 0) "Create" else "Save"
-        val isSaveHover = isHover(mouseX, mouseY, ex, y + 80, 45, 12)
-        val saveBtnColor = if (isSaveHover) 0xFF22AA22.toInt() else 0xFF118811.toInt()
-        graphics.fill(ex, y + 80, ex + 45, y + 92, saveBtnColor)
-        graphics.drawString(font, saveStr, ex + (45 - font.width(saveStr)) / 2, y + 82, 0xFFFFFF, false)
+        // Toggle Mode text button
+        val modeStr = if (editorMode == EditorMode.COIN) "[§aCoin§r] Barter" else "Coin [§aBarter§r]"
+        val isModeHover = isHover(mouseX, mouseY, ex, y + 43, 100, 9)
+        val modeColor = if (isModeHover) 0xFFFFFF else 0xAAAAAA
+        graphics.drawString(font, modeStr, ex, y + 43, modeColor, false)
 
+        // Save Button (green custom button)
+        val isSaveHover = isHover(mouseX, mouseY, ex, y + 75, 56, 10)
+        val saveV = if (isSaveHover) 10f else 0f
+        graphics.blit(CREATE_OFFER_BTN, ex, y + 75, 0f, saveV, 56, 10, 56, 20)
+        val saveText = "Save"
+        graphics.drawString(font, saveText, ex + (56 - font.width(saveText)) / 2, y + 75 + 1, 0xFFFFFF, false)
+
+        // Delete Button (red box) (shifted 20px right): 60 + 20 = 80
         if (selectedOfferIdx >= 0) {
-            val isDelHover = isHover(mouseX, mouseY, x + 160, y + 80, 45, 12)
-            val delBtnColor = if (isDelHover) 0xFFAA2222.toInt() else 0xFF881111.toInt()
-            graphics.fill(x + 160, y + 80, x + 205, y + 92, delBtnColor)
-            graphics.drawString(font, "Delete", x + 160 + (45 - font.width("Delete")) / 2, y + 82, 0xFFFFFF, false)
+            val isDelHover = isHover(mouseX, mouseY, ex + 60, y + 75, 45, 10)
+            val delColor = if (isDelHover) 0xFFAA2222.toInt() else 0xFF881111.toInt()
+            graphics.fill(ex + 60, y + 75, ex + 105, y + 85, delColor)
+            graphics.drawString(font, "Delete", ex + 60 + (45 - font.width("Delete")) / 2, y + 76, 0xFFFFFF, false)
         }
 
-        // Whitelist buttons
-        val isAddW = isHover(mouseX, mouseY, x + 190, y + 98, 10, 12)
-        graphics.fill(x + 190, y + 98, x + 200, y + 110, if (isAddW) 0xFF22AA22.toInt() else 0xFF118811.toInt())
-        graphics.drawString(font, "+", x + 193, y + 100, 0xFFFFFF, false)
+        // Whitelist textzone background (shifted 20px right, 6px up): ex = x + 128, y + 94 - 6 = y + 88
+        graphics.blit(TEXTZONE, x + 128, y + 88, 0f, 0f, 56, 10, 56, 10)
 
-        val isRemW = isHover(mouseX, mouseY, x + 202, y + 98, 10, 12)
-        graphics.fill(x + 202, y + 98, x + 212, y + 110, if (isRemW) 0xFFAA2222.toInt() else 0xFF881111.toInt())
-        graphics.drawString(font, "-", x + 205, y + 100, 0xFFFFFF, false)
+        // Whitelist buttons (shifted 20px right, 6px up): 60 + 20 = 80 -> ex + 80, 72 + 20 = 92 -> ex + 92
+        val isAddW = isHover(mouseX, mouseY, ex + 60, y + 88, 10, 10)
+        val addWV = if (isAddW) 10f else 0f
+        graphics.blit(PLUS_BTN, ex + 60, y + 88, 0f, addWV, 10, 10, 10, 20)
 
-        // ── Bottom Panel: Inventory Slots ──
-        val startX = 29
-        // Draw slot backgrounds for 27 stock slots
-        for (i in 0 until 27) {
-            val row = i / 9
-            val col = i % 9
-            drawSlotBg(graphics, x + startX + col * 18, y + 114 + row * 18)
-        }
-
-        // Draw slot backgrounds for player inventory
-        for (row in 0..2) {
-            for (col in 0..8) {
-                drawSlotBg(graphics, x + startX + col * 18, y + 176 + row * 18)
-            }
-        }
-
-        // Draw slot backgrounds for hotbar
-        for (col in 0..8) {
-            drawSlotBg(graphics, x + startX + col * 18, y + 234)
-        }
+        val isRemW = isHover(mouseX, mouseY, ex + 72, y + 88, 10, 10)
+        val remWV = if (isRemW) 10f else 0f
+        graphics.blit(MINUS_BTN, ex + 72, y + 88, 0f, remWV, 10, 10, 10, 20)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -247,18 +228,18 @@ class PlayerShopOwnerScreen(
         val mx = mouseX.toInt(); val my = mouseY.toInt()
 
         // Shop rename
-        if (isHover(mx, my, x + 142, y + 2, 40, 11)) {
+        if (isHover(mx, my, x + 135, y + 2, 40, 11)) {
             sendRename()
             return true
         }
 
-        // Offer list click
-        if (isHover(mx, my, x + 8, y + 28, 82, 68)) {
-            val totalH = if (menu.offers.isEmpty()) 0 else menu.offers.size * 20 - 1
-            val maxSY = (totalH - 68).coerceAtLeast(0)
+        // Offer list click (shifted 10px right)
+        if (isHover(mx, my, x + 24, y + 20, 62, 72)) {
+            val totalH = if (menu.offers.isEmpty()) 0 else menu.offers.size * 22 - 1
+            val maxSY = (totalH - 72).coerceAtLeast(0)
             val scrollY = (scroll * maxSY).toInt()
-            val clickY = my - (y + 28) + scrollY
-            val idx = clickY / 20
+            val clickY = my - (y + 20) + scrollY
+            val idx = clickY / 22
             if (idx in menu.offers.indices) {
                 selectedOfferIdx = idx
                 loadOfferIntoEditor(menu.offers[idx])
@@ -267,16 +248,19 @@ class PlayerShopOwnerScreen(
             }
         }
 
-        // "+ Add offer" button click
-        if (isHover(mx, my, x + 8, y + 98, 90, 12)) {
+        // "+ Add offer" button click (shifted 10px right, 6px up)
+        if (isHover(mx, my, x + 24, y + 88, 62, 10)) {
             selectedOfferIdx = -1
             clearEditor()
             minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
             return true
         }
 
+        // ex = 108 + 20 = 128
+        val ex = x + 128
+
         // Result item slot drag (virtual slot)
-        if (isHover(mx, my, x + 110, y + 30, 18, 18)) {
+        if (isHover(mx, my, ex, y + 23, 16, 16)) {
             val carried = minecraft?.player?.containerMenu?.carried ?: ItemStack.EMPTY
             if (!carried.isEmpty) {
                 editResult = carried.copy()
@@ -286,7 +270,7 @@ class PlayerShopOwnerScreen(
         }
 
         // Barter cost item slot drag (virtual slot)
-        if (editorMode == EditorMode.BARTER && isHover(mx, my, x + 110, y + 62, 18, 18)) {
+        if (editorMode == EditorMode.BARTER && isHover(mx, my, ex, y + 58, 16, 16)) {
             val carried = minecraft?.player?.containerMenu?.carried ?: ItemStack.EMPTY
             if (!carried.isEmpty) {
                 editCostItem = carried.copy()
@@ -296,38 +280,38 @@ class PlayerShopOwnerScreen(
         }
 
         // Mode toggle
-        if (isHover(mx, my, x + 110, y + 50, 100, 10)) {
+        if (isHover(mx, my, ex, y + 43, 100, 9)) {
             editorMode = if (editorMode == EditorMode.COIN) EditorMode.BARTER else EditorMode.COIN
             minecraft?.soundManager?.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f))
             return true
         }
 
         // Save offer
-        if (isHover(mx, my, x + 110, y + 80, 45, 12)) {
+        if (isHover(mx, my, ex, y + 75, 56, 10)) {
             sendSaveOffer()
             return true
         }
 
         // Delete offer
-        if (selectedOfferIdx >= 0 && isHover(mx, my, x + 160, y + 80, 45, 12)) {
+        if (selectedOfferIdx >= 0 && isHover(mx, my, ex + 60, y + 75, 45, 10)) {
             sendDeleteOffer()
             return true
         }
 
-        // Whitelist add
-        if (isHover(mx, my, x + 190, y + 98, 10, 12)) {
+        // Whitelist add (shifted 20px right, 6px up)
+        if (isHover(mx, my, ex + 60, y + 88, 10, 10)) {
             sendWhitelist(true)
             return true
         }
 
-        // Whitelist remove
-        if (isHover(mx, my, x + 202, y + 98, 10, 12)) {
+        // Whitelist remove (shifted 20px right, 6px up)
+        if (isHover(mx, my, ex + 72, y + 88, 10, 10)) {
             sendWhitelist(false)
             return true
         }
 
-        // Scroller dragging
-        if (isHover(mx, my, x + 92, y + 28, 6, 68)) {
+        // Scroller dragging (shifted 20px right, 13px down)
+        if (isHover(mx, my, x + 100, y + 33, 6, 52)) {
             isDragging = true
             updateScroll(mouseY)
             return true
@@ -350,7 +334,7 @@ class PlayerShopOwnerScreen(
     }
 
     private fun updateScroll(my: Double) {
-        scroll = (((my - topPos - 28 - 4) / (68 - 8)).coerceIn(0.0, 1.0)).toFloat()
+        scroll = (((my - topPos - 33 - 5.5) / (52 - 11)).coerceIn(0.0, 1.0)).toFloat()
     }
 
     private fun loadOfferIntoEditor(offer: PlayerShopOffer) {
@@ -435,4 +419,24 @@ class PlayerShopOwnerScreen(
 
     private fun isHover(mx: Int, my: Int, rx: Int, ry: Int, rw: Int, rh: Int) =
         mx >= rx && mx < rx + rw && my >= ry && my < ry + rh
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (keyCode == 256) { // Escape key
+            this.onClose()
+            return true
+        }
+        if (shopNameField.keyPressed(keyCode, scanCode, modifiers) || shopNameField.canConsumeInput()) {
+            return true
+        }
+        if (priceField.keyPressed(keyCode, scanCode, modifiers) || priceField.canConsumeInput()) {
+            return true
+        }
+        if (costCountField.keyPressed(keyCode, scanCode, modifiers) || costCountField.canConsumeInput()) {
+            return true
+        }
+        if (whitelistField.keyPressed(keyCode, scanCode, modifiers) || whitelistField.canConsumeInput()) {
+            return true
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
 }

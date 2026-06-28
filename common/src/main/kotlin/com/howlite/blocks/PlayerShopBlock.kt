@@ -23,6 +23,16 @@ import net.minecraft.world.phys.BlockHitResult
 @Suppress("OVERRIDE_DEPRECATION", "DEPRECATION")
 class PlayerShopBlock(properties: Properties) : BaseEntityBlock(properties) {
 
+    private val SHAPE = box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0)
+
+    override fun getShape(
+        state: BlockState, level: net.minecraft.world.level.BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext
+    ): net.minecraft.world.phys.shapes.VoxelShape = SHAPE
+
+    override fun getCollisionShape(
+        state: BlockState, level: net.minecraft.world.level.BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext
+    ): net.minecraft.world.phys.shapes.VoxelShape = SHAPE
+
     private val blockCodec: MapCodec<PlayerShopBlock> = simpleCodec { PlayerShopBlock(it) }
     override fun codec(): MapCodec<PlayerShopBlock> = blockCodec
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
