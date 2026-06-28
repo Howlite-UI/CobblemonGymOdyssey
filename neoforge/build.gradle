@@ -56,7 +56,6 @@ dependencies {
     // ByteCodecs – bibliothèque interne Team Resourceful (dépendance de Chipped, non distribuée sur Modrinth)
     implementation("com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}") { transitive = false }
     developmentNeoForge("com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}") { transitive = false }
-    shadowBundle("com.teamresourceful:bytecodecs:${rootProject.bytecodecs_version}") { transitive = false }
 
     // Cobblemon Raid Dens & GeckoLib (NeoForge)
     modImplementation "maven.modrinth:cobblemonraiddens:${rootProject.cobblemonraiddens_neoforge_version}"

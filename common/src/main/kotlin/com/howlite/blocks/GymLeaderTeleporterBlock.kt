@@ -2,9 +2,11 @@ package com.howlite.blocks
 
 import com.mojang.serialization.MapCodec
 import com.howlite.api.PlayerProgressApi
+import com.howlite.data.GymRegion
 import com.howlite.items.GymBadgeItems
 import com.howlite.items.GymLeaderTicketItem
 import com.howlite.world.GymArenaGenerator
+import net.minecraft.network.chat.Component
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
@@ -79,6 +81,50 @@ class GymLeaderTeleporterBlock(properties: Properties) : BaseEntityBlock(propert
         if (item is GymLeaderTicketItem) {
             if (!state.getValue(PORTAL_OPEN)) {
                 if (!level.isClientSide) {
+                    // --- Vérification de la progression régionale ---
+                    if (player is ServerPlayer && !player.isCreative) {
+                        val progress = PlayerProgressApi.get(player)
+                        val ticketRegion = item.targetBadge.region
+                        val prerequisiteMet = when (ticketRegion) {
+                            // Hoenn déverrouillé après complétion de Johto
+                            GymRegion.HOENN  -> progress.hasCompletedRegion(GymRegion.JOHTO)
+                            // Sinnoh déverrouillé après complétion de Hoenn
+                            GymRegion.SINNOH -> progress.hasCompletedRegion(GymRegion.HOENN)
+                            // Unova déverrouillé après complétion de Sinnoh
+                            GymRegion.UNOVA  -> progress.hasCompletedRegion(GymRegion.SINNOH)
+                            // Kalos déverrouillé après complétion de Unova
+                            GymRegion.KALOS  -> progress.hasCompletedRegion(GymRegion.UNOVA)
+                            // Alola déverrouillé après complétion de Kalos
+                            GymRegion.ALOLA  -> progress.hasCompletedRegion(GymRegion.KALOS)
+                            // Galar déverrouillé après complétion de Alola
+                            GymRegion.GALAR  -> progress.hasCompletedRegion(GymRegion.ALOLA)
+                            // Paldea déverrouillé après complétion de Galar
+                            GymRegion.PALDEA -> progress.hasCompletedRegion(GymRegion.GALAR)
+                            // Kanto et Johto toujours accessibles
+                            else -> true
+                        }
+                        if (!prerequisiteMet) {
+                            val requiredRegion = when (ticketRegion) {
+                                GymRegion.HOENN  -> GymRegion.JOHTO
+                                GymRegion.SINNOH -> GymRegion.HOENN
+                                GymRegion.UNOVA  -> GymRegion.SINNOH
+                                GymRegion.KALOS  -> GymRegion.UNOVA
+                                GymRegion.ALOLA  -> GymRegion.KALOS
+                                GymRegion.GALAR  -> GymRegion.ALOLA
+                                GymRegion.PALDEA -> GymRegion.GALAR
+                                else -> ticketRegion
+                            }
+                            player.sendSystemMessage(
+                                Component.translatable(
+                                    "cobblemongymodyssey.progression.region_locked",
+                                    ticketRegion.name.lowercase().replaceFirstChar { it.uppercaseChar() },
+                                    requiredRegion.name.lowercase().replaceFirstChar { it.uppercaseChar() }
+                                )
+                            )
+                            return ItemInteractionResult.FAIL
+                        }
+                    }
+
                     val blockEntity = level.getBlockEntity(pos) as? GymLeaderTeleporterBlockEntity
                     if (blockEntity != null) {
                         // Consommer le ticket

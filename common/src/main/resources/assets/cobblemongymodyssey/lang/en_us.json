@@ -179,7 +179,7 @@
   "item.cobblemongymodyssey.gym_ticket_unova_basic_badge": "\uE021 Basic Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_unova_toxic_badge": "\uE022 Toxic Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_unova_insect_badge": "\uE023 Insect Gym Ticket",
-  "item.cobblemongymodyssey.gym_ticket_unova_bold_badge": "\uE024 Bolt Gym Ticket",
+  "item.cobblemongymodyssey.gym_ticket_unova_bolt_badge": "\uE024 Bolt Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_unova_quake_badge": "\uE025 Quake Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_unova_jet_badge": "\uE026 Jet Gym Ticket",
   "item.cobblemongymodyssey.gym_ticket_unova_freeze_badge": "\uE027 Freeze Gym Ticket",
@@ -310,5 +310,13 @@
   "cobblemongymodyssey.daily.claim_all": "CLAIM ALL",
   "cobblemongymodyssey.daily.claimed_all": "ALL CLAIMED",
   "cobblemongymodyssey.daily.tooltip.locked": "Defeat all Gym Leaders of this region to unlock daily rewards!",
-  "cobblemongymodyssey.daily.msg.not_completed": "§cYou must defeat all Gym Leaders of this region to claim this allowance!"
+  "cobblemongymodyssey.daily.msg.not_completed": "§cYou must defeat all Gym Leaders of this region to claim this allowance!",
+
+  "cobblemongymodyssey.progression.johto_complete": "§6✦ §eYou have conquered the §6Johto League§e! The §cNether§e and the §6Hoenn Region§e are now unlocked!",
+  "cobblemongymodyssey.progression.hoenn_complete": "§6✦ §eYou have conquered the §6Hoenn League§e! The §5End§e and the §6Sinnoh Region§e are now unlocked!",
+  "cobblemongymodyssey.progression.nether_locked": "§c✦ §4The Nether is locked!§c You must complete the §6Johto League §cfirst (8 badges: Zephyr → Rising Badge).",
+  "cobblemongymodyssey.progression.end_locked": "§c✦ §4The End is locked!§c You must complete the §6Hoenn League §cfirst (8 badges: Stone → Rain Badge).",
+  "cobblemongymodyssey.progression.region_locked": "§c✦ The §e%s§c region is locked! Complete the §e%s League §cfirst.",
+  "item.cobblemongymodyssey.ticket_distortion": "Distortion Ticket",
+  "item.cobblemongymodyssey.ticket_underground": "Underground Ticket"
 }

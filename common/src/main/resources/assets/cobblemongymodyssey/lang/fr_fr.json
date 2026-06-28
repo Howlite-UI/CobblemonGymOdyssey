@@ -178,7 +178,7 @@
   "item.cobblemongymodyssey.gym_ticket_unova_basic_badge": "\uE021 Ticket d'Arène Basique",
   "item.cobblemongymodyssey.gym_ticket_unova_toxic_badge": "\uE022 Ticket d'Arène Toxique",
   "item.cobblemongymodyssey.gym_ticket_unova_insect_badge": "\uE023 Ticket d'Arène Insecte",
-  "item.cobblemongymodyssey.gym_ticket_unova_bold_badge": "\uE024 Ticket d'Arène Volt",
+  "item.cobblemongymodyssey.gym_ticket_unova_bolt_badge": "\uE024 Ticket d'Arène Volt",
   "item.cobblemongymodyssey.gym_ticket_unova_quake_badge": "\uE025 Ticket d'Arène Secousse",
   "item.cobblemongymodyssey.gym_ticket_unova_jet_badge": "\uE026 Ticket d'Arène Jet",
   "item.cobblemongymodyssey.gym_ticket_unova_freeze_badge": "\uE027 Ticket d'Arène Cryo",
@@ -298,5 +298,13 @@
   "cobblemongymodyssey.daily.claim_all": "TOUT RECUP.",
   "cobblemongymodyssey.daily.claimed_all": "TOUT FAIT",
   "cobblemongymodyssey.daily.tooltip.locked": "Battez tous les Champions d'arène de cette région pour débloquer !",
-  "cobblemongymodyssey.daily.msg.not_completed": "§cVous devez vaincre tous les Champions de cette région pour récupérer cette allocation !"
+  "cobblemongymodyssey.daily.msg.not_completed": "§cVous devez vaincre tous les Champions de cette région pour récupérer cette allocation !",
+
+  "cobblemongymodyssey.progression.johto_complete": "§6✦ §eVous avez conquis la §6Ligue Johto§e ! Le §cNether§e et la §6Région Hoenn§e sont maintenant débloqués !",
+  "cobblemongymodyssey.progression.hoenn_complete": "§6✦ §eVous avez conquis la §6Ligue Hoenn§e ! L'§5End§e et la §6Région Sinnoh§e sont maintenant débloqués !",
+  "cobblemongymodyssey.progression.nether_locked": "§c✦ §4Le Nether est verrouillé !§c Vous devez d'abord terminer la §6Ligue Johto §c(8 badges : Plume → Badge Ascension).",
+  "cobblemongymodyssey.progression.end_locked": "§c✦ §4L'End est verrouillé !§c Vous devez d'abord terminer la §6Ligue Hoenn §c(8 badges : Pierre → Badge Pluie).",
+  "cobblemongymodyssey.progression.region_locked": "§c✦ La région §e%s§c est verrouillée ! Terminez d'abord la §eLigue %s§c.",
+  "item.cobblemongymodyssey.ticket_distortion": "Ticket Distorsion",
+  "item.cobblemongymodyssey.ticket_underground": "Ticket Souterrain"
 }

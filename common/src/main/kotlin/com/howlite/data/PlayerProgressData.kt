@@ -123,6 +123,15 @@ class PlayerProgressData {
     fun hasBadge(badge: GymBadge): Boolean = badge in _badges
 
     /**
+     * Vérifie si le joueur a remporté tous les badges d'une région donnée.
+     * Utilisé pour les conditions de déblocage dimensionnel (Nether, End...).
+     */
+    fun hasCompletedRegion(region: GymRegion): Boolean {
+        val regionBadges = GymBadge.entries.filter { it.region == region }
+        return regionBadges.isNotEmpty() && regionBadges.all { hasBadge(it) }
+    }
+
+    /**
      * Ajoute un badge à la collection du joueur et recalcule le [levelCap]
      * au maximum de tous les badges Kanto détenus.
      */

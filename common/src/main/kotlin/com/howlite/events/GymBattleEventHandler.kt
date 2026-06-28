@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.Cobblemon
 import com.howlite.data.PokemonSnapshot
+import com.howlite.data.GymRegion
 import com.howlite.api.PlayerProgressApi
 import com.howlite.config.GymConfig
 import com.howlite.items.GymBadgeItems
@@ -83,6 +84,18 @@ object GymBattleEventHandler {
 
                 data.earnBadge(badge)
                 PlayerProgressApi.markDirty(player)
+
+                // Vérifier si une ligue entière a été complétée — déblocage dimensionnel
+                when {
+                    data.hasCompletedRegion(GymRegion.JOHTO) && badge.region == GymRegion.JOHTO ->
+                        player.sendSystemMessage(
+                            Component.translatable("cobblemongymodyssey.progression.johto_complete")
+                        )
+                    data.hasCompletedRegion(GymRegion.HOENN) && badge.region == GymRegion.HOENN ->
+                        player.sendSystemMessage(
+                            Component.translatable("cobblemongymodyssey.progression.hoenn_complete")
+                        )
+                }
 
                 // Accorder l'item physique du badge
                 val itemStack = ItemStack(item)

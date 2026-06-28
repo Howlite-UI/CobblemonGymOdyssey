@@ -279,6 +279,14 @@ object GymBadgeItems {
     val ALFORNADA_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_paldea_alfornada_badge") { GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.ALFORNADA_BADGE) }
     val GLASEADO_TICKET: RegistrySupplier<Item> = ITEMS.register("gym_ticket_paldea_glaseado_badge") { GymLeaderTicketItem(Item.Properties().stacksTo(64), GymBadge.GLASEADO_BADGE) }
 
+    // Modpack Custom Tickets
+    val TICKET_DISTORTION: RegistrySupplier<Item> = ITEMS.register("ticket_distortion") {
+        Item(Item.Properties().stacksTo(64))
+    }
+    val TICKET_UNDERGROUND: RegistrySupplier<Item> = ITEMS.register("ticket_underground") {
+        Item(Item.Properties().stacksTo(64))
+    }
+
     // -------------------------------------------------------------------------
     // Onglet créatif "Gym Badges"
     // -------------------------------------------------------------------------
@@ -416,7 +424,8 @@ object GymBadgeItems {
             FIRE_TICKET, FIGHTING_TICKET, GHOST_TICKET, GALAR_FAIRY_TICKET,
             ROCK_TICKET, ICE_TICKET, DARK_TICKET, DRAGON_TICKET,
             CORTONDO_TICKET, ARTAZON_TICKET, LEVINCIA_TICKET, CASCARRAFA_TICKET,
-            MEDALI_TICKET, MONTENEVERA_TICKET, ALFORNADA_TICKET, GLASEADO_TICKET
+            MEDALI_TICKET, MONTENEVERA_TICKET, ALFORNADA_TICKET, GLASEADO_TICKET,
+            TICKET_DISTORTION, TICKET_UNDERGROUND
         )
     }
 }

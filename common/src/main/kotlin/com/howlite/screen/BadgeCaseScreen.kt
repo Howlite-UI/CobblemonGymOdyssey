@@ -49,6 +49,10 @@ class BadgeCaseScreen(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/badge_box_background_galar.png"
         )
+        val BACKGROUND_UNOVA_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            CobblemonGymOdyssey.MOD_ID,
+            "textures/gui/badge_box_background_unova.png"
+        )
         val TOPBAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             CobblemonGymOdyssey.MOD_ID,
             "textures/gui/badge_box_topbar.png"
@@ -147,9 +151,10 @@ class BadgeCaseScreen(
         UNOVA(
             "cobblemongymodyssey.badge_case.tab.unova",
             listOf(
-                GymBadge.TOXIC_BADGE, GymBadge.BASIC_BADGE,
-                GymBadge.INSECT_BADGE, GymBadge.BOLT_BADGE,
-                GymBadge.QUAKE_BADGE, GymBadge.JET_BADGE,
+                GymBadge.TRIO_BADGE,  GymBadge.TOXIC_BADGE,
+                GymBadge.BASIC_BADGE, GymBadge.INSECT_BADGE,
+                GymBadge.BOLT_BADGE,  GymBadge.QUAKE_BADGE,
+                GymBadge.JET_BADGE,   GymBadge.FREEZE_BADGE,
                 GymBadge.LEGEND_BADGE, GymBadge.WAVE_BADGE
             ),
             0xFF34495E.toInt(), // Gris foncé / Bleu nuit
@@ -357,7 +362,8 @@ class BadgeCaseScreen(
         val bgTexture = when (region) {
             Region.ALOLA -> BACKGROUND_ALOLA_TEXTURE
             Region.GALAR -> BACKGROUND_GALAR_TEXTURE
-            else -> BACKGROUND_TEXTURE
+            Region.UNOVA -> BACKGROUND_UNOVA_TEXTURE
+            else         -> BACKGROUND_TEXTURE
         }
         graphics.blit(bgTexture, x, y, 0f, 0f, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT)
 
@@ -617,24 +623,24 @@ class BadgeCaseScreen(
             val alolaSlotXs = intArrayOf(46, 64, 104, 122)
             return alolaSlotXs.getOrElse(index) { 0 }
         }
-        if (activeRegion == Region.GALAR) {
-            val galarSlotXs = intArrayOf(
+        if (activeRegion == Region.GALAR || activeRegion == Region.UNOVA) {
+            val slotXs = intArrayOf(
                 10, 158, // Row 1 (y=93)
                 10, 28, 46, 64, 104, 122, 140, 158 // Row 2 (y=111)
             )
-            return galarSlotXs.getOrElse(index) { 0 }
+            return slotXs.getOrElse(index) { 0 }
         }
         val slotXs = intArrayOf(10, 28, 46, 64, 104, 122, 140, 158)
         return slotXs.getOrElse(index) { 0 }
     }
 
     private fun getSlotY(index: Int): Int {
-        if (activeRegion == Region.GALAR) {
-            val galarSlotYs = intArrayOf(
+        if (activeRegion == Region.GALAR || activeRegion == Region.UNOVA) {
+            val slotYs = intArrayOf(
                 93, 93,
                 111, 111, 111, 111, 111, 111, 111, 111
             )
-            return galarSlotYs.getOrElse(index) { 111 }
+            return slotYs.getOrElse(index) { 111 }
         }
         return 111
     }
@@ -886,7 +892,7 @@ class BadgeCaseScreen(
                     return
                 }
             }
-            val gridMinY = if (activeRegion == Region.GALAR) 93 else 111
+            val gridMinY = if (activeRegion == Region.GALAR || activeRegion == Region.UNOVA) 93 else 111
             if (mouseY < y + gridMinY) {
                 return
             }
@@ -965,7 +971,7 @@ class BadgeCaseScreen(
                     return true
                 }
             }
-            val clickedOnGrid = if (activeRegion == Region.GALAR) {
+            val clickedOnGrid = if (activeRegion == Region.GALAR || activeRegion == Region.UNOVA) {
                 (mouseY >= y + 93 && mouseY < y + 109) || (mouseY >= y + 111 && mouseY < y + 127)
             } else {
                 mouseY >= y + 111 && mouseY < y + 127

@@ -83,7 +83,7 @@ config = "cobblemongymodyssey.mixins.json"
 [[dependencies.cobblemongymodyssey]]
 modId = "accessories"
 type = "optional"
-versionRange = "[1.1.0,)"
+versionRange = "[1.1.0-beta.0,)"
 ordering = "NONE"
 side = "BOTH"
 
