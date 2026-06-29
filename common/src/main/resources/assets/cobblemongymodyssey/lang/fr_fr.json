@@ -32,7 +32,7 @@
     "cobblemongymodyssey.level_cap.battle_blocked":  "â›” Combat annulÃ© ! %s (niveau %s) dÃ©passe votre Level Cap de %s. Battez d\u0027autres Champions d\u0027ArÃ¨ne pour le relever !",
     "item.cobblemongymodyssey.badge_case":  "BoÃ®te Ã  Badges",
     "cobblemongymodyssey.badge_case.title":  "BoÃ®te Ã  Badges",
-    "cobblemongymodyssey.badge_case.league_format":  "â€” LIGUE %s â€”",
+    "cobblemongymodyssey.badge_case.league_format":  "\u2014 LIGUE %s \u2014",
     "cobblemongymodyssey.badge_case.tab.kanto":  "Kanto",
     "cobblemongymodyssey.badge_case.tab.johto":  "Johto",
     "cobblemongymodyssey.badge_case.tab.hoenn":  "Hoenn",
