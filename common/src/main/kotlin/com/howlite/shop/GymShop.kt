@@ -64,6 +64,27 @@ object GymShop {
         val shops: Map<String, RegionShopConfig> = emptyMap()
     )
 
+    data class GymShopEntry(
+        val requiredBadge: String,
+        val costItem: ItemStack,
+        val resultItem: ItemStack
+    )
+
+    fun parseItemStack(itemString: String, count: Int, registries: net.minecraft.core.HolderLookup.Provider): ItemStack {
+        if (itemString.isEmpty()) return ItemStack.EMPTY
+        try {
+            val parser = net.minecraft.commands.arguments.item.ItemParser(registries)
+            val itemResult = parser.parse(com.mojang.brigadier.StringReader(itemString))
+            val itemInput = net.minecraft.commands.arguments.item.ItemInput(itemResult.item(), itemResult.components())
+            return itemInput.createItemStack(count, false)
+        } catch (e: Exception) {
+            // Fallback
+            val loc = ResourceLocation.tryParse(itemString)
+            val item = if (loc != null) BuiltInRegistries.ITEM.get(loc) else Items.AIR
+            return if (item == Items.AIR) ItemStack.EMPTY else ItemStack(item, count)
+        }
+    }
+
     var loadedConfig: ShopsConfig = ShopsConfig()
 
     init {
@@ -112,7 +133,7 @@ object GymShop {
 
     fun openShop(player: ServerPlayer, region: GymRegion) {
         val progress = PlayerProgressApi.get(player)
-        val availableItems = mutableListOf<ShopItemConfig>()
+        val availableConfigs = mutableListOf<ShopItemConfig>()
 
         loadConfig()
 
@@ -132,40 +153,48 @@ object GymShop {
                     } else {
                         itemConf.costItem
                     }
-                    availableItems.add(itemConf.copy(costItem = costItem))
+                    availableConfigs.add(itemConf.copy(costItem = costItem))
                 }
             }
         }
 
         // Trier les items disponibles dans l'ordre canonique des badges (ordinal de GymBadge).
         // Les items sans badge reconnu (requiredBadge vide ou inconnu) vont à la fin.
-        availableItems.sortWith(Comparator { a, b ->
+        availableConfigs.sortWith(Comparator { a, b ->
             val ordA = GymBadge.entries.find { it.id == a.requiredBadge }?.ordinal ?: Int.MAX_VALUE
             val ordB = GymBadge.entries.find { it.id == b.requiredBadge }?.ordinal ?: Int.MAX_VALUE
             ordA.compareTo(ordB)
         })
 
-        if (availableItems.isEmpty()) return
+        // Convertir en GymShopEntry avec support NBT/Components
+        val registries = player.registryAccess()
+        val availableEntries = availableConfigs.map { conf ->
+            GymShopEntry(
+                requiredBadge = conf.requiredBadge,
+                costItem = parseItemStack(conf.costItem, conf.costCount, registries),
+                resultItem = parseItemStack(conf.resultItem, conf.resultCount, registries)
+            )
+        }.filter { !it.resultItem.isEmpty }
 
-        val regionLower = region.name.lowercase()
+        if (availableEntries.isEmpty()) return
+
         dev.architectury.registry.menu.MenuRegistry.openExtendedMenu(
             player,
             object : MenuProvider {
-                override fun getDisplayName(): Component =
-                    Component.empty()
+                override fun getDisplayName(): Component = Component.empty()
 
                 override fun createMenu(syncId: Int, inv: Inventory, p: Player): AbstractContainerMenu {
-                    return com.howlite.menu.GymShopMenu(syncId, inv, region, availableItems)
+                    return com.howlite.menu.GymShopMenu(syncId, inv, region, availableEntries)
                 }
             }
         ) { buf ->
             buf.writeUtf(region.name)
-            buf.writeInt(availableItems.size)
-            for (item in availableItems) {
-                buf.writeUtf(item.costItem)
-                buf.writeInt(item.costCount)
-                buf.writeUtf(item.resultItem)
-                buf.writeInt(item.resultCount)
+            val regBuf = net.minecraft.network.RegistryFriendlyByteBuf(buf, player.registryAccess())
+            regBuf.writeInt(availableEntries.size)
+            for (entry in availableEntries) {
+                regBuf.writeUtf(entry.requiredBadge)
+                ItemStack.OPTIONAL_STREAM_CODEC.encode(regBuf, entry.costItem)
+                ItemStack.OPTIONAL_STREAM_CODEC.encode(regBuf, entry.resultItem)
             }
         }
     }

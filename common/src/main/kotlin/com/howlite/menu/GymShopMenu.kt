@@ -16,7 +16,7 @@ class GymShopMenu(
     syncId: Int,
     playerInventory: Inventory,
     val region: GymRegion,
-    val items: List<GymShop.ShopItemConfig>
+    val items: List<GymShop.GymShopEntry>
 ) : AbstractContainerMenu(BadgeCaseMenus.GYM_SHOP_MENU_TYPE.get(), syncId) {
 
     init {
@@ -43,7 +43,7 @@ class GymShopMenu(
         syncId,
         playerInventory,
         GymRegion.valueOf(buf.readUtf()),
-        readItems(buf)
+        readItems(buf, playerInventory.player.level().registryAccess())
     )
 
     override fun stillValid(player: Player): Boolean = true
@@ -54,52 +54,72 @@ class GymShopMenu(
         val quantity = (id % 100) + 1
 
         if (selectedIndex !in items.indices) return false
-        val itemConfig = items[selectedIndex]
+        val entry = items[selectedIndex]
 
-        // 1. Calcul du coût total
-        val costItemLoc = net.minecraft.resources.ResourceLocation.tryParse(itemConfig.costItem) ?: return false
-        val costItem = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(costItemLoc)
-        val totalCostCount = itemConfig.costCount.toLong() * quantity
-
-        val resultItemLoc = net.minecraft.resources.ResourceLocation.tryParse(itemConfig.resultItem) ?: return false
-        val resultItem = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(resultItemLoc)
-        val totalResultCount = itemConfig.resultCount * quantity
+        val costStackSingle = entry.costItem
+        val resultStackSingle = entry.resultItem
+        val costItemType = costStackSingle.item
 
         // 2. Vérification s'il s'agit d'une pièce du portefeuille
-        val coinType = getCoinType(itemConfig.costItem)
+        val costItemPath = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(costItemType).toString()
+        val coinType = getCoinType(costItemPath)
         if (coinType != null) {
-            val totalCostCCC = coinType.valueCCC * totalCostCount
+            val totalCostCCC = coinType.valueCCC * costStackSingle.count * quantity
             val success = WalletManager.removeAndSync(player, totalCostCCC)
             if (success) {
-                val stack = ItemStack(resultItem, totalResultCount)
+                val stack = resultStackSingle.copyWithCount(resultStackSingle.count * quantity)
                 giveOrDrop(player, stack)
-                player.connection.send(net.minecraft.network.protocol.game.ClientboundSoundPacket(
-                    net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(net.minecraft.sounds.SoundEvents.VILLAGER_YES),
-                    net.minecraft.sounds.SoundSource.PLAYERS,
-                    player.x, player.y, player.z,
-                    1.0f, 1.0f,
-                    player.level().random.nextLong()
-                ))
+                playSuccessSound(player)
                 return true
             }
         } else {
-            // Physique (ex: émeraude)
-            if (hasRequiredItems(player, costItem, totalCostCount.toInt())) {
-                consumeItems(player, costItem, totalCostCount.toInt())
-                val stack = ItemStack(resultItem, totalResultCount)
+            // Physique (ex: émeraude, jetons de gym, etc.) avec support complet de composants NBT/Components
+            val requiredCostStack = costStackSingle.copyWithCount(costStackSingle.count * quantity)
+            if (hasRequiredItems(player, requiredCostStack)) {
+                consumeItems(player, requiredCostStack)
+                val stack = resultStackSingle.copyWithCount(resultStackSingle.count * quantity)
                 giveOrDrop(player, stack)
-                player.connection.send(net.minecraft.network.protocol.game.ClientboundSoundPacket(
-                    net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(net.minecraft.sounds.SoundEvents.VILLAGER_YES),
-                    net.minecraft.sounds.SoundSource.PLAYERS,
-                    player.x, player.y, player.z,
-                    1.0f, 1.0f,
-                    player.level().random.nextLong()
-                ))
+                playSuccessSound(player)
                 return true
             }
         }
 
         return false
+    }
+
+    private fun playSuccessSound(player: ServerPlayer) {
+        player.connection.send(net.minecraft.network.protocol.game.ClientboundSoundPacket(
+            net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(net.minecraft.sounds.SoundEvents.VILLAGER_YES),
+            net.minecraft.sounds.SoundSource.PLAYERS,
+            player.x, player.y, player.z,
+            1.0f, 1.0f,
+            player.level().random.nextLong()
+        ))
+    }
+
+    private fun hasRequiredItems(player: ServerPlayer, requiredStack: ItemStack): Boolean {
+        var found = 0
+        for (stack in player.inventory.items) {
+            if (ItemStack.isSameItemSameComponents(stack, requiredStack)) {
+                found += stack.count
+            }
+        }
+        return found >= requiredStack.count
+    }
+
+    private fun consumeItems(player: ServerPlayer, requiredStack: ItemStack) {
+        var remaining = requiredStack.count
+        for (stack in player.inventory.items) {
+            if (ItemStack.isSameItemSameComponents(stack, requiredStack)) {
+                if (stack.count >= remaining) {
+                    stack.shrink(remaining)
+                    break
+                } else {
+                    remaining -= stack.count
+                    stack.count = 0
+                }
+            }
+        }
     }
 
     private fun getCoinType(itemId: String): CoinType? {
@@ -109,31 +129,6 @@ class GymShopMenu(
             "cobblemongymodyssey:cobble_gold_coin" -> CoinType.GOLD
             "cobblemongymodyssey:cobble_platinum_coin" -> CoinType.PLATINUM
             else -> null
-        }
-    }
-
-    private fun hasRequiredItems(player: ServerPlayer, item: net.minecraft.world.item.Item, count: Int): Boolean {
-        var found = 0
-        for (stack in player.inventory.items) {
-            if (stack.item == item) {
-                found += stack.count
-            }
-        }
-        return found >= count
-    }
-
-    private fun consumeItems(player: ServerPlayer, item: net.minecraft.world.item.Item, count: Int) {
-        var remaining = count
-        for (stack in player.inventory.items) {
-            if (stack.item == item) {
-                if (stack.count >= remaining) {
-                    stack.shrink(remaining)
-                    break
-                } else {
-                    remaining -= stack.count
-                    stack.count = 0
-                }
-            }
         }
     }
 
@@ -181,17 +176,16 @@ class GymShopMenu(
     }
 
     companion object {
-        private fun readItems(buf: FriendlyByteBuf): List<GymShop.ShopItemConfig> {
-            val size = buf.readInt()
-            val list = mutableListOf<GymShop.ShopItemConfig>()
+        private fun readItems(buf: FriendlyByteBuf, registries: net.minecraft.core.RegistryAccess): List<GymShop.GymShopEntry> {
+            val regBuf = net.minecraft.network.RegistryFriendlyByteBuf(buf, registries)
+            val size = regBuf.readInt()
+            val list = mutableListOf<GymShop.GymShopEntry>()
             for (i in 0 until size) {
                 list.add(
-                    GymShop.ShopItemConfig(
-                        requiredBadge = "",
-                        costItem = buf.readUtf(),
-                        costCount = buf.readInt(),
-                        resultItem = buf.readUtf(),
-                        resultCount = buf.readInt()
+                    GymShop.GymShopEntry(
+                        requiredBadge = regBuf.readUtf(),
+                        costItem = ItemStack.OPTIONAL_STREAM_CODEC.decode(regBuf),
+                        resultItem = ItemStack.OPTIONAL_STREAM_CODEC.decode(regBuf)
                     )
                 )
             }
