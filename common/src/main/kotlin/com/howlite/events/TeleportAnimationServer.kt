@@ -372,4 +372,20 @@ object TeleportAnimationServer {
     /** Détermine si une dimension est éligible à l'animation (Overworld ou End). */
     fun isDimensionEligible(level: ServerLevel): Boolean =
         level.dimension() == Level.OVERWORLD || level.dimension() == Level.END
+
+    /**
+     * Retourne true si le joueur possède au moins un Pokémon rideable dans son équipe.
+     * Un Pokémon rideable est un Pokémon dont la forme a au moins un comportement de monte.
+     */
+    fun hasRideablePokemon(player: ServerPlayer): Boolean {
+        return try {
+            val party = Cobblemon.storage.getParty(player.uuid, player.registryAccess())
+            party.filterNotNull().any { pokemon ->
+                val behaviours = pokemon.form.riding.behaviours
+                behaviours != null && behaviours.isNotEmpty()
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
 }

@@ -4,6 +4,9 @@ import com.howlite.events.TeleportAnimationServer;
 import net.blay09.mods.waystones.api.TeleportDestination;
 import net.blay09.mods.waystones.api.WaystoneTeleportContext;
 import net.blay09.mods.waystones.core.WaystoneTeleportManager;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -16,7 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Mixin optionnel sur WaystoneTeleportManager.doTeleport.
  *
  * Intercepte la teleportation pour les joueurs et demarre le delay / l animation
- * GTA 5 de 1.5s avant d executer la teleportation reelle.
+ * Pokemon B&W avant d executer la teleportation reelle.
+ * Bloque la TP si le joueur n a pas de Pokemon rideable (comme le field move Vol en Gen 5).
  */
 @Mixin(WaystoneTeleportManager.class)
 public class WaystoneTeleportManagerMixin {
@@ -55,10 +59,27 @@ public class WaystoneTeleportManagerMixin {
             return;
         }
 
-        // Lancer l animation de teleportation et de zoom-up (GTA 5 / Pokemon Vol)
+        // ── Vérifier si le joueur possède un Pokémon rideable ────────────────
+        // Comme dans Pokémon B&W, seuls les dresseurs ayant un Pokémon capable
+        // de voler (rideable) peuvent utiliser les Waystones pour se téléporter.
+        if (!TeleportAnimationServer.INSTANCE.hasRideablePokemon(player)) {
+            Component msg = Component.translatable(
+                "cobblemongymodyssey.teleport.requires_rideable"
+            ).withStyle(Style.EMPTY
+                .withColor(TextColor.fromRgb(0xFF4444))
+                .withItalic(true)
+            );
+            player.sendSystemMessage(msg);
+            // Annuler la téléportation sans effet de bord
+            cir.setReturnValue(com.mojang.datafixers.util.Either.left(new java.util.ArrayList<>()));
+            cir.cancel();
+            return;
+        }
+
+        // Lancer l animation de teleportation et de zoom-up (Pokemon B&W Vol)
         TeleportAnimationServer.INSTANCE.startWaystoneAnimation(player, context, destination);
 
-        // Annuler la TP immediate et renvoyer une reussite fictive (liste vide d entites TP pour l instant)
+        // Annuler la TP immediate et renvoyer une reussite fictive
         cir.setReturnValue(com.mojang.datafixers.util.Either.left(new java.util.ArrayList<>()));
         cir.cancel();
     }
