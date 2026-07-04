@@ -425,7 +425,7 @@ object TeleportAnimationClient {
 
         // Calcul de la trajectoire de vol dynamique (style cinématique Pokémon B&W)
         var targetX = w / 2.0
-        var targetY = h / 2.0 + 10.0
+        var targetY = h / 2.0
 
         if (isZoomUp) {
             val t = ((p - 0.25) / 0.55).coerceIn(0.0, 1.0)
@@ -461,13 +461,13 @@ object TeleportAnimationClient {
             targetY = when {
                 t <= 0.35 -> {
                     val tIn = t / 0.35
-                    (h / 2.0 - 50.0) + 60.0 * smoothstep(tIn)
+                    (h / 2.0 - 60.0) + 60.0 * smoothstep(tIn)
                 }
                 t >= 0.80 -> {
                     val tOut = (t - 0.80) / 0.20
-                    (h / 2.0 + 10.0) + 60.0 * smoothstep(tOut)
+                    (h / 2.0) + 60.0 * smoothstep(tOut)
                 }
-                else -> h / 2.0 + 10.0
+                else -> h / 2.0
             }
         }
 
@@ -477,10 +477,10 @@ object TeleportAnimationClient {
 
         val pose = g.pose()
         pose.pushPose()
-        pose.translate(targetX, finalY, 300.0)
+        pose.translate(targetX, finalY + 17.0, 300.0)
 
         // Scale du Pokémon
-        val baseScale = 45.0f
+        val baseScale = 12.0f
         pose.scale(baseScale, baseScale, 1.0f)
 
         // Orientation oblique droite (profil de vol)
@@ -499,7 +499,8 @@ object TeleportAnimationClient {
                 poseType = PoseType.FLY, // Forcer la pose de vol (FLY / HOVER)
                 state = floatingState,
                 partialTicks = partialTicks,
-                scale = 1.0f
+                scale = 1.0f,
+                applyProfileTransform = false
             )
         } catch (e: Exception) {
             e.printStackTrace()
