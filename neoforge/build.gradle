@@ -65,6 +65,9 @@ dependencies {
     // CobbleSafari (NeoForge)
     modImplementation "maven.modrinth:cobblesafari:${rootProject.cobblesafari_neoforge_version}"
 
+    // Waystones + Balm (soft-dep — compile-only pour le mixin WaystoneTeleportManager)
+    compileOnly fileTree(dir: rootProject.file('neoforge/run/mods'), include: ['*waystones*.jar', '*balm*.jar'])
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

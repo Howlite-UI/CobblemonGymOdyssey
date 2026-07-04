@@ -94,3 +94,18 @@ type = "required"
 versionRange = "[0.2.3,)"
 ordering = "AFTER"
 side = "BOTH"
+
+# Waystones + Balm (soft-dep) — animation de téléportation
+[[dependencies.cobblemongymodyssey]]
+modId = "balm"
+type = "optional"
+versionRange = "[21.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.cobblemongymodyssey]]
+modId = "waystones"
+type = "optional"
+versionRange = "[21.0,)"
+ordering = "AFTER"
+side = "BOTH"

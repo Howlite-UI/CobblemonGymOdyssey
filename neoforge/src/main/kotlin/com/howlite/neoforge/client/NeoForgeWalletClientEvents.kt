@@ -127,5 +127,6 @@ object NeoForgeWalletClientEvents {
     @SubscribeEvent
     fun onRenderHud(event: RenderGuiEvent.Post) {
         WalletHudOverlay.render(event.guiGraphics, event.partialTick.gameTimeDeltaTicks)
+        com.howlite.client.render.TeleportAnimationClient.renderOverlay(event.guiGraphics)
     }
 }

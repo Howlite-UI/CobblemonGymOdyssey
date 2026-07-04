@@ -4,11 +4,19 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
-    "MerchantScreenMixin"
+    "MerchantScreenMixin",
+    "CameraMixin",
+    "ItemInHandRendererMixin",
+    "GuiMixin"
   ],
   "mixins": [
+    "ServerPlayerMixin",
+    "MinecraftServerMixin",
+    "EntityMixin",
+    "WaystoneTeleportManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "com.howlite.mixin.GymMixinConfigPlugin"
 }

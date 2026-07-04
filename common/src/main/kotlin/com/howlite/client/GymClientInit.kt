@@ -89,5 +89,7 @@ object GymClientInit {
                 }
             }
         }
+        // Register S2C packets for the teleport animation (Zoom Up / Zoom Down)
+        com.howlite.events.TeleportAnimationNetwork.registerClientReceivers()
     }
 }

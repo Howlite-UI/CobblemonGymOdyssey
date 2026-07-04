@@ -18,5 +18,17 @@ dependencies {
     modCompileOnly "maven.modrinth:cobblemonraiddens:${rootProject.cobblemonraiddens_fabric_version}"
     modCompileOnly "maven.modrinth:geckolib:${rootProject.geckolib_fabric_version}"
     modCompileOnly "maven.modrinth:cloth-config:${rootProject.cloth_config_fabric_version}"
+
+    // Waystones + Balm (soft-dep — compile-only pour le mixin WaystoneTeleportManager)
+    compileOnly fileTree(dir: rootProject.file('neoforge/run/mods'), include: ['*waystones*.jar', '*balm*.jar'])
+}
+
+// Mixins Java nécessitent les classes Kotlin (TeleportAnimationClient, etc.)
+// → compiler Java APRÈS Kotlin et inclure les classes Kotlin dans le classpath Java.
+tasks.named('compileJava') {
+    dependsOn tasks.named('compileKotlin')
+}
+tasks.named('compileJava').configure {
+    classpath = classpath + files(tasks.named('compileKotlin').get().destinationDirectory)
 }
 

@@ -22,9 +22,10 @@ class ExampleModFabricClient : ClientModInitializer {
         // Enregistrer les packets wallet S2C
         WalletNetwork.registerClientReceivers()
 
-        // HUD wallet (coin inférieur gauche)
+        // HUD wallet (coin inférieur gauche) + overlay de nuages de téléportation
         ClientGuiEvent.RENDER_HUD.register { graphics, tickDelta ->
             WalletHudOverlay.render(graphics, tickDelta.gameTimeDeltaTicks)
+            com.howlite.client.render.TeleportAnimationClient.renderOverlay(graphics)
         }
 
         // Associe le MenuType à l'écran côté client
