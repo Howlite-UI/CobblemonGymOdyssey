@@ -16,11 +16,44 @@ import java.util.Set;
 public class GymMixinConfigPlugin implements IMixinConfigPlugin {
     private static boolean isWaystonesPresent = false;
 
+    private static boolean checkWaystones() {
+        // Check Fabric
+        try {
+            Class<?> fabricLoaderClass = Class.forName("net.fabricmc.loader.api.FabricLoader");
+            Object fabricLoader = fabricLoaderClass.getMethod("getInstance").invoke(null);
+            boolean isLoaded = (boolean) fabricLoaderClass.getMethod("isModLoaded", String.class).invoke(fabricLoader, "waystones");
+            if (isLoaded) return true;
+        } catch (Throwable ignored) {}
+
+        // Check NeoForge / Forge
+        try {
+            Class<?> fmlLoaderClass = Class.forName("net.neoforged.fml.loading.FMLLoader");
+            Object loadingModList = fmlLoaderClass.getMethod("getLoadingModList").invoke(null);
+            Object modFile = loadingModList.getClass().getMethod("getModFileById", String.class).invoke(loadingModList, "waystones");
+            if (modFile != null) return true;
+        } catch (Throwable ignored) {}
+
+        try {
+            Class<?> modListClass = Class.forName("net.minecraftforge.fml.ModList");
+            Object modList = modListClass.getMethod("get").invoke(null);
+            boolean isLoaded = (boolean) modListClass.getMethod("isLoaded", String.class).invoke(modList, "waystones");
+            if (isLoaded) return true;
+        } catch (Throwable ignored) {}
+
+        // Fallback to getResource check
+        try {
+            String resourcePath = "net/blay09/mods/waystones/core/WaystoneTeleportManager.class";
+            if (GymMixinConfigPlugin.class.getClassLoader().getResource(resourcePath) != null) {
+                return true;
+            }
+        } catch (Throwable ignored) {}
+
+        return false;
+    }
+
     @Override
     public void onLoad(String mixinPackage) {
-        // Recherche du fichier de classe sans forcer son chargement dans la JVM
-        String resourcePath = "net/blay09/mods/waystones/core/WaystoneTeleportManager.class";
-        isWaystonesPresent = this.getClass().getClassLoader().getResource(resourcePath) != null;
+        isWaystonesPresent = checkWaystones();
     }
 
     @Override

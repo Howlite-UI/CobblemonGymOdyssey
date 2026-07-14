@@ -9,6 +9,12 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
+import net.minecraft.world.entity.player.Player
+
+import com.howlite.mixin.MobAccessor
 
 object NurseJoyHandler {
 
@@ -18,7 +24,21 @@ object NurseJoyHandler {
             if (entity is NPCEntity) {
                 if (entity.npc.id.toString() == "cobblemongymodyssey:nurse_joy") {
                     entity.isInvulnerable = true
-                    entity.setNoAi(true)
+                    entity.setNoAi(false)
+
+                    // Set movement speed to 0.0 and knockback resistance to 1.0 to keep her stationary
+                    entity.getAttribute(Attributes.MOVEMENT_SPEED)?.baseValue = 0.0
+                    entity.getAttribute(Attributes.KNOCKBACK_RESISTANCE)?.baseValue = 1.0
+
+                    // Use Mixin Accessor to get goalSelector (cast through Any to satisfy Kotlin compiler)
+                    val goalSelector = (entity as Any as MobAccessor).goalSelector
+
+                    // Check if look goals are already present to prevent duplicates on reload
+                    val hasLookGoal = goalSelector.getAvailableGoals().any { it.goal is LookAtPlayerGoal }
+                    if (!hasLookGoal) {
+                        goalSelector.addGoal(1, LookAtPlayerGoal(entity, Player::class.java, 8.0f))
+                        goalSelector.addGoal(2, RandomLookAroundGoal(entity))
+                    }
                 }
             }
             EventResult.pass()

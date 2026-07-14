@@ -29,6 +29,6 @@ tasks.named('compileJava') {
     dependsOn tasks.named('compileKotlin')
 }
 tasks.named('compileJava').configure {
-    classpath = classpath + files(tasks.named('compileKotlin').get().destinationDirectory)
+    classpath = classpath + files(tasks.named('compileKotlin').get().destinationDirectory) + files("${project.layout.buildDirectory.get().asFile}/classes/java/main") + files("${project.layout.buildDirectory.get().asFile}/classes/kotlin/main")
 }
 

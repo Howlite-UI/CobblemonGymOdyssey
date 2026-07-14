@@ -13,7 +13,8 @@
     "ServerPlayerMixin",
     "MinecraftServerMixin",
     "EntityMixin",
-    "WaystoneTeleportManagerMixin"
+    "WaystoneTeleportManagerMixin",
+    "MobAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
