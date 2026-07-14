@@ -1,0 +1,15 @@
+{
+    "battleConfiguration": {
+        "canChallenge": false
+    },
+    "hitbox": "player",
+    "skill": 5,
+    "resourceIdentifier": "cobblemongymodyssey:nurse_joy",
+    "interaction": {
+        "type": "none"
+    },
+    "names": [
+        "Nurse Joy"
+    ],
+    "autoHealParty": false
+}

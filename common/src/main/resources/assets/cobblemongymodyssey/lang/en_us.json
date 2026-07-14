@@ -331,5 +331,6 @@
     "cobblemongymodyssey.player_shop.msg.earnings_collected_auto": "You collected %s from your shop earnings!",
     "cobblemongymodyssey.player_shop.msg.insufficient_funds": "You don\u0027t have enough CobbleCoins!",
     "cobblemongymodyssey.player_shop.msg.trusted_removed": "Removed %s from trusted players.",
-    "cobblemongymodyssey.teleport.requires_rideable": "You need a Pokémon capable of flying to teleport!"
+    "cobblemongymodyssey.teleport.requires_rideable": "You need a Pokémon capable of flying to teleport!",
+    "cobblemongymodyssey.nurse_joy.healed": "§d[Nurse Joy] §fYour Pokémon have been healed and are in perfect health!"
 }

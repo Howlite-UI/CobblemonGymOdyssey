@@ -1,0 +1,13 @@
+{
+  "name": "cobblemongymodyssey:nurse_joy",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:standard",
+      "model": "cobblemon:alex.geo",
+      "texture": "cobblemongymodyssey:textures/npc/nurse_joy.png",
+      "layers": []
+    }
+  ]
+}

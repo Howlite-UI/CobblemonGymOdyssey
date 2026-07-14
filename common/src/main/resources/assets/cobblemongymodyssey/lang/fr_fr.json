@@ -319,5 +319,6 @@
     "cobblemongymodyssey.player_shop.msg.earnings_collected_auto": "Vous avez collecte %s de vos gains de boutique !",
     "cobblemongymodyssey.player_shop.msg.insufficient_funds": "Vous n\u0027avez pas assez de CobbleCoins !",
     "cobblemongymodyssey.player_shop.msg.trusted_removed": "%s retire des joueurs de confiance.",
-    "cobblemongymodyssey.teleport.requires_rideable": "Vous avez besoin d'un Pokémon capable de voler pour vous téléporter !"
+    "cobblemongymodyssey.teleport.requires_rideable": "Vous avez besoin d'un Pokémon capable de voler pour vous téléporter !",
+    "cobblemongymodyssey.nurse_joy.healed": "§d[Infirmière Joëlle] §fVos Pokémon ont été soignés et sont en parfaite santé !"
 }
