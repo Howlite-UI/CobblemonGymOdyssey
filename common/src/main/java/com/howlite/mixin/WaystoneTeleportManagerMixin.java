@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Mixin optionnel sur WaystoneTeleportManager.doTeleport.
@@ -26,61 +27,88 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class WaystoneTeleportManagerMixin {
 
     @Inject(
-        method = "doTeleport(Lnet/blay09/mods/waystones/api/WaystoneTeleportContext;Lnet/blay09/mods/waystones/api/TeleportDestination;)Lcom/mojang/datafixers/util/Either;",
+        method = "tryTeleportAsync(Lnet/blay09/mods/waystones/api/WaystoneTeleportContext;)Ljava/util/concurrent/CompletableFuture;",
         at = @At("HEAD"),
         cancellable = true,
         require = 0,
         remap = false
     )
-    private static void onDoTeleport(
+    private static void onTryTeleportAsync(
         WaystoneTeleportContext context,
-        TeleportDestination destination,
-        CallbackInfoReturnable<com.mojang.datafixers.util.Either<?, ?>> cir
+        CallbackInfoReturnable<CompletableFuture<net.blay09.mods.waystones.api.WaystoneTeleportResult>> cir
     ) {
+        System.out.println("[WaystoneMixin] onTryTeleportAsync called");
         Entity entity = context.getEntity();
+        System.out.println("[WaystoneMixin] entity=" + entity);
         if (!(entity instanceof ServerPlayer player)) {
+            System.out.println("[WaystoneMixin] NOT a ServerPlayer, skipping");
             return;
         }
 
         // Si nous sommes deja en train d executer la TP differee, on laisse faire
         if (TeleportAnimationServer.INSTANCE.getExecutingWaystoneTeleports().contains(player.getUUID())) {
+            System.out.println("[WaystoneMixin] Already executing waystone TP, letting through");
             return;
         }
 
+        // Resoudre la destination à partir du Waystone cible
+        net.blay09.mods.waystones.api.Waystone targetWaystone = context.getTargetWaystone();
+        System.out.println("[WaystoneMixin] targetWaystone=" + targetWaystone);
+        if (targetWaystone == null) {
+            System.out.println("[WaystoneMixin] targetWaystone is null, skipping");
+            return;
+        }
+        java.util.Optional<TeleportDestination> destinationOpt = WaystoneTeleportManager.resolveDefaultDestination(player.serverLevel(), targetWaystone);
+        System.out.println("[WaystoneMixin] destinationOpt present=" + destinationOpt.isPresent());
+        if (destinationOpt.isEmpty()) {
+            System.out.println("[WaystoneMixin] destination empty, skipping");
+            return;
+        }
+        TeleportDestination destination = destinationOpt.get();
+
         // Verifier si la dimension de destination est eligible
         if (destination.level() instanceof ServerLevel targetLevel) {
-            if (!TeleportAnimationServer.INSTANCE.isDimensionEligible(targetLevel)) {
+            boolean eligible = TeleportAnimationServer.INSTANCE.isDimensionEligible(targetLevel);
+            System.out.println("[WaystoneMixin] dimension eligible=" + eligible + " dim=" + targetLevel.dimension().location());
+            if (!eligible) {
                 return;
             }
         }
 
         // Si le joueur est deja en train de se teleporter, on ignore
         if (TeleportAnimationServer.INSTANCE.isTeleporting(player.getUUID())) {
+            System.out.println("[WaystoneMixin] already teleporting, skipping");
             return;
         }
 
         // ── Vérifier si le joueur possède un Pokémon rideable ────────────────
-        // Comme dans Pokémon B&W, seuls les dresseurs ayant un Pokémon capable
-        // de voler (rideable) peuvent utiliser les Waystones pour se téléporter.
-        if (!TeleportAnimationServer.INSTANCE.hasRideablePokemon(player)) {
+        boolean hasRideable = TeleportAnimationServer.INSTANCE.hasRideablePokemon(player);
+        System.out.println("[WaystoneMixin] hasRideablePokemon=" + hasRideable);
+        if (!hasRideable) {
             Component msg = Component.translatable(
                 "cobblemongymodyssey.teleport.requires_rideable"
             ).withStyle(Style.EMPTY
                 .withColor(TextColor.fromRgb(0xFF4444))
                 .withItalic(true)
             );
-            player.sendSystemMessage(msg);
-            // Annuler la téléportation sans effet de bord
-            cir.setReturnValue(com.mojang.datafixers.util.Either.left(new java.util.ArrayList<>()));
+            // Annuler la téléportation en renvoyant un résultat d'échec contenant l'erreur
+            cir.setReturnValue(CompletableFuture.completedFuture(
+                net.blay09.mods.waystones.api.WaystoneTeleportResult.failed(
+                    new net.blay09.mods.waystones.api.error.WaystoneTeleportError(msg)
+                )
+            ));
             cir.cancel();
             return;
         }
 
+        System.out.println("[WaystoneMixin] Starting waystone animation for player " + player.getName().getString());
         // Lancer l animation de teleportation et de zoom-up (Pokemon B&W Vol)
         TeleportAnimationServer.INSTANCE.startWaystoneAnimation(player, context, destination);
 
-        // Annuler la TP immediate et renvoyer une reussite fictive
-        cir.setReturnValue(com.mojang.datafixers.util.Either.left(new java.util.ArrayList<>()));
+        // Annuler la TP immediate et renvoyer un CompletableFuture complété avec résultat vide
+        cir.setReturnValue(CompletableFuture.completedFuture(
+            new net.blay09.mods.waystones.api.WaystoneTeleportResult(new java.util.ArrayList<>())
+        ));
         cir.cancel();
     }
 }

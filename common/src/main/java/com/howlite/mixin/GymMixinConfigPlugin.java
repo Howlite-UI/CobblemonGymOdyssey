@@ -17,6 +17,12 @@ public class GymMixinConfigPlugin implements IMixinConfigPlugin {
     private static boolean isWaystonesPresent = false;
 
     private static boolean checkWaystones() {
+        // Class-load check for Waystones API (extremely robust and works across all loaders)
+        try {
+            Class.forName("net.blay09.mods.waystones.api.WaystoneTeleportContext");
+            return true;
+        } catch (Throwable ignored) {}
+
         // Check Fabric
         try {
             Class<?> fabricLoaderClass = Class.forName("net.fabricmc.loader.api.FabricLoader");
@@ -54,6 +60,7 @@ public class GymMixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public void onLoad(String mixinPackage) {
         isWaystonesPresent = checkWaystones();
+        System.out.println("[CobblemonGymOdyssey MixinConfig] onLoad: isWaystonesPresent=" + isWaystonesPresent);
     }
 
     @Override
@@ -64,7 +71,9 @@ public class GymMixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (mixinClassName.contains("Waystone")) {
-            return isWaystonesPresent;
+            boolean apply = isWaystonesPresent;
+            System.out.println("[CobblemonGymOdyssey MixinConfig] shouldApplyMixin: target=" + targetClassName + " mixin=" + mixinClassName + " apply=" + apply);
+            return apply;
         }
         return true;
     }

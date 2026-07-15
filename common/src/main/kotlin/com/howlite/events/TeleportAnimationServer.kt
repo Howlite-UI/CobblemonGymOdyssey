@@ -320,9 +320,8 @@ object TeleportAnimationServer {
                 player.stopRiding()
             }
 
-            net.blay09.mods.waystones.core.WaystoneTeleportManager.doTeleport(
-                pending.context as net.blay09.mods.waystones.api.WaystoneTeleportContext,
-                pending.destination as net.blay09.mods.waystones.api.TeleportDestination
+            net.blay09.mods.waystones.core.WaystoneTeleportManager.tryTeleport(
+                pending.context as net.blay09.mods.waystones.api.WaystoneTeleportContext
             )
 
             if (vehicle != null) {
