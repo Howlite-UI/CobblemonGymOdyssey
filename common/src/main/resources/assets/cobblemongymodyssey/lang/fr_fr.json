@@ -320,5 +320,24 @@
     "cobblemongymodyssey.player_shop.msg.insufficient_funds": "Vous n\u0027avez pas assez de CobbleCoins !",
     "cobblemongymodyssey.player_shop.msg.trusted_removed": "%s retire des joueurs de confiance.",
     "cobblemongymodyssey.teleport.requires_rideable": "Vous avez besoin d'un Pokémon capable de voler pour vous téléporter !",
-    "cobblemongymodyssey.nurse_joy.healed": "§d[Infirmière Joëlle] §fVos Pokémon ont été soignés et sont en parfaite santé !"
+    "cobblemongymodyssey.nurse_joy.healed": "§d[Infirmière Joëlle] §fVos Pokémon ont été soignés et sont en parfaite santé !",
+
+    "block.cobblemongymodyssey.celestial_observatory": "Observatoire Céleste",
+    "cobblemongymodyssey.gui.celestial_observatory.title": "Observatoire Céleste",
+
+    "cobblemongymodyssey.moon.phase.none": "Nuit Ordinaire",
+    "cobblemongymodyssey.moon.phase.none.desc": "Une nuit normale — aucun effet spécial.",
+    "cobblemongymodyssey.moon.phase.blue_moon": "✦ Lune Bleue",
+    "cobblemongymodyssey.moon.phase.blue_moon.desc": "Les Pokémon Shiny ont 5× plus de chances d'apparaître !",
+    "cobblemongymodyssey.moon.phase.red_moon": "☾ Lune Rouge",
+    "cobblemongymodyssey.moon.phase.red_moon.desc": "Les Pokémon de type Ténèbre et Spectre apparaissent plus souvent.",
+    "cobblemongymodyssey.moon.phase.purple_moon": "✧ Lune Violette",
+    "cobblemongymodyssey.moon.phase.purple_moon.desc": "Tous les Pokémon gagnent 1,5× d'EXP cette nuit.",
+    "cobblemongymodyssey.moon.phase.full_moon": "★ Pleine Lune",
+    "cobblemongymodyssey.moon.phase.full_moon.desc": "Les Pokémon sauvages apparaissent avec 3 IVs parfaits garantis !",
+
+    "cobblemongymodyssey.moon.notification.BLUE_MOON":   "§b✦ [Lune Bleue] §fLa Lune Bleue se lève ! Les Pokémon Shiny ont §b5× plus de chances §fd'apparaître cette nuit !",
+    "cobblemongymodyssey.moon.notification.RED_MOON":    "§c☾ [Lune Rouge] §fUne lune cramoisie plane sur le monde. Les Pokémon Ténèbre et Spectre s'agitent dans l'ombre...",
+    "cobblemongymodyssey.moon.notification.PURPLE_MOON": "§d✧ [Lune Violette] §fDes énergies mystiques tourbillonnent ! Tous les Pokémon gagneront §d1,5× d'EXP §fcette nuit.",
+    "cobblemongymodyssey.moon.notification.FULL_MOON":   "§e★ [Pleine Lune] §fLa légendaire Pleine Lune illumine le monde ! Les Pokémon sauvages apparaissent avec §e3 IVs parfaits §fcette nuit !"
 }

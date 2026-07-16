@@ -85,6 +85,10 @@ subprojects {
         }
     }
 
+    tasks.named('compileKotlin') {
+        destinationDirectory = file("${buildDir}/classes/java/main")
+    }
+
     tasks.named('jar', Jar) {
         from(tasks.named('compileKotlin').map { it.destinationDirectory })
     }

@@ -332,5 +332,24 @@
     "cobblemongymodyssey.player_shop.msg.insufficient_funds": "You don\u0027t have enough CobbleCoins!",
     "cobblemongymodyssey.player_shop.msg.trusted_removed": "Removed %s from trusted players.",
     "cobblemongymodyssey.teleport.requires_rideable": "You need a Pokémon capable of flying to teleport!",
-    "cobblemongymodyssey.nurse_joy.healed": "§d[Nurse Joy] §fYour Pokémon have been healed and are in perfect health!"
+    "cobblemongymodyssey.nurse_joy.healed": "§d[Nurse Joy] §fYour Pokémon have been healed and are in perfect health!",
+
+    "block.cobblemongymodyssey.celestial_observatory": "Celestial Observatory",
+    "cobblemongymodyssey.gui.celestial_observatory.title": "Celestial Observatory",
+
+    "cobblemongymodyssey.moon.phase.none": "Normal Night",
+    "cobblemongymodyssey.moon.phase.none.desc": "A regular night — no special effects.",
+    "cobblemongymodyssey.moon.phase.blue_moon": "✦ Blue Moon",
+    "cobblemongymodyssey.moon.phase.blue_moon.desc": "Shiny Pokémon are 5× more likely to appear!",
+    "cobblemongymodyssey.moon.phase.red_moon": "☾ Red Moon",
+    "cobblemongymodyssey.moon.phase.red_moon.desc": "Dark and Ghost-type Pokémon appear more frequently.",
+    "cobblemongymodyssey.moon.phase.purple_moon": "✧ Purple Moon",
+    "cobblemongymodyssey.moon.phase.purple_moon.desc": "All Pokémon gain 1.5× EXP during this night.",
+    "cobblemongymodyssey.moon.phase.full_moon": "★ Full Moon",
+    "cobblemongymodyssey.moon.phase.full_moon.desc": "Wild Pokémon spawn with 3 guaranteed perfect IVs!",
+
+    "cobblemongymodyssey.moon.notification.BLUE_MOON":   "§b✦ [Blue Moon] §fThe Blue Moon rises! Shiny Pokémon are §b5× more likely §fto appear tonight!",
+    "cobblemongymodyssey.moon.notification.RED_MOON":    "§c☾ [Red Moon] §fA crimson moon looms overhead. Dark and Ghost-type Pokémon stir in the shadows...",
+    "cobblemongymodyssey.moon.notification.PURPLE_MOON": "§d✧ [Purple Moon] §fMystic energies swirl! All Pokémon will gain §d1.5× EXP §fthis night.",
+    "cobblemongymodyssey.moon.notification.FULL_MOON":   "§e★ [Full Moon] §fThe legendary Full Moon illuminates the world! Wild Pokémon spawn with §e3 perfect IVs §ftonight!"
 }

@@ -16,6 +16,11 @@ import com.howlite.events.AltarBattleEventHandler
 import com.howlite.events.EconomyEventHandler
 import com.howlite.events.DimensionAccessHandler
 import com.howlite.events.NurseJoyHandler
+import com.howlite.moon.MoonConfig
+import com.howlite.moon.MoonManager
+import com.howlite.moon.MoonNetwork
+import com.howlite.moon.MoonSpawnModifier
+import com.howlite.commands.MoonCommand
 
 import com.howlite.items.CobbleCoins
 import com.howlite.items.GymBadgeItems
@@ -57,6 +62,13 @@ object CobblemonGymOdyssey {
         EconomyEventHandler.register()
         DimensionAccessHandler.register()
         NurseJoyHandler.register()
+
+        // ── Système de phases lunaires ───────────────────────────────────
+        MoonConfig.load()
+        MoonManager.register()
+        MoonSpawnModifier.register()
+        MoonNetwork.registerServerReceivers()
+        MoonCommand.register()
 
 
         com.cobblemon.mod.common.Cobblemon.statProvider = AltarStatProvider(com.cobblemon.mod.common.Cobblemon.statProvider)

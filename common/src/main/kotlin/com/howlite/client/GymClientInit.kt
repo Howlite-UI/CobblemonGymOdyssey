@@ -13,6 +13,7 @@ import dev.architectury.networking.NetworkManager
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.ResourceLocation
+import com.howlite.moon.MoonNetwork
 
 object GymClientInit {
     @Suppress("DEPRECATION")
@@ -91,5 +92,22 @@ object GymClientInit {
         }
         // Register S2C packets for the teleport animation (Zoom Up / Zoom Down)
         com.howlite.events.TeleportAnimationNetwork.registerClientReceivers()
+
+        // ── Phases lunaires ────────────────────────────────────────────
+        // Enregistrer le receiver S2C sync_moon_phase
+        MoonNetwork.registerClientReceivers()
+
+        // Receiver S2C pour ouvrir le GUI de l'Observatoire Céleste
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.S2C,
+            com.howlite.blocks.CelestialObservatoryBlock.OPEN_GUI_PACKET
+        ) { buf, context ->
+            buf.readBlockPos() // Lire la position (non utilisée directement)
+            context.queue {
+                Minecraft.getInstance().setScreen(
+                    com.howlite.client.screen.CelestialObservatoryScreen()
+                )
+            }
+        }
     }
 }

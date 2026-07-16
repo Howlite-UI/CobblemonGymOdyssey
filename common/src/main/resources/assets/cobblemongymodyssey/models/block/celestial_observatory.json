@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "cobblemongymodyssey:block/celestial_observatory_side",
+    "down":     "cobblemongymodyssey:block/celestial_observatory_side",
+    "up":       "cobblemongymodyssey:block/celestial_observatory_top",
+    "north":    "cobblemongymodyssey:block/celestial_observatory_side",
+    "south":    "cobblemongymodyssey:block/celestial_observatory_side",
+    "east":     "cobblemongymodyssey:block/celestial_observatory_side",
+    "west":     "cobblemongymodyssey:block/celestial_observatory_side"
+  }
+}

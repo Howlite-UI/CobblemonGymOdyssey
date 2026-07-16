@@ -147,6 +147,26 @@ object GymBlocks {
             BlockEntityType.Builder.of(::PlayerShopBlockEntity, PLAYER_SHOP.get()).build(null)
         }
 
+    // ── Celestial Observatory ────────────────────────────────
+    val CELESTIAL_OBSERVATORY: RegistrySupplier<Block> = BLOCKS.register("celestial_observatory") {
+        CelestialObservatoryBlock(
+            BlockBehaviour.Properties.of()
+                .strength(3.5f)
+                .requiresCorrectToolForDrops()
+                .lightLevel { 4 }  // Légère luminescence
+        )
+    }
+
+    val CELESTIAL_OBSERVATORY_ITEM: RegistrySupplier<Item> = ITEMS.register("celestial_observatory") {
+        BlockItem(CELESTIAL_OBSERVATORY.get(), Item.Properties())
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    val CELESTIAL_OBSERVATORY_ENTITY: RegistrySupplier<BlockEntityType<CelestialObservatoryBlockEntity>> =
+        BLOCK_ENTITY_TYPES.register("celestial_observatory") {
+            BlockEntityType.Builder.of(::CelestialObservatoryBlockEntity, CELESTIAL_OBSERVATORY.get()).build(null)
+        }
+
     fun register() {
         BLOCKS.register()
         BLOCK_ENTITY_TYPES.register()
@@ -165,7 +185,8 @@ object GymBlocks {
             UNOWN_STONE_SLAB_ITEM,
             UNOWN_STONE_STAIRS_ITEM,
             UNOWN_STONE_WALL_ITEM,
-            PLAYER_SHOP_ITEM
+            PLAYER_SHOP_ITEM,
+            CELESTIAL_OBSERVATORY_ITEM
         )
     }
 }

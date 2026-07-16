@@ -39,6 +39,19 @@ public abstract class ServerPlayerMixin {
         if (!TeleportAnimationServer.INSTANCE.isDimensionEligible(targetLevel)) return;
         if (TeleportAnimationServer.INSTANCE.isTeleporting(self.getUUID())) return;
 
+        // ── Filtre Elevator : deplacement purement vertical (meme X et Z, meme dimension) ──
+        // L'elevator de OpenBlocks ne change que le Y, jamais X ou Z.
+        boolean sameDimension = self.level().dimension().equals(targetLevel.dimension());
+        double dx = Math.abs(x - self.getX());
+        double dz = Math.abs(z - self.getZ());
+        if (sameDimension && dx < 0.5 && dz < 0.5) return;
+
+        // ── Filtre Hypertube : teleportation intra-dimension sur courte distance ──
+        // Create Hypertubes deplacent le joueur en petites etapes rapides.
+        // On ignore les TP intra-dimension sous 20 blocs de distance horizontale.
+        double horizontalDistSq = dx * dx + dz * dz;
+        if (sameDimension && horizontalDistSq < 400.0) return;
+
         TeleportAnimationServer.INSTANCE.startAnimation(self, targetLevel, x, y, z, yaw, pitch);
         cir.setReturnValue(false);
         cir.cancel();
